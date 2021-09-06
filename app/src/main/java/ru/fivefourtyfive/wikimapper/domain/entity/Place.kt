@@ -31,40 +31,18 @@ data class Place(
     @SerializedName("description")
     @Expose
     val description: String? = null,
-    ////////
     @SerializedName("wikipedia")
     @Expose
     val wikipedia: String? = null,
-    @SerializedName("is_building")
-    @Expose
-    val isBuilding: Boolean = false,
-    @SerializedName("is_region")
-    @Expose
-    val isRegion: Boolean = false,
-    @SerializedName("is_deleted")
-    @Expose
-    val isDeleted: Boolean = false,
     @SerializedName("tags")
     @Expose
     val tags: List<Tag>? = null,
     @SerializedName("parent_id")
     @Expose
     val parentId: Int? = null,
-    @SerializedName("x")
-    @Expose
-    val x: Int? = null,
-    @SerializedName("y")
-    @Expose
-    val y: Int? = null,
-    @SerializedName("pl")
-    @Expose
-    val pl: Double? = null,
     @SerializedName("polygon")
     @Expose
     val polygon: List<Dot>? = null,
-    @SerializedName("is_protected")
-    @Expose(deserialize = false)
-    val isProtected: Boolean? = null,
     @SerializedName("photos")
     @Expose
     val photos: List<Photo>? = null,
@@ -74,19 +52,4 @@ data class Place(
     @SerializedName("location")
     @Expose
     val location: Location? = null,
-//    @SerializedName("availableLanguages")
-//    @Expose
-//    val availableLanguages: AvailableLanguages? = null,
-//    @SerializedName("similarPlaces")
-//    @Expose
-//    val similarPlaces: SimilarPlaces? = null,
-//    @SerializedName("nearestPlaces")
-//    @Expose
-//    val nearestPlaces: NearestPlaces? = null,
-//    @SerializedName("nearestHotels")
-//    @Expose
-//    val nearestHotels: List<Object>? = null
-//    @SerializedName("edit_info")
-//    @Expose
-//    val editInfo: EditInfo,
 )
