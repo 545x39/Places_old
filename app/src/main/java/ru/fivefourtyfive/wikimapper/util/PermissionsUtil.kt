@@ -6,7 +6,7 @@ import androidx.core.content.ContextCompat
 
 object PermissionsUtil {
 
-    fun isPermissionNotGranted(context: Context, permission: String): Boolean {
+    private fun isPermissionNotGranted(context: Context, permission: String): Boolean {
         return ContextCompat.checkSelfPermission(
             context,
             permission

@@ -42,7 +42,7 @@ interface Api {
         "Accept: application/json;charset=utf-8",
         "Cache-Control: max-age=640000"
     )
-    fun getObject(
+    suspend fun getPlace(
         @Query(value = KEY) key: String = API_KEY,
         @Query(value = FUNCTION) function: String = OBJECT_GET_BY_ID,
         @Query(value = ID) id: Int,
@@ -50,7 +50,7 @@ interface Api {
         @Query(value = LANGUAGE) language: String? = RU,
         @Query(value = PACK) pack: String? = GZIP,
         @Query(value = FORMAT) format: String = JSON,
-    ): Call<Place>
+    ): Place
 
     @GET(".")
     @Headers(
@@ -59,7 +59,7 @@ interface Api {
         "Accept: application/json;charset=utf-8",
         "Cache-Control: max-age=640000"
     )
-    fun getObjects(
+    fun getArea(
         @Query(value = KEY) key: String = API_KEY,
         @Query(value = FUNCTION) function: String = OBJECT_GET_BY_BOX,
         @Query(value = COORDS_BY) coordsBy: String = BBOX,

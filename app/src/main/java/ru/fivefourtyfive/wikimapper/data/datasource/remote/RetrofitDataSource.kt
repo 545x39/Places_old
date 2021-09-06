@@ -1,34 +1,34 @@
 package ru.fivefourtyfive.wikimapper.data.datasource.remote
 
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Parameters
 import ru.fivefourtyfive.wikimapper.data.repository.abstraction.RemoteDataSource
-import ru.fivefourtyfive.wikimapper.domain.entity.Place
+import ru.fivefourtyfive.wikimapper.domain.datastate.PlaceDataState
 import timber.log.Timber
 import javax.inject.Inject
 
 class RetrofitDataSource @Inject constructor(private val api: Api) : RemoteDataSource {
 
-    override fun getPlace(id: Int, dataBlocks: String?){
-        api.getObject(
-            id = id,
-            dataBlocks = dataBlocks
-        ).enqueue(object : Callback<Place> {
-            override fun onResponse(
-                call: Call<Place>,
-                response: Response<Place>
-            ) {
-                Timber.e("RESPONSE OK!!!" + response.body())
-            }
-
-            override fun onFailure(call: Call<Place>, t: Throwable) {
-                Timber.e("RESPONSE FAILED!!!: $t")
-            }
-        })
-    }
+    override suspend fun getPlace(id: Int, dataBlocks: String?): Flow<PlaceDataState> = flow {
+        emit(PlaceDataState.Loading)
+            api.getPlace(
+                id = id,
+                dataBlocks = dataBlocks
+            ).apply {
+                when (debugInfo) {
+                    null -> emit(PlaceDataState.Success(this))
+                    else -> emit(PlaceDataState.Error(message = debugInfo?.message ?: ""))
+                }
+        }
+    }.flowOn(IO)
 
     override fun getPlaces(
         latMin: Double,
@@ -39,7 +39,7 @@ class RetrofitDataSource @Inject constructor(private val api: Api) : RemoteDataS
         count: Int?,
         language: String?
     ) {
-        api.getObjects(boundingBox = Parameters.build(latMin, lonMin, latMax, lonMax))
+        api.getArea(boundingBox = Parameters.build(latMin, lonMin, latMax, lonMax))
             .enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(
                     call: Call<ResponseBody>, response: Response<ResponseBody>

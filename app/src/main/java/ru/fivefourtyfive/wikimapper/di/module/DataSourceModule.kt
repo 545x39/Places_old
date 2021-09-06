@@ -13,5 +13,5 @@ interface DataSourceModule {
 
 //    TODO
 //    @Binds
-//    fun provideRemoteDataSource(dataSource: RoomDataSource): LocalDataSource
+//    fun provideLocalDataSource(dataSource: RoomDataSource): LocalDataSource
 }
