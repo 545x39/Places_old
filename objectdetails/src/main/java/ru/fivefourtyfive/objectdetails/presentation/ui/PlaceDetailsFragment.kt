@@ -33,7 +33,8 @@ class PlaceDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         DaggerPlaceDetailsComponent.factory()
-            .create((requireActivity().application as Wikimapper).appComponent).inject(this)
+            .create((requireActivity().application as Wikimapper).appComponent)
+            .inject(this)
         return inflater.inflate(R.layout.fragment_object_detail, container, false)
     }
 
@@ -47,8 +48,6 @@ class PlaceDetailsFragment : Fragment() {
                 viewModel.getPlace(18307319)
                 Toast.makeText(requireContext(), "ID passed: $it", LENGTH_SHORT).show()
             }
-
         }
-
     }
 }

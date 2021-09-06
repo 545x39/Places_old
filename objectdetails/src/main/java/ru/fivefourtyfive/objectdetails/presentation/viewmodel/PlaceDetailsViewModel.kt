@@ -16,14 +16,13 @@ class PlaceDetailsViewModel @Inject constructor(private val repository: PlaceRep
     fun getPlace(id: Int){
         viewModelScope.launch {
             repository.getPlace(id).catch {
-                Timber.e("ERROR COLLECTING DATA: $it")
+                Timber.e("CAUGHT EXCEPTION WHILE COLLECTING DATA: [$it]")
             }.collect {
                 when(it){
                     is PlaceDataState.Success -> Timber.e("DATA COLLECTED: [${it.place.title}]")
                     is PlaceDataState.Loading -> Timber.e("DATA IS NOW BEING LOADED...")
                     is PlaceDataState.Error   -> Timber.e("ERROR COLLECTING DATA: [${it.message}]")
                 }
-
             }
         }
     }
