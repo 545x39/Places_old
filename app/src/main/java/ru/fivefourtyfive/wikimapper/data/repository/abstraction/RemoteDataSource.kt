@@ -1,12 +1,14 @@
 package ru.fivefourtyfive.wikimapper.data.repository.abstraction
 
+import kotlinx.coroutines.flow.Flow
 import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.DataBlock
 import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Parameters
 import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Value
+import ru.fivefourtyfive.wikimapper.domain.datastate.PlaceDataState
 
 interface RemoteDataSource {
 
-    fun getPlace(
+    suspend fun getPlace(
         id: Int, dataBlocks: String? = Parameters.build(
             DataBlock.MAIN,
             DataBlock.PHOTOS,
@@ -14,7 +16,7 @@ interface RemoteDataSource {
             DataBlock.GEOMETRY,
             DataBlock.LOCATION
         )
-    )
+    ): Flow<PlaceDataState>
 
     fun getPlaces(
         latMin: Double,
