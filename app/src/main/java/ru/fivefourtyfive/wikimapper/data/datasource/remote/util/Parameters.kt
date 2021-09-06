@@ -13,7 +13,7 @@ object Parameters {
     }
 
     @Synchronized
-    fun build(vararg values: Float) = buildString {
+    fun build(vararg values: Double) = buildString {
         with(values.indices) {
             map {
                 append(values[it])

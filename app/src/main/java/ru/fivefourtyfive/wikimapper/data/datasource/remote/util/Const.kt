@@ -39,6 +39,25 @@ object Value {
     const val DEFAULT_BOX       = "35.2886,13.9666,C35.5152,14.1093"
 }
 
+/**
+Main block fields:
+    "id"
+    "object_type"
+    "language_id"
+    "language_iso"
+    "language_name"
+    "urlhtml"
+    "title"
+    "description"
+    "is_building"
+    "is_region"
+    "is_deleted"
+    "tags"
+    "parent_id"
+    "x"
+    "y"
+    "pl"
+ */
 object DataBlock {
     const val MAIN              = "main"
     const val GEOMETRY          = "geometry"

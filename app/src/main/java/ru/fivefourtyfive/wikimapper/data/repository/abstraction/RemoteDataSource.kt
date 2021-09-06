@@ -1,30 +1,26 @@
 package ru.fivefourtyfive.wikimapper.data.repository.abstraction
 
-import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.*
+import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.DataBlock
+import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Parameters
+import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Value
 
 interface RemoteDataSource {
 
-    fun getPlace(id: Int, dataBlocks: String? = Parameters.build(
-        DataBlock.MAIN,
-        DataBlock.PHOTOS,
-        DataBlock.COMMENTS,
-        DataBlock.GEOMETRY,
-        DataBlock.EDIT,
-        DataBlock.LOCATION,
-        DataBlock.ATTACHED,
-        DataBlock.TRANSLATE,
-        DataBlock.SIMILAR_OBJECTS,
-        DataBlock.NEAREST_OBJECTS,
-        DataBlock.NEAREST_COMMENTS,
-        DataBlock.NEAREST_STREETS,
-        DataBlock.NEAREST_HOTELS
-    ))
+    fun getPlace(
+        id: Int, dataBlocks: String? = Parameters.build(
+            DataBlock.MAIN,
+            DataBlock.PHOTOS,
+            DataBlock.COMMENTS,
+            DataBlock.GEOMETRY,
+            DataBlock.LOCATION
+        )
+    )
 
     fun getPlaces(
-        latMin: Float,
-        lonMin: Float,
-        latMax: Float,
-        lonMax: Float,
+        latMin: Double,
+        lonMin: Double,
+        latMax: Double,
+        lonMax: Double,
         category: String? = null,
         count: Int? = 100,
         language: String? = Value.RU
@@ -37,5 +33,5 @@ interface RemoteDataSource {
         language: String? = Value.RU,
     )
 
-    fun search(query: String, latitude: Float, longitude: Float, )
+    fun search(query: String, latitude: Float, longitude: Float)
 }

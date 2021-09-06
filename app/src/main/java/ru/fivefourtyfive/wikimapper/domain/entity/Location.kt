@@ -29,7 +29,7 @@ data class Location(
     @Expose
     val state: String? = null,
     @SerializedName("place")
-    @Expose
+    @Expose(deserialize = false)
     val place: String? = null,
     @SerializedName("country_adm_id")
     @Expose(deserialize = false)
@@ -45,7 +45,7 @@ data class Location(
     val city: String? = null,
     @SerializedName("cityguideDomain")
     @Expose(deserialize = false)
-    val cityGuideDomain: Object? = null,
+    val cityGuideDomain: Any? = null,
     @SerializedName("zoom")
     @Expose(deserialize = false)
     val zoom: Float? = null

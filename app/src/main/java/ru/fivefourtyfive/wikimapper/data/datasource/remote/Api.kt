@@ -32,6 +32,7 @@ import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Value.DEFAULT_BO
 import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Value.GZIP
 import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Value.JSON
 import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Value.RU
+import ru.fivefourtyfive.wikimapper.domain.entity.Place
 
 interface Api {
 
@@ -51,7 +52,7 @@ interface Api {
         @Query(value = LANGUAGE) language: String? = RU,
         @Query(value = PACK) pack: String? = GZIP,
         @Query(value = FORMAT) format: String = JSON,
-    ): Call<ResponseBody>
+    ): Call<Place>
 
     @GET(".")
     @Headers(

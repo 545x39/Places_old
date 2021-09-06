@@ -6,36 +6,35 @@ import retrofit2.Callback
 import retrofit2.Response
 import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Parameters
 import ru.fivefourtyfive.wikimapper.data.repository.abstraction.RemoteDataSource
+import ru.fivefourtyfive.wikimapper.domain.entity.Place
 import timber.log.Timber
 import javax.inject.Inject
 
 class RetrofitDataSource @Inject constructor(private val api: Api) : RemoteDataSource {
 
-    override fun getPlace(id: Int, dataBlocks: String?) {
+    override fun getPlace(id: Int, dataBlocks: String?){
         api.getObject(
             id = id,
             dataBlocks = dataBlocks
-        )
-            .enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(
-                    call: Call<ResponseBody>,
-                    response: Response<ResponseBody>
-                ) {
-                    Timber.e("RESPONSE OK!!!")
-                }
+        ).enqueue(object : Callback<Place> {
+            override fun onResponse(
+                call: Call<Place>,
+                response: Response<Place>
+            ) {
+                Timber.e("RESPONSE OK!!!" + response.body())
+            }
 
-                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-
-                    Timber.e("RESPONSE FAILED!!!")
-                }
-            })
+            override fun onFailure(call: Call<Place>, t: Throwable) {
+                Timber.e("RESPONSE FAILED!!!: $t")
+            }
+        })
     }
 
     override fun getPlaces(
-        latMin: Float,
-        lonMin: Float,
-        latMax: Float,
-        lonMax: Float,
+        latMin: Double,
+        lonMin: Double,
+        latMax: Double,
+        lonMax: Double,
         category: String?,
         count: Int?,
         language: String?

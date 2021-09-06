@@ -58,7 +58,7 @@ data class Place(
     val pl: Int? = null,
     @SerializedName("polygon")
     @Expose
-    val polygon: List<PolygonDot>? = null,
+    val polygon: List<Dot>? = null,
     @SerializedName("is_protected")
     @Expose(deserialize = false)
     val isProtected: Boolean? = null,
@@ -87,3 +87,27 @@ data class Place(
 //    @Expose
 //    val editInfo: EditInfo,
 )
+/**
+Nearest:
+private String id;
+private Integer languageId;
+private String languageIso;
+private String languageName;
+private String title;
+private String url;
+private Double lon;
+private Double lat;
+private Double distance;
+ */
+/**
+ Similar:
+ private String id;
+ private Integer languageId;
+ private String languageIso;
+ private String languageName;
+ private String title;
+ private String url;
+ private Double lon;
+ private Double lat;
+ private Double distance;
+ * */
