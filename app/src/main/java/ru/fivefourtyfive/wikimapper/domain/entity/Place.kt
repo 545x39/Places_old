@@ -22,6 +22,7 @@ data class Place(
     @SerializedName("language_name")
     @Expose
     val languageName: String? = null,
+    @Suppress("SpellCheckingInspection")
     @SerializedName("urlhtml")
     @Expose
     val urlHtml: String? = null,

@@ -26,6 +26,6 @@ data class Comment(
     @Expose
     val date: Long? = null,
     @SerializedName("is_deleted")
-    @Expose(deserialize = false)
+    @Expose
     val isDeleted: Boolean = false,
 )

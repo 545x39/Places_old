@@ -29,24 +29,11 @@ data class Location(
     @Expose
     val state: String? = null,
     @SerializedName("place")
-    @Expose(deserialize = false)
+    @Expose
     val place: String? = null,
-    @SerializedName("country_adm_id")
-    @Expose(deserialize = false)
-    val countryAdmId: Int? = null,
-//    @SerializedName("gadm")
-//    @Expose
-//    val gadm: List<Gadm>? = null,
-    @SerializedName("city_id")
-    @Expose(deserialize = false)
-    val cityId: Int? = 0,
     @SerializedName("city")
-    @Expose(deserialize = false)
+    @Expose
     val city: String? = null,
-    @SerializedName("cityguideDomain")
-    @Expose(deserialize = false)
-    val cityGuideDomain: Any? = null,
-    @SerializedName("zoom")
-    @Expose(deserialize = false)
+    @Expose
     val zoom: Float? = null
 )
