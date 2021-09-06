@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name" translatable="false">Wikimapper</string>
+    <string name="settings">Settings</string>
+    <string name="search">Search</string>
+    <string name="title_map" translatable="false">Map</string>
+    <string name="title_object" translatable="false">Object</string>
+    <string name="title_search" translatable="false">Search</string>
+    <string name="title_settings" translatable="false">Settings</string>
+    <string name="title_objectdetails">Info</string>
+</resources>

@@ -1,0 +1,33 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="ru.fivefourtyfive.wikimapper.presentation.ui.MainActivity">
+    <item
+        android:id="@+id/action_search"
+        android:orderInCategory="1"
+        android:icon="@drawable/icon_lens"
+        android:title="@string/search"
+        app:showAsAction="always" />
+<!--    <item-->
+<!--        android:id="@+id/action_search"-->
+<!--        android:orderInCategory="1"-->
+<!--        android:title="@string/search"-->
+<!--        app:actionViewClass="androidx.appcompat.widget.SearchView"-->
+<!--        android:icon="@drawable/icon_lens"-->
+<!--        app:showAsAction="always" />-->
+    <!--    app:actionViewClass="androidx.appcompat.widget.SearchView$SearchAutoComplete"-->
+
+    <!--    TODO Remove it when necessary-->
+    <item
+        android:id="@+id/action_object_details"
+        android:orderInCategory="99"
+        android:icon="@drawable/icon_hammer"
+        android:title="@string/title_objectdetails"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:icon="@drawable/icon_gear"
+        android:title="@string/settings"
+        app:showAsAction="ifRoom" />
+</menu>

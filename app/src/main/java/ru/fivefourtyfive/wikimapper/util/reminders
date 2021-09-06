@@ -1,0 +1,27 @@
+КОНВЕРТЕР JSON в POJO
+http://www.jsonschema2pojo.org/
+
+ОБЪЕКТ
+    http://api.wikimapia.org/?key=example&function=place.getbyid&id=55&format=json&=&language=ru&data_blocks=main,comments,photos,location
+
+ОБЪЕКТЫ
+    http://api.wikimapia.org/?key=example&function=box&coordsby=bbox&bbox=35.2886%2C13.9666%2C35.5152%2C14.1093&category=203&count=100&format=json
+
+КАТЕГОРИИ
+    http://api.wikimapia.org/?key=example&function=category.getall&format=json&pack=&language=en&name=&page=1&count=50
+
+ПОИСК
+    http://api.wikimapia.org/?key=example&function=search&q=%D0%BF%D1%83%D1%88%D0%BA%D0%B8%D0%BD&lat=30.416336&lon=59.722139&distance=5000000
+    api.wikimapia.org/?key=example&function=search&q=невский&lat=30.416336&lon=59.722139&language=ru&format=json&page=3&count=100
+
+РАЗНОЕ
+        https://blog.cartong.org/2014/10/30/tutorial-using-wikimapia-data-in-qgis/
+        %2C
+        30.416336,59.722139
+        //
+        https://blog.cartong.org/2014/10/30/tutorial-using-wikimapia-data-in-qgis/
+        29.071884,59.894104,30.382004,60.215603
+        29.071884%2C59.894104%2C30.382004%2C60.215603
+        http://api.wikimapia.org/?key=example&function=box&coordsby=bbox&bbox=35.2886%2C13.9666%2C35.5152%2C14.1093&category=203&count=100&format=json
+        http://api.wikimapia.org/?key=example&function=box&coordsby=bbox&bbox=29.071884%2C59.894104%2C30.382004%2C60.215603&category=203&count=100&format=json
+        http://api.wikimapia.org/?key=example&function=box&coordsby=bbox&bbox=29.071884%2C59.894104%2C30.382004%2C60.215603&count=500&format=json&language=ru
