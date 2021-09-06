@@ -4,43 +4,46 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 data class Place(
+    @SerializedName("debug")
+    @Expose
+    var debugInfo: DebugInfo? = null,
     @SerializedName("id")
     @Expose
-    val id: Int,
+    val id: Int = 0,
     @SerializedName("object_type")
     @Expose
-    val objectType: Int,
+    val objectType: Int = 0,
     @SerializedName("language_id")
     @Expose
-    val languageId: Int,
+    val languageId: Int = 0,
     @SerializedName("language_iso")
     @Expose
-    val languageIso: String,
+    val languageIso: String? = null,
     @SerializedName("language_name")
     @Expose
-    val languageName: String,
+    val languageName: String? = null,
     @SerializedName("urlhtml")
     @Expose
-    val urlHtml: String,
+    val urlHtml: String? = null,
     @SerializedName("title")
     @Expose
-    val title: String,
+    val title: String? = null,
     @SerializedName("description")
     @Expose
     val description: String? = null,
     ////////
     @SerializedName("wikipedia")
     @Expose
-    val wikipedia: String,
+    val wikipedia: String? = null,
     @SerializedName("is_building")
     @Expose
-    val isBuilding: Boolean,
+    val isBuilding: Boolean = false,
     @SerializedName("is_region")
     @Expose
-    val isRegion: Boolean,
+    val isRegion: Boolean = false,
     @SerializedName("is_deleted")
     @Expose
-    val isDeleted: Boolean,
+    val isDeleted: Boolean = false,
     @SerializedName("tags")
     @Expose
     val tags: List<Tag>? = null,
@@ -49,10 +52,10 @@ data class Place(
     val parentId: Int? = null,
     @SerializedName("x")
     @Expose
-    val x: Int,
+    val x: Int? = null,
     @SerializedName("y")
     @Expose
-    val y: Int,
+    val y: Int? = null,
     @SerializedName("pl")
     @Expose
     val pl: Double? = null,
@@ -71,8 +74,6 @@ data class Place(
     @SerializedName("location")
     @Expose
     val location: Location? = null,
-
-
 //    @SerializedName("availableLanguages")
 //    @Expose
 //    val availableLanguages: AvailableLanguages? = null,
@@ -89,27 +90,3 @@ data class Place(
 //    @Expose
 //    val editInfo: EditInfo,
 )
-/**
-Nearest:
-private String id;
-private Integer languageId;
-private String languageIso;
-private String languageName;
-private String title;
-private String url;
-private Double lon;
-private Double lat;
-private Double distance;
- */
-/**
- Similar:
- private String id;
- private Integer languageId;
- private String languageIso;
- private String languageName;
- private String title;
- private String url;
- private Double lon;
- private Double lat;
- private Double distance;
- * */
