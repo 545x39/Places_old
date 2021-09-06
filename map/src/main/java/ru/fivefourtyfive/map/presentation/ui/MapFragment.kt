@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.core.os.bundleOf
-import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.dynamicfeatures.DynamicExtras
@@ -130,7 +129,7 @@ class MapFragment : Fragment() {
     private fun navigateToObjectDetails(){
         val installMonitor = DynamicInstallMonitor()
         findNavController().navigate(
-            appR.id.action_mapFragment_to_objectDetailsFragment,
+            appR.id.action_mapFragment_to_placeDetailsFragment,
             bundleOf(ID to Random.nextInt(1, 50000)),
             null,
             DynamicExtras(installMonitor)

@@ -3,12 +3,11 @@ package ru.fivefourtyfive.wikimapper.di
 import android.content.SharedPreferences
 import dagger.Component
 import ru.fivefourtyfive.wikimapper.Wikimapper
-import ru.fivefourtyfive.wikimapper.data.repository.implementation.ObjectRepository
+import ru.fivefourtyfive.wikimapper.data.repository.implementation.PlaceRepository
 import ru.fivefourtyfive.wikimapper.di.module.AppModule
 import ru.fivefourtyfive.wikimapper.di.module.DataSourceModule
 import ru.fivefourtyfive.wikimapper.di.module.NetworkModule
 import ru.fivefourtyfive.wikimapper.di.module.ViewModelProviderFactoryModule
-import ru.fivefourtyfive.wikimapper.presentation.ui.MainActivity
 import javax.inject.Singleton
 
 @Singleton
@@ -26,7 +25,7 @@ interface AppComponent {
 
     fun getPreferences(): SharedPreferences
 
-    fun getObjectRepository(): ObjectRepository
+    fun getPlaceRepository(): PlaceRepository
 
 //    fun workerProviderFactory(): WorkerProviderFactory
 

@@ -7,7 +7,17 @@ interface RemoteDataSource {
     fun getPlace(id: Int, dataBlocks: String? = Parameters.build(
         DataBlock.MAIN,
         DataBlock.PHOTOS,
-        DataBlock.COMMENTS
+        DataBlock.COMMENTS,
+        DataBlock.GEOMETRY,
+        DataBlock.EDIT,
+        DataBlock.LOCATION,
+        DataBlock.ATTACHED,
+        DataBlock.TRANSLATE,
+        DataBlock.SIMILAR_OBJECTS,
+        DataBlock.NEAREST_OBJECTS,
+        DataBlock.NEAREST_COMMENTS,
+        DataBlock.NEAREST_STREETS,
+        DataBlock.NEAREST_HOTELS
     ))
 
     fun getPlaces(
