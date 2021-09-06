@@ -43,8 +43,8 @@ class PlaceDetailsFragment : Fragment() {
         viewModel = ViewModelProvider(this, providerFactory).get(PlaceDetailsViewModel::class.java)
         view.findViewById<Button>(R.id.button_object).setOnClickListener {
             (arguments?.get(ID) as Int)?.let {
-//                viewModel.getPlace(Random.nextInt(1, 540))
-                viewModel.getPlace(18307319)
+                viewModel.getPlace(Random.nextInt(1, 540))
+//                viewModel.getPlace(18307319)
                 Toast.makeText(requireContext(), "ID passed: " + it, LENGTH_SHORT)
                     .show()
             }

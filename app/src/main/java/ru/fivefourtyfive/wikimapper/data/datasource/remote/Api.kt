@@ -39,8 +39,6 @@ interface Api {
     @GET(".")
     @Headers(
         "Content-Type: Application/Raw",
-        "Content-Type: Application/Raw",
-        "Accept-Encoding: gzip,deflate",
         "Accept: application/json;charset=utf-8",
         "Cache-Control: max-age=640000"
     )
@@ -58,7 +56,6 @@ interface Api {
     @Headers(
         "Content-Type: Application/Raw",
         "Content-Type: Application/Raw",
-        "Accept-Encoding: gzip,deflate",
         "Accept: application/json;charset=utf-8",
         "Cache-Control: max-age=640000"
     )
@@ -78,7 +75,6 @@ interface Api {
     @Headers(
         "Content-Type: Application/Raw",
         "Content-Type: Application/Raw",
-        "Accept-Encoding: gzip,deflate",
         "Accept: application/json;charset=utf-8",
         "Cache-Control: max-age=640000"
     )
@@ -94,6 +90,12 @@ interface Api {
     ): Call<ResponseBody>
 
     @GET(".")
+    @Headers(
+        "Content-Type: Application/Raw",
+        "Content-Type: Application/Raw",
+        "Accept: application/json;charset=utf-8",
+        "Cache-Control: max-age=640000"
+    )
     fun search(
         @Query(value = KEY) key: String = API_KEY,
         @Query(value = FUNCTION) function: String = SEARCH,

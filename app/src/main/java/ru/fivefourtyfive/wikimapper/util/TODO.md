@@ -28,3 +28,7 @@
 
 Пример запроса:
 http://api.wikimapia.org/?key=example&function=box&coordsby=bbox&bbox=35.2886%2C13.9666%2C35.5152%2C14.1093&category=203&count=100&format=json
+
+
+
+//TODO: понять почему не работает с gzip.

@@ -55,7 +55,7 @@ data class Place(
     val y: Int,
     @SerializedName("pl")
     @Expose
-    val pl: Int? = null,
+    val pl: Double? = null,
     @SerializedName("polygon")
     @Expose
     val polygon: List<Dot>? = null,
@@ -71,6 +71,8 @@ data class Place(
     @SerializedName("location")
     @Expose
     val location: Location? = null,
+
+
 //    @SerializedName("availableLanguages")
 //    @Expose
 //    val availableLanguages: AvailableLanguages? = null,
