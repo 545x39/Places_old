@@ -13,6 +13,8 @@ import javax.inject.Inject
 class PlaceDetailsViewModel @Inject constructor(private val repository: PlaceRepository) :
     ViewModel() {
 
+    //TODO must inherit Reducer.
+
     fun getPlace(id: Int) {
         viewModelScope.launch {
             repository.getPlace(id)

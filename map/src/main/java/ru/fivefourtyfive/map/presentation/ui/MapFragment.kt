@@ -17,7 +17,6 @@ import org.osmdroid.events.DelayedMapListener
 import org.osmdroid.events.MapListener
 import org.osmdroid.events.ScrollEvent
 import org.osmdroid.events.ZoomEvent
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.tileprovider.tilesource.TileSourcePolicy
 import org.osmdroid.tileprovider.tilesource.XYTileSource
 import org.osmdroid.views.CustomZoomButtonsController
@@ -63,23 +62,30 @@ class MapFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        setMap()
+        setMap(requireContext())
         setMapListener()
     }
 
-    val NO_LABELS = XYTileSource(
-        "OsmNoLabels", 0, 19, 256, ".png",
+    private val wikimediaTileSource = XYTileSource(
+        "OsmNoLabels",
+        0,
+        19,
+        256,
+        ".png",
         arrayOf("https://c.tiles.wmflabs.org/osm-no-labels/"),
         "© OpenStreetMap contributors",
         TileSourcePolicy(
             2,
-            TileSourcePolicy.FLAG_NO_BULK or TileSourcePolicy.FLAG_NO_PREVENTIVE or TileSourcePolicy.FLAG_USER_AGENT_MEANINGFUL or TileSourcePolicy.FLAG_USER_AGENT_NORMALIZED
+            TileSourcePolicy.FLAG_NO_BULK
+                    or TileSourcePolicy.FLAG_NO_PREVENTIVE
+                    or TileSourcePolicy.FLAG_USER_AGENT_MEANINGFUL
+                    or TileSourcePolicy.FLAG_USER_AGENT_NORMALIZED
         )
     )
 
     //<editor-fold defaultstate="collapsed" desc="MAP">
-    private fun setMap() {
-        val context: Context = mapView.context
+    private fun setMap(context: Context) {
+//        val context: Context = mapView.context
 
         fun setCompassOverlay() {
             CompassOverlay(context, InternalCompassOrientationProvider(context), mapView).apply {
@@ -95,12 +101,12 @@ class MapFragment : Fragment() {
         configuration.osmdroidTileCache = File(configuration.osmdroidBasePath, "tiles")
         mapView.apply {
 //            setTileSource(TileSourceFactory.MAPNIK)
-            setTileSource(NO_LABELS)
+            setTileSource(wikimediaTileSource)
             setUseDataConnection(true)
             isTilesScaledToDpi = true
             setMultiTouchControls(true)
             minZoomLevel = 2.0
-            maxZoomLevel = 20.0
+            maxZoomLevel = 19.0
             zoomController.setVisibility(CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT)
             controller.setZoom(10.0)
             isVerticalMapRepetitionEnabled = false
@@ -128,12 +134,12 @@ class MapFragment : Fragment() {
     private fun setMapListener() {
         mapView.addMapListener(DelayedMapListener(object : MapListener {
             override fun onScroll(event: ScrollEvent?): Boolean {
-                Timber.e("MAP SCROLLED")
+                Timber.e("MAP SCROLLED. BBOX: " + mapView.boundingBox)
                 return false
             }
 
             override fun onZoom(event: ZoomEvent?): Boolean {
-                Timber.e("MAP RESIZED")
+                Timber.e("MAP RESIZED. BBOX: " + mapView.boundingBox)
                 return false
             }
         }, 200))
@@ -190,7 +196,7 @@ class MapFragment : Fragment() {
         val REQUEST_CODE_INSTALL_CONFIRMATION = 2
         //
         installMonitor.status.observe(viewLifecycleOwner,
-            Observer { state ->
+            { state ->
                 when (state.status()) {
                     SplitInstallSessionStatus.INSTALLED -> {
                         //Модуль установлен, можно дёрнуть навигацию к нему.
@@ -210,6 +216,7 @@ class MapFragment : Fragment() {
                     SplitInstallSessionStatus.CANCELED -> {
                         //Установка отменена пользователем.
                     }
+                    else ->{}
                 }
                 if (state.hasTerminalStatus()) {
                     installMonitor.status.removeObservers(viewLifecycleOwner) //Отписаться.
