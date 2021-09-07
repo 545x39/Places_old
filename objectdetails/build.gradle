@@ -60,6 +60,8 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
     //PREFERENCES
     implementation "androidx.preference:preference-ktx:$preference_version"
+    //GLIDE
+    implementation "com.github.bumptech.glide:glide:4.12.0"
     ////PLAY CORE
     api "com.google.android.play:core:$play_core_version"
     ////TESTING
