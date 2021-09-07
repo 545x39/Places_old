@@ -26,6 +26,7 @@ android {
 
 dependencies {
     implementation project(":app")
+    //implementation(project(":app"))
     ////VERSIONS
     def lifecycle_version = "2.2.0"
     def nav_version = "2.3.5"

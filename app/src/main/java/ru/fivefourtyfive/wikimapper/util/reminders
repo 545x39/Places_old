@@ -25,3 +25,6 @@ http://www.jsonschema2pojo.org/
         http://api.wikimapia.org/?key=example&function=box&coordsby=bbox&bbox=35.2886%2C13.9666%2C35.5152%2C14.1093&category=203&count=100&format=json
         http://api.wikimapia.org/?key=example&function=box&coordsby=bbox&bbox=29.071884%2C59.894104%2C30.382004%2C60.215603&category=203&count=100&format=json
         http://api.wikimapia.org/?key=example&function=box&coordsby=bbox&bbox=29.071884%2C59.894104%2C30.382004%2C60.215603&count=500&format=json&language=ru
+
+Map listener:
+https://stackoverflow.com/questions/39306301/osmdroid-load-marker-after-scroll
