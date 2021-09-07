@@ -72,7 +72,8 @@ android {
     }
 
     buildFeatures {
-        viewBinding = true
+//        viewBinding = true
+        dataBinding = true
     }
 
     setDynamicFeatures(setOf(":map", ":search", ":settings", ":objectdetails"))
