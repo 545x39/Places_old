@@ -18,6 +18,7 @@ object Versions {
     const val PLAY_CORE_VERSION = "1.10.1"
     const val TIMBER_VERSION = "5.0.1"
     const val JUNIT_VERSION = "4.13.2"
-    const val JUNIT_EXT_VERSION = "4.13.2"
-    const val ESPRESSO_VERSION = "1.1.3"
+    const val JUNIT_EXT_VERSION = "1.1.3"
+    const val ESPRESSO_VERSION = "3.4.0"
+    const val ANDROIDX_ANNOTATION = "1.2.0"
 }
