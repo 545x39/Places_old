@@ -8,16 +8,9 @@ import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.ViewState
  * - Photos
  * - Comments
  * - Tags
- * Hence the states.
  */
 sealed class PlaceDetailsViewState : ViewState {
-    class All(val place: Place): PlaceDetailsViewState()
-    class NoPhotos(val place: Place): PlaceDetailsViewState()
-    class NoComments(val place: Place): PlaceDetailsViewState()
-    class NoTags(val place: Place): PlaceDetailsViewState()
-    class NoPhotosAndTags(val place: Place): PlaceDetailsViewState()
-    class NoPhotosAndComments(val place: Place): PlaceDetailsViewState()
-    class NoCommentsAndTags(val place: Place): PlaceDetailsViewState()
+    class Success(val place: Place): PlaceDetailsViewState()
     class Error(val message: String? = null): PlaceDetailsViewState()
     object Loading: PlaceDetailsViewState()
 }
