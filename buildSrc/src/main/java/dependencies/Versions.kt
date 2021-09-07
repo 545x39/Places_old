@@ -5,7 +5,7 @@ object Versions {
     const val APPCOMPAT_VERSION = "1.3.1"
     const val MATERIAL_VERSION = "1.4.0"
     const val LIFECYCLE_VERSION = "2.2.0"
-    const val NAV_VERSION = "2.3.5"
+    const val NAVIGATION_VERSION = "2.3.5"
     const val DAGGER_VERSION = "2.38.1"
     const val COROUTINES_VERSION = "1.5.2-native-mt"
     const val LIFECYCLE_EXT_VERSION = "2.3.1"
