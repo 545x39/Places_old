@@ -60,8 +60,10 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
     //PREFERENCES
     implementation "androidx.preference:preference-ktx:$preference_version"
-    //GLIDE
+    //GLIDE & GLIDE SLIDER
     implementation "com.github.bumptech.glide:glide:4.12.0"
+    annotationProcessor "com.github.bumptech.glide:compiler:4.9.0"
+    implementation "com.github.firdausmaulan:GlideSlider:1.5.1"
     //CIRCLE IMAGE VIEW
     implementation "de.hdodenhof:circleimageview:3.1.0"
     ////PLAY CORE

@@ -17,6 +17,9 @@ data class Photo(
     @Expose
     val objectId: Int,
     val time: Long? = null,
+    @SerializedName("user_name")
+    @Expose
+    val userName: String? = null,
     @SerializedName("time_str")
     @Expose
     val timeString: String? = null,

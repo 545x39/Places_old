@@ -6,5 +6,5 @@
     <string name="title_object" translatable="false">Object</string>
     <string name="title_search" translatable="false">Search</string>
     <string name="title_settings" translatable="false">Settings</string>
-    <string name="title_objectdetails">Info</string>
+    <string name="title_objectdetails">Object</string>
 </resources>

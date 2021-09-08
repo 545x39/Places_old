@@ -3,6 +3,7 @@ package ru.fivefourtyfive.wikimapper.presentation.ui
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.google.android.material.snackbar.Snackbar
 import ru.fivefourtyfive.wikimapper.R
 import ru.fivefourtyfive.wikimapper.util.Permissions.PERMISSIONS
 import ru.fivefourtyfive.wikimapper.util.PermissionsUtil
@@ -22,5 +23,10 @@ class MainActivity : AppCompatActivity() {
             val notGranted: Array<String> = getNotGrantedPermissions(this, PERMISSIONS)
             ActivityCompat.requestPermissions(this, notGranted, 1234)
         }
+    }
+
+    fun showSnackBar(message: String) {
+        Snackbar.make(findViewById(R.id.main_content), message, Snackbar.LENGTH_LONG)
+            .show()
     }
 }

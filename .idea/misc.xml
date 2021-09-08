@@ -4,14 +4,13 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../../layout/custom_preview.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.18489583333333334" />
+        <entry key="objectdetails/src/main/res/layout/carousel_fragment.xml" value="0.228125" />
         <entry key="objectdetails/src/main/res/layout/fragment_object_detail.xml" value="0.18697916666666667" />
       </map>
     </option>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
-  <component name="ProjectPlainTextFileTypeManager">
-    <file url="file://$PROJECT_DIR$/app/src/main/java/ru/fivefourtyfive/wikimapper/domain/datastate/DataState.kt" />
-  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>

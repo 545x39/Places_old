@@ -173,7 +173,7 @@ class MapFragment : Fragment() {
         val installMonitor = DynamicInstallMonitor()
         findNavController().navigate(
             appR.id.action_mapFragment_to_placeDetailsFragment,
-            bundleOf(ID to Random.nextInt(1, 50000)),
+            bundleOf(ID to if (Random.nextBoolean()) 18307319 else Random.nextInt(1, 540)),
             null,
             DynamicExtras(installMonitor)
         )
