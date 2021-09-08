@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="ru.fivefourtyfive.wikimapper.presentation.ui.MainActivity">
+    <item
+        android:id="@+id/action_share_link"
+        android:orderInCategory="96"
+        android:title="@string/share_link"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_share_coordinates"
+        android:orderInCategory="97"
+        android:title="@string/share_coordinates"
+        app:showAsAction="never" />
+
+    <item
+        android:checkable="true"
+        android:id="@+id/action_slide_show"
+        android:orderInCategory="98"
+        android:title="@string/slide_show"
+        app:showAsAction="never" />
+</menu>
