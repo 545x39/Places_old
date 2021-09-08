@@ -26,7 +26,6 @@ class PlaceDetailsViewModel @Inject constructor(private val repository: PlaceRep
             repository.getPlace(id)
                 .catch {
                     _viewStateLiveData.postValue(reduce(PlaceDataState.Error()))
-                    Timber.e("CAUGHT EXCEPTION WHILE COLLECTING DATA: [$it]")
                 }.collect {
                     _viewStateLiveData.postValue(reduce(it))
                 }

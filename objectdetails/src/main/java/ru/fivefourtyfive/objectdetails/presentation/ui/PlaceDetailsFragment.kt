@@ -1,11 +1,11 @@
 package ru.fivefourtyfive.objectdetails.presentation.ui
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
+import android.view.*
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -21,14 +21,12 @@ import ru.fivefourtyfive.objectdetails.presentation.viewmodel.PlaceDetailsViewSt
 import ru.fivefourtyfive.wikimapper.Wikimapper
 import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Parameter.ID
 import ru.fivefourtyfive.wikimapper.di.factory.ViewModelProviderFactory
-import ru.fivefourtyfive.wikimapper.domain.entity.Location
-import ru.fivefourtyfive.wikimapper.domain.entity.Photo
-import ru.fivefourtyfive.wikimapper.domain.entity.Place
-import ru.fivefourtyfive.wikimapper.domain.entity.Tag
+import ru.fivefourtyfive.wikimapper.domain.entity.*
 import ru.fivefourtyfive.wikimapper.presentation.ui.MainActivity
 import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.Renderer
 import javax.inject.Inject
 import ru.fivefourtyfive.wikimapper.R as appR
+
 
 class PlaceDetailsFragment : Fragment(), Renderer<PlaceDetailsViewState> {
 
@@ -45,6 +43,7 @@ class PlaceDetailsFragment : Fragment(), Renderer<PlaceDetailsViewState> {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        setHasOptionsMenu(true)
         DaggerPlaceDetailsComponent.factory()
             .create((requireActivity().application as Wikimapper).appComponent)
             .inject(this)
@@ -62,6 +61,50 @@ class PlaceDetailsFragment : Fragment(), Renderer<PlaceDetailsViewState> {
         arguments?.let { viewModel.getPlace(it.getInt(ID)) }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) =
+        inflater.inflate(R.menu.menu_place_details, menu)
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        //TODO check preferences whether slide show mode is enabled and set checkbox accordingly.
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        //<editor-fold defaultstate="collapsed" desc="INNER METHODS">
+        fun shareLink() {}
+
+        fun shareCoordinates() {
+            with(viewModel.viewStateLiveData.value) {
+                if (this is PlaceDetailsViewState.Success) {
+                    place.location?.apply {
+                        startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("geo:$lat,$lon?q=$lat,$lon")
+                            )
+                        )
+                    }
+                }
+            }
+        }
+
+        fun switchSlideShow() {
+            item.isChecked = !item.isChecked
+            when (item.isChecked) {
+                true -> binding.slider.startAutoCycle()
+                false -> binding.slider.stopAutoCycle()
+            }
+        }
+        //</editor-fold>
+
+        when (item.itemId) {
+            R.id.action_share_link -> shareLink()
+            R.id.action_share_coordinates -> shareCoordinates()
+            R.id.action_slide_show -> switchSlideShow()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun render(viewState: PlaceDetailsViewState) {
         with(viewState) {
             when (this) {
@@ -77,10 +120,16 @@ class PlaceDetailsFragment : Fragment(), Renderer<PlaceDetailsViewState> {
                         setLocation(it.location)
                         setTags(it.tags)
                         setPhotos(it.photos)
+                        setComments(it.comments)
                     }
                 }
             }
         }
+    }
+
+    private fun setComments(comments: List<Comment>?) {
+        val count = "Комментариев: ${if (comments.isNullOrEmpty()) 0 else comments.size}"
+        binding.commentsCount.text = count
     }
 
     private fun setMain(place: Place) {
@@ -96,7 +145,8 @@ class PlaceDetailsFragment : Fragment(), Renderer<PlaceDetailsViewState> {
             .setPresetTransformer(SliderLayout.Transformer.Accordion)
             .setPresetIndicator(SliderLayout.PresetIndicators.Center_Top)
             .setCustomAnimation(DescriptionAnimation())
-            .disableAutoCycling(false)
+            .disableAutoCycling(true)
+            .setDuration(4500)
             .stopCyclingWhenTouch(true)
             .buildWith(photos)
     }

@@ -13,24 +13,22 @@
         android:layout_height="match_parent">
 
         <ProgressBar
+            android:id="@+id/progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/progress"
-            android:foregroundTint="@color/purple_500"
             android:layout_centerInParent="true" />
 
         <LinearLayout
+            android:id="@+id/contentLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/contentLayout"
             android:orientation="vertical">
-
 
             <com.glide.slider.library.SliderLayout
                 android:id="@+id/slider"
                 android:layout_width="match_parent"
                 android:layout_height="240dp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <ScrollView
                 android:id="@+id/description_scroll_view"
@@ -49,8 +47,8 @@
                         android:id="@+id/title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
                         android:layout_marginStart="4dp"
+                        android:layout_marginTop="4dp"
                         android:layout_marginEnd="4dp"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -61,10 +59,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
                         android:layout_marginBottom="4dp"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
                         android:textColor="@color/teal_700"
-                        />
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/description"
@@ -72,12 +69,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
                         android:layout_marginEnd="4dp"
+                        android:textIsSelectable="true"
                         android:scrollbars="vertical" />
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#cccccc" />
+                        android:background="@color/light_grey" />
 
                     <TextView
                         android:id="@+id/tags"
@@ -91,20 +89,26 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#cccccc" />
+                        android:background="@color/light_grey" />
+
+                    <TextView
+                        android:id="@+id/commentsCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:textColor="@color/teal_700"
+                        android:textStyle="bold" />
+<!--                    android:textSize="12sp"-->
+
+                    <androidx.compose.ui.platform.ComposeView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/commentsLayout"
+                        />
                 </LinearLayout>
-
             </ScrollView>
-
-            <!--        <androidx.recyclerview.widget.RecyclerView-->
-            <!--            android:id="@+id/commentsRecyclerView"-->
-            <!--            android:layout_width="match_parent"-->
-            <!--            android:layout_height="match_parent"-->
-            <!--            android:layout_below="@+id/tags_divider"-->
-            <!--            android:layout_marginStart="2dp"-->
-            <!--            android:layout_marginTop="2dp"-->
-            <!--            android:layout_marginEnd="2dp"-->
-            <!--            android:layout_marginBottom="50dp" />-->
         </LinearLayout>
     </RelativeLayout>
 </layout>
