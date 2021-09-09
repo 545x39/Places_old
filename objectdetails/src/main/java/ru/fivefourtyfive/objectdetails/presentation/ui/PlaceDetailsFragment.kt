@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.*
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import androidx.compose.foundation.layout.Column
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -16,6 +17,7 @@ import ru.fivefourtyfive.objectdetails.databinding.FragmentPlaceDetailsBinding
 import ru.fivefourtyfive.objectdetails.di.DaggerPlaceDetailsComponent
 import ru.fivefourtyfive.objectdetails.presentation.ui.util.SliderBuilder
 import ru.fivefourtyfive.objectdetails.presentation.ui.util.TagsBuilder
+import ru.fivefourtyfive.objectdetails.presentation.ui.view.Comment
 import ru.fivefourtyfive.objectdetails.presentation.viewmodel.PlaceDetailsViewModel
 import ru.fivefourtyfive.objectdetails.presentation.viewmodel.PlaceDetailsViewState
 import ru.fivefourtyfive.wikimapper.Wikimapper
@@ -24,6 +26,7 @@ import ru.fivefourtyfive.wikimapper.di.factory.ViewModelProviderFactory
 import ru.fivefourtyfive.wikimapper.domain.entity.*
 import ru.fivefourtyfive.wikimapper.presentation.ui.MainActivity
 import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.Renderer
+import ru.fivefourtyfive.wikimapper.util.Network.ROOT_URL
 import javax.inject.Inject
 import ru.fivefourtyfive.wikimapper.R as appR
 
@@ -71,19 +74,21 @@ class PlaceDetailsFragment : Fragment(), Renderer<PlaceDetailsViewState> {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         //<editor-fold defaultstate="collapsed" desc="INNER METHODS">
-        fun shareLink() {}
+        fun share(uriString: String) =
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(uriString)))
+
+        fun shareLink() {
+            with(viewModel.viewStateLiveData.value) {
+                if (this is PlaceDetailsViewState.Success) {
+                    share("$ROOT_URL/${place.id}/${place.languageIso}")
+                }
+            }
+        }
 
         fun shareCoordinates() {
             with(viewModel.viewStateLiveData.value) {
                 if (this is PlaceDetailsViewState.Success) {
-                    place.location?.apply {
-                        startActivity(
-                            Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse("geo:$lat,$lon?q=$lat,$lon")
-                            )
-                        )
-                    }
+                    place.location?.apply { share("geo:$lat,$lon?q=$lat,$lon") }
                 }
             }
         }
@@ -130,6 +135,7 @@ class PlaceDetailsFragment : Fragment(), Renderer<PlaceDetailsViewState> {
     private fun setComments(comments: List<Comment>?) {
         val count = "Комментариев: ${if (comments.isNullOrEmpty()) 0 else comments.size}"
         binding.commentsCount.text = count
+        binding.commentsLayout.setContent { Column { comments?.map { Comment(it) } } }
     }
 
     private fun setMain(place: Place) {

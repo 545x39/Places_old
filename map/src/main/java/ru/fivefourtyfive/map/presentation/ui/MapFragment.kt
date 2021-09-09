@@ -30,6 +30,7 @@ import ru.fivefourtyfive.map.R
 import ru.fivefourtyfive.wikimapper.R as appR
 import ru.fivefourtyfive.wikimapper.BuildConfig
 import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Parameter.ID
+import ru.fivefourtyfive.wikimapper.util.Network.WIKIMEDIA_TILES_URL
 import timber.log.Timber
 import java.io.File
 import kotlin.random.Random
@@ -72,7 +73,7 @@ class MapFragment : Fragment() {
         19,
         256,
         ".png",
-        arrayOf("https://c.tiles.wmflabs.org/osm-no-labels/"),
+        arrayOf(WIKIMEDIA_TILES_URL),
         "© OpenStreetMap contributors",
         TileSourcePolicy(
             2,
@@ -173,7 +174,11 @@ class MapFragment : Fragment() {
         val installMonitor = DynamicInstallMonitor()
         findNavController().navigate(
             appR.id.action_mapFragment_to_placeDetailsFragment,
-            bundleOf(ID to if (Random.nextBoolean()) 18307319 else Random.nextInt(1, 540)),
+            bundleOf(ID to
+//                     if (Random.nextBoolean()) 18307319 else
+                    Random.nextInt(1, 540)
+            )
+                ,
             null,
             DynamicExtras(installMonitor)
         )

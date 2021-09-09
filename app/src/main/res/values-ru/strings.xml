@@ -2,6 +2,9 @@
 <resources>
     <string name="settings">Настройки</string>
     <string name="search">Поиск</string>
+    <string name="show_on_map">Показать на карте</string>
+    <string name="add_to_favorites">Добавить в избранные</string>
+    <string name="delete_from_favorites">Удалить из избранных</string>
     <string name="share_link">Отправить ссылку</string>
     <string name="share_coordinates">Отправить координаты</string>
     <string name="slide_show">Слайд-шоу</string>
