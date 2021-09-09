@@ -6,6 +6,7 @@
         <entry key="../../../../../../layout/custom_preview.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.18489583333333334" />
         <entry key="map/src/main/res/menu/menu_map.xml" value="0.228125" />
+        <entry key="objectdetails/src/main/res/drawable/icon_user.xml" value="0.22552083333333334" />
         <entry key="objectdetails/src/main/res/layout/carousel_fragment.xml" value="0.228125" />
         <entry key="objectdetails/src/main/res/layout/fragment_object_detail.xml" value="0.18697916666666667" />
         <entry key="objectdetails/src/main/res/layout/fragment_place_details.xml" value="0.228125" />
