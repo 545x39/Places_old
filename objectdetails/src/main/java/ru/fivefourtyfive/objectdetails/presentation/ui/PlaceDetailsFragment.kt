@@ -75,7 +75,7 @@ class PlaceDetailsFragment : Fragment(), Renderer<PlaceDetailsViewState> {
 
         //<editor-fold defaultstate="collapsed" desc="INNER METHODS">
         fun share(uriString: String) =
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(uriString)))
+            runCatching { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(uriString)))}
 
         fun shareLink() {
             with(viewModel.viewStateLiveData.value) {
