@@ -3,6 +3,7 @@ package ru.fivefourtyfive.wikimapper.di
 import android.content.SharedPreferences
 import dagger.Component
 import ru.fivefourtyfive.wikimapper.Wikimapper
+import ru.fivefourtyfive.wikimapper.data.repository.AreaRepository
 import ru.fivefourtyfive.wikimapper.data.repository.implementation.PlaceRepository
 import ru.fivefourtyfive.wikimapper.di.module.AppModule
 import ru.fivefourtyfive.wikimapper.di.module.DataSourceModule
@@ -26,6 +27,8 @@ interface AppComponent {
     fun getPreferences(): SharedPreferences
 
     fun getPlaceRepository(): PlaceRepository
+
+    fun getAreaRepository(): AreaRepository
 
 //    fun workerProviderFactory(): WorkerProviderFactory
 

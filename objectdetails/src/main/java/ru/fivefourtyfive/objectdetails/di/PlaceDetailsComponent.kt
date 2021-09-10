@@ -5,7 +5,10 @@ import ru.fivefourtyfive.objectdetails.presentation.ui.PlaceDetailsFragment
 import ru.fivefourtyfive.wikimapper.di.AppComponent
 
 @PlaceDetailsScope
-@Component(dependencies = [AppComponent::class], modules = [PlaceDetailsModule::class])
+@Component(
+    dependencies = [AppComponent::class],
+    modules = [PlaceDetailsModule::class]
+)
 interface PlaceDetailsComponent {
 
     fun inject(fragment: PlaceDetailsFragment)

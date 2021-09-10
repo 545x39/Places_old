@@ -30,7 +30,7 @@ class RetrofitDataSource @Inject constructor(private val api: Api) : RemoteDataS
         }
     }.flowOn(IO)
 
-    override fun getPlaces(
+    override fun getArea(
         latMin: Double,
         lonMin: Double,
         latMax: Double,
@@ -44,7 +44,7 @@ class RetrofitDataSource @Inject constructor(private val api: Api) : RemoteDataS
                 override fun onResponse(
                     call: Call<ResponseBody>, response: Response<ResponseBody>
                 ) {
-                    Timber.e("RESPONSE OK!!!")
+                    Timber.e("RESPONSE OK!!!\n${response.body()}")
                 }
 
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {

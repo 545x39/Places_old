@@ -9,11 +9,11 @@ import ru.fivefourtyfive.wikimapper.R
 
 @Composable
 fun ContentText(text: String?){
-    SelectionContainer {
+//    SelectionContainer {
         Text(
             text ?: "",
             color = colorResource(id = R.color.grey),
             fontSize = 14.sp
         )
-    }
+//    }
 }

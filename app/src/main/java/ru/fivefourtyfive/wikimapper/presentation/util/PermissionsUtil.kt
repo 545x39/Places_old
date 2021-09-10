@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.wikimapper.util
+package ru.fivefourtyfive.wikimapper.presentation.util
 
 import android.content.Context
 import android.content.pm.PackageManager

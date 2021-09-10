@@ -18,7 +18,7 @@ interface RemoteDataSource {
         )
     ): Flow<PlaceDataState>
 
-    fun getPlaces(
+    fun getArea(
         latMin: Double,
         lonMin: Double,
         latMax: Double,
