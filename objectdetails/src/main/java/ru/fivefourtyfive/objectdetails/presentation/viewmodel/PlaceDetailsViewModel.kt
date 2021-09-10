@@ -1,5 +1,6 @@
 package ru.fivefourtyfive.objectdetails.presentation.viewmodel
 
+import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,17 +10,33 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.fivefourtyfive.wikimapper.data.repository.implementation.PlaceRepository
 import ru.fivefourtyfive.wikimapper.domain.datastate.PlaceDataState
+import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.EventHandler
 import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.Reducer
-import timber.log.Timber
+import ru.fivefourtyfive.wikimapper.util.Preferences.PREFERENCE_SLIDESHOW
 import javax.inject.Inject
 
-class PlaceDetailsViewModel @Inject constructor(private val repository: PlaceRepository) :
-    ViewModel(), Reducer<PlaceDataState, PlaceDetailsViewState> {
+class PlaceDetailsViewModel @Inject constructor(
+    private val repository: PlaceRepository,
+    private val preferences: SharedPreferences
+) :
+    ViewModel(), Reducer<PlaceDataState, PlaceDetailsViewState>, EventHandler<PlaceEvent> {
 
     private val _viewStateLiveData: MutableLiveData<PlaceDetailsViewState> =
         MutableLiveData(PlaceDetailsViewState.Loading)
 
     val viewStateLiveData = _viewStateLiveData as LiveData<PlaceDetailsViewState>
+
+    override fun handleEvent(event: PlaceEvent) {
+        when (event) {
+            is PlaceEvent.GetPlace -> getPlace(event.id)
+            is PlaceEvent.SetSlideshow -> setSlideshow(event.enable)
+        }
+    }
+
+    fun slideshow() = preferences.getBoolean(PREFERENCE_SLIDESHOW, false)
+
+    private fun setSlideshow(enabled: Boolean) =
+        preferences.edit().putBoolean(PREFERENCE_SLIDESHOW, enabled).apply()
 
     fun getPlace(id: Int) {
         viewModelScope.launch {
@@ -33,10 +50,24 @@ class PlaceDetailsViewModel @Inject constructor(private val repository: PlaceRep
     }
 
     override fun reduce(dataState: PlaceDataState): PlaceDetailsViewState {
-        return when (dataState) {
-            is PlaceDataState.Success -> PlaceDetailsViewState.Success(dataState.place)
-            is PlaceDataState.Loading -> PlaceDetailsViewState.Loading
-            is PlaceDataState.Error -> PlaceDetailsViewState.Error(dataState.message)
+        with(dataState) {
+            return when (this) {
+                is PlaceDataState.Success -> PlaceDetailsViewState.Success(
+                    id = place.id,
+                    title = place.title,
+                    description = place.description,
+                    languageIso = place.languageIso,
+                    photos = place.photos,
+                    comments = place.comments,
+                    tags = place.tags,
+                    lat = place.location?.lat,
+                    lon = place.location?.lon,
+                    place = place.location?.place,
+                    country = place.location?.country
+                )
+                is PlaceDataState.Loading -> PlaceDetailsViewState.Loading
+                is PlaceDataState.Error -> PlaceDetailsViewState.Error(message = message)
+            }
         }
     }
 }

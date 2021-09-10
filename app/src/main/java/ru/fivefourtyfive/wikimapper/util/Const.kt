@@ -11,11 +11,14 @@ object Network {
 }
 
 object Permissions {
-
     val PERMISSIONS = arrayOf(
         READ_PHONE_STATE,
         WRITE_EXTERNAL_STORAGE,
         READ_EXTERNAL_STORAGE,
         ACCESS_FINE_LOCATION
     )
+}
+
+object Preferences {
+    const val PREFERENCE_SLIDESHOW = "preference_slideshow"
 }

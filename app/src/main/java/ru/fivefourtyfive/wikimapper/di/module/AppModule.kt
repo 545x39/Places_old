@@ -18,4 +18,8 @@ class AppModule(private val application: Wikimapper) {
     @Singleton
     @Provides
     fun provideWorkManager() = WorkManager.getInstance(application)
+
+//    @Singleton
+//    @Provides
+//    fun provideContext() = application.baseContext
 }

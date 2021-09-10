@@ -5,7 +5,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import ru.fivefourtyfive.objectdetails.presentation.viewmodel.PlaceDetailsViewModel
-import ru.fivefourtyfive.wikimapper.di.ley.ViewModelKey
+import ru.fivefourtyfive.wikimapper.di.key.ViewModelKey
 
 @Module
 interface PlaceDetailsModule {

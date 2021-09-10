@@ -5,6 +5,8 @@
     <string name="show_on_map">Show on map</string>
     <string name="add_to_favorites">Add to favorites</string>
     <string name="delete_from_favorites">Delete from favorites</string>
+    <string name="share">Share</string>
+    <string name="show_on_website">Show on website</string>
     <string name="share_link">Share link</string>
     <string name="share_coordinates">Share coordinates</string>
     <string name="slide_show">Slide show</string>
@@ -13,4 +15,5 @@
     <string name="title_search" translatable="false">Search</string>
     <string name="title_settings" translatable="false">Settings</string>
     <string name="title_objectdetails">Object</string>
+    <string name="comments_count">Comments: %s</string>
 </resources>

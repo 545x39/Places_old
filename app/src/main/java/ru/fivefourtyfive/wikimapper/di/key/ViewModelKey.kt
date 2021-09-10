@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.wikimapper.di.ley
+package ru.fivefourtyfive.wikimapper.di.key
 
 import androidx.lifecycle.ViewModel
 import dagger.MapKey

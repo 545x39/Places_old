@@ -25,30 +25,30 @@ class SliderBuilder(private val context: Context, private val layout: SliderLayo
     fun addOnPageChangeListener(listener: ViewPagerEx.OnPageChangeListener) =
         apply { layout.addOnPageChangeListener(listener) }
 
-    fun disableAutoCycling(disable: Boolean) = apply { if (disable) layout.stopAutoCycle() }
+    fun enableAutoCycling(enable: Boolean) =
+        apply { if (enable) layout.startAutoCycle() else layout.stopAutoCycle() }
 
     fun stopCyclingWhenTouch(stop: Boolean) = apply { layout.stopCyclingWhenTouch(stop) }
 
     fun setDuration(duration: Long) = this.apply { layout.setDuration(duration) }
 
     @SuppressLint("CheckResult")
-    fun buildWith(photos: List<Photo>?) {
-        if (!photos.isNullOrEmpty()) layout.visibility = View.VISIBLE
+    fun buildWith(photos: List<Photo>) {
+        if (photos.isNotEmpty()) layout.visibility = View.VISIBLE
         val requestOptions = RequestOptions()
         requestOptions.centerCrop()
             .diskCacheStrategy(DiskCacheStrategy.NONE)
         //.placeholder(R.drawable.placeholder)
         //.error(R.drawable.placeholder);
-        photos?.map { photo ->
+        photos.map { photo ->
             photo.apply {
                 //There is also a DefaultSliderView, which cannot display any text.
                 TextSliderView(context)
                     .image(url1280)
                     .description("$userName, $timeString")
                     .setRequestOption(requestOptions)
-                    .setProgressBarVisible(true).apply {
-                        layout.addSlider(this@apply)
-                    }
+                    .setProgressBarVisible(true)
+                    .let { layout.addSlider(it) }
             }
         }
     }
