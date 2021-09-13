@@ -1,9 +1,9 @@
 package ru.fivefourtyfive.wikimapper.data.datasource.remote.util
 
-object Parameters {
+object DataBlocks {
 
     @Synchronized
-    fun build(vararg values: String) = buildString {
+    fun add(vararg values: String) = buildString {
         with(values.indices) {
             map {
                 append(values[it])
@@ -13,7 +13,7 @@ object Parameters {
     }
 
     @Synchronized
-    fun build(vararg values: Double) = buildString {
+    fun add(vararg values: Double) = buildString {
         with(values.indices) {
             map {
                 append(values[it])

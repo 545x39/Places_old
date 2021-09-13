@@ -24,7 +24,6 @@ import dependencies.Versions.ROOM_VERSION
 import dependencies.Versions.TIMBER_VERSION
 import dependencies.Versions.WORK_MANAGER_VERSION
 
-
 //<editor-fold defaultstate="collapsed" desc="PLUGINS">
 plugins {
     id("com.android.application")
