@@ -22,7 +22,6 @@ import org.osmdroid.events.ScrollEvent
 import org.osmdroid.events.ZoomEvent
 import org.osmdroid.tileprovider.tilesource.TileSourcePolicy
 import org.osmdroid.tileprovider.tilesource.XYTileSource
-import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.MapView
@@ -82,11 +81,14 @@ class MapFragment : Fragment() {
         mapView = view.findViewById(R.id.map)
         view.findViewById<Button>(R.id.get_area_button).setOnClickListener {
             mapView.boundingBox.apply {
-//                viewModel.getArea(lonWest, latSouth, lonEast, latNorth)
+                viewModel.getArea(lonWest, latSouth, lonEast, latNorth)
 //                Timber.e("BOUNDING BOX: $this")
 //                Timber.e("BOUNDING BOX: latSouth: $latSouth, lonEast: $lonEast , latNorth: $latNorth, lonWest: $lonWest")
 
             }
+            viewModel.liveData.observe(viewLifecycleOwner,  {
+                //TODO
+            })
             Timber.e("Drawing...")
             drawPolygon()
             Timber.e("Drawn.")
@@ -168,12 +170,12 @@ class MapFragment : Fragment() {
     private fun setMapListener() {
         mapView.addMapListener(DelayedMapListener(object : MapListener {
             override fun onScroll(event: ScrollEvent?): Boolean {
-                Timber.e("MAP SCROLLED. BBOX: " + mapView.boundingBox)
+//                Timber.e("MAP SCROLLED. BBOX: " + mapView.boundingBox)
                 return false
             }
 
             override fun onZoom(event: ZoomEvent?): Boolean {
-                Timber.e("MAP RESIZED. BBOX: " + mapView.boundingBox)
+//                Timber.e("MAP RESIZED. BBOX: " + mapView.boundingBox)
                 return false
             }
         }, 200))

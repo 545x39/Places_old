@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.DataBlock
 import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Parameters
 import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Value
+import ru.fivefourtyfive.wikimapper.domain.datastate.AreaDataState
 import ru.fivefourtyfive.wikimapper.domain.datastate.PlaceDataState
 
 interface RemoteDataSource {
@@ -18,7 +19,7 @@ interface RemoteDataSource {
         )
     ): Flow<PlaceDataState>
 
-    fun getArea(
+    suspend fun getArea(
         latMin: Double,
         lonMin: Double,
         latMax: Double,
@@ -26,7 +27,7 @@ interface RemoteDataSource {
         category: String? = null,
         count: Int? = 100,
         language: String? = Value.RU
-    )
+    ): Flow<AreaDataState>
 
     fun getCategories(
         name: String? = null,
