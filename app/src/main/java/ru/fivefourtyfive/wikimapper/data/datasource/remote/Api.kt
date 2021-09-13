@@ -32,6 +32,7 @@ import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Value.DEFAULT_BO
 import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Value.GZIP
 import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Value.JSON
 import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Value.RU
+import ru.fivefourtyfive.wikimapper.domain.entity.Area
 import ru.fivefourtyfive.wikimapper.domain.entity.Place
 
 interface Api {
@@ -59,7 +60,7 @@ interface Api {
         "Accept: application/json;charset=utf-8",
         "Cache-Control: max-age=640000"
     )
-    fun getArea(
+    suspend fun getArea(
         @Query(value = KEY) key: String = API_KEY,
         @Query(value = FUNCTION) function: String = OBJECT_GET_BY_BOX,
         @Query(value = COORDS_BY) coordsBy: String = BBOX,
@@ -69,7 +70,7 @@ interface Api {
         @Query(value = LANGUAGE) language: String? = RU,
         @Query(value = PACK) pack: String? = GZIP,
         @Query(value = FORMAT) format: String = JSON,
-    ): Call<ResponseBody>
+    ): Area
 
     @GET(".")
     @Headers(

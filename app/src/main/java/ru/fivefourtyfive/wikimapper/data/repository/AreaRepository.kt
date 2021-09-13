@@ -5,7 +5,7 @@ import javax.inject.Inject
 
 class AreaRepository @Inject constructor(private val remoteDataSource: RemoteDataSource) {
 
-    fun getArea(latMin: Double, lonMin: Double, latMax: Double, lonMax: Double) =
+    suspend fun getArea(latMin: Double, lonMin: Double, latMax: Double, lonMax: Double) =
         remoteDataSource.getArea(latMin, lonMin, latMax, lonMax)
 
 }

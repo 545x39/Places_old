@@ -22,6 +22,9 @@ data class Place(
     @SerializedName("language_name")
     @Expose
     val languageName: String? = null,
+    @SerializedName("url")
+    @Expose
+    val url: String? = null,
     @Suppress("SpellCheckingInspection")
     @SerializedName("urlhtml")
     @Expose
@@ -29,6 +32,9 @@ data class Place(
     @SerializedName("title")
     @Expose
     val title: String? = null,
+    @SerializedName("name")
+    @Expose
+    val name: String? = null,
     @SerializedName("description")
     @Expose
     val description: String? = null,
@@ -52,5 +58,5 @@ data class Place(
     val comments: List<Comment>? = null,
     @SerializedName("location")
     @Expose
-    val location: Location? = null,
+    val location: Location? = null
 )
