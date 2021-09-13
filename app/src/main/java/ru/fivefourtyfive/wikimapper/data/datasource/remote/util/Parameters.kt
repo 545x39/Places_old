@@ -1,6 +1,6 @@
 package ru.fivefourtyfive.wikimapper.data.datasource.remote.util
 
-object DataBlocks {
+object Parameters {
 
     @Synchronized
     fun add(vararg values: String) = buildString {
