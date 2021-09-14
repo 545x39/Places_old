@@ -17,6 +17,8 @@ class PlaceDTO(
     polygon: ArrayList<GeoPoint>
 ) : Polygon() {
 
+    var highlight = false
+
     init {
         //Forces the loop to close, as the first and the last points are the same.
         polygon.add(polygon[0])
@@ -26,11 +28,12 @@ class PlaceDTO(
         title = name
     }
 
-    fun setHighlighted(highlight: Boolean) {
-        fillPaint.color = when (highlight) {
+    fun setHighlighted(enable: Boolean) {
+        fillPaint.color = when (enable) {
             true -> Color.argb(80, 49, 137, 135)
-            false -> Color.argb(255, 255, 255, 255)
+            false -> Color.argb(0, 255, 255, 255)
         }
+        highlight = enable
     }
 
     override fun equals(other: Any?) = when (other) {
