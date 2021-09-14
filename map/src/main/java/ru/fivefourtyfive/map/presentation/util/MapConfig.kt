@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.map.presentation.ui
+package ru.fivefourtyfive.map.presentation.util
 
 import android.content.Context
 import org.osmdroid.config.Configuration
@@ -18,7 +18,6 @@ import java.io.File
 object MapConfig {
 
     fun config(context: Context, mapView: MapView){
-
 
         fun setCompassOverlay() {
             CompassOverlay(context, InternalCompassOrientationProvider(context), mapView).apply {
@@ -56,7 +55,7 @@ object MapConfig {
         ////
         mapView.overlays.add(locationOverlay)
         mapView.overlays.add(directedLocationOverlay)
-        locationOverlay?.apply {
+        locationOverlay.apply {
             enableMyLocation()
             enableFollowLocation()
 //        enableAutoStop = false

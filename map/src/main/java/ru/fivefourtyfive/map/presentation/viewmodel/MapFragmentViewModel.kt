@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import ru.fivefourtyfive.map.presentation.dto.PlaceDTO
 import ru.fivefourtyfive.map.presentation.util.toPlaceDto
 import ru.fivefourtyfive.wikimapper.data.repository.AreaRepository
 import ru.fivefourtyfive.wikimapper.domain.datastate.AreaDataState

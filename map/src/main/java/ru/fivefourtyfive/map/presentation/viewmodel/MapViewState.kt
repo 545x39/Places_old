@@ -1,6 +1,7 @@
 package ru.fivefourtyfive.map.presentation.viewmodel
 
 import android.view.View
+import ru.fivefourtyfive.map.presentation.dto.PlaceDTO
 import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.ViewState
 
 sealed class MapViewState : ViewState {

@@ -39,7 +39,12 @@ class RetrofitDataSource @Inject constructor(private val api: Api) : RemoteDataS
         language: String?
     ) = flow {
         emit(AreaDataState.Loading)
-        api.getArea(boundingBox = Parameters.add(latMin, lonMin, latMax, lonMax)).apply {
+        api.getArea(
+            boundingBox = Parameters.add(latMin, lonMin, latMax, lonMax),
+            category = category,
+            count = count,
+            language = language
+        ).apply {
             when (debugInfo) {
                 null -> emit(AreaDataState.Success(this))
                 else -> emit(AreaDataState.Error(message = debugInfo?.message ?: ""))

@@ -306,7 +306,7 @@ class MapFragment : Fragment() {
 //        line.setPoints(geoPoints)
         mapView.overlayManager.add(line)
         polygon.setFillColor(Color.argb(80, 49,137,135))
-        geoPoints.add(geoPoints.get(0))    //forces the loop to close
+        geoPoints.add(geoPoints[0])    //forces the loop to close
         polygon.strokeColor = ContextCompat.getColor(requireContext(), appR.color.white)
         polygon.strokeWidth = 3.0f
         polygon.points = geoPoints

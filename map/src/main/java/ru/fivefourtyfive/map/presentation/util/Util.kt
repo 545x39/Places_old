@@ -1,7 +1,7 @@
 package ru.fivefourtyfive.map.presentation.util
 
 import org.osmdroid.util.GeoPoint
-import ru.fivefourtyfive.map.presentation.viewmodel.PlaceDTO
+import ru.fivefourtyfive.map.presentation.dto.PlaceDTO
 import ru.fivefourtyfive.wikimapper.domain.entity.Place
 
 fun Place.toPlaceDto() = PlaceDTO(
