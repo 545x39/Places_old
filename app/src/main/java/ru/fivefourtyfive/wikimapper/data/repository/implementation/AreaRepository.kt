@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.wikimapper.data.repository
+package ru.fivefourtyfive.wikimapper.data.repository.implementation
 
 import ru.fivefourtyfive.wikimapper.data.repository.abstraction.RemoteDataSource
 import javax.inject.Inject

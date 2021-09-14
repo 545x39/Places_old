@@ -4,7 +4,7 @@ import android.graphics.Color
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Polygon
 
-class PlaceDTO (
+class PlaceDTO(
     val id: Int,
     name: String,
     val url: String,
@@ -18,12 +18,19 @@ class PlaceDTO (
 ) : Polygon() {
 
     init {
-//        setFillColor(Color.argb(80, 49,137,135))
-        polygon.add(polygon[0])//Forces the loop to close, as the first and the last points are the same.
-        strokeColor = Color.WHITE
-        strokeWidth = 3.0f
+        //Forces the loop to close, as the first and the last points are the same.
+        polygon.add(polygon[0])
+        outlinePaint.color = Color.WHITE
+        outlinePaint.strokeWidth = 3.0f
         points = polygon
         title = name
+    }
+
+    fun setHighlighted(highlight: Boolean) {
+        fillPaint.color = when (highlight) {
+            true -> Color.argb(80, 49, 137, 135)
+            false -> Color.argb(255, 255, 255, 255)
+        }
     }
 
     override fun equals(other: Any?) = when (other) {
