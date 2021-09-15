@@ -1,5 +1,6 @@
 package ru.fivefourtyfive.map.presentation.ui
 
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
@@ -18,6 +19,7 @@ import com.google.android.play.core.splitinstall.SplitInstallManager
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import org.osmdroid.api.IGeoPoint
 import org.osmdroid.events.DelayedMapListener
 import org.osmdroid.events.MapListener
 import org.osmdroid.events.ScrollEvent
@@ -32,6 +34,10 @@ import org.osmdroid.views.overlay.compass.CompassOverlay
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
+import org.osmdroid.views.overlay.simplefastpoint.LabelledGeoPoint
+import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlay
+import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlayOptions
+import org.osmdroid.views.overlay.simplefastpoint.SimplePointTheme
 import ru.fivefourtyfive.map.R
 import ru.fivefourtyfive.map.di.DaggerMapFragmentComponent
 import ru.fivefourtyfive.map.presentation.dto.PlaceDTO
@@ -75,15 +81,7 @@ class MapFragment : Fragment() {
 
 //    // set some visual options for the overlay
 //    // we use here MAXIMUM_OPTIMIZATION algorithm, which works well with >100k points
-//    private val overlayOptions = SimpleFastPointOverlayOptions.getDefaultStyle()
-//        .setAlgorithm(SimpleFastPointOverlayOptions.RenderingAlgorithm.MAXIMUM_OPTIMIZATION)
-//        .setRadius(1.0f)
-//        .setSelectedRadius(100f)
-//        .setIsClickable(true)
-//        .setCellSize(1)
-//        .setTextStyle(textStyle)
-//        .setSelectedPointStyle(selectedTextStyle)
-//
+    private val overlayOptions = SimpleFastPointOverlayOptions.getDefaultStyle()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -109,16 +107,17 @@ class MapFragment : Fragment() {
             strokeWidth = 1.0f
             style = Paint.Style.STROKE
         }
-
+        ////
         textStyle.apply {
             style = Paint.Style.FILL
             isAntiAlias = true
-            color = 0
-            textAlign = Paint.Align.LEFT;
-            textSize = 30.0f;
+            color = Color.WHITE
+            textAlign = Paint.Align.CENTER
+            textSize = 28.0f;
             isFakeBoldText = true;
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD);
         }
+        setOverlayOptions()
         ////
         view.findViewById<Button>(R.id.get_area_button).setOnClickListener {
             mapView.boundingBox.apply { viewModel.getArea(lonWest, latSouth, lonEast, latNorth) }
@@ -128,7 +127,6 @@ class MapFragment : Fragment() {
                     when (this) {
                         is MapViewState.Success -> {
                             //TODO Удалить то, что вышло за пределы видимой области карты, нарисовать то, что вновь попало в видимую область. То, что уже было, не трогать.
-                            //TODO Сделать отображение названия объекта по щелчку на нём.
                             //TODO Сделать навигацию в описание объекта по щелчку на названии выбранного объекта.
                             //TODO Выводить названия объектов (не кликабельные) при масштабировании и перемещении карты в зависимости от соотношения размера объекта к масштабу карты.
                             //TODO Подобрать более контрастный цвет для контуров объектов.
@@ -178,8 +176,25 @@ class MapFragment : Fragment() {
 //            val theme = SimplePointTheme()
 //            SimpleFastPointOverlay()
 //            mapView?.overlays?.add(SimpleFastPointOverlay)(LabelledGeoPoint(place.lat, place.lon, place.title)))
+
+            // wrap them in a theme
+            val points = arrayListOf<IGeoPoint>()
+            points.add(LabelledGeoPoint(place.lat, place.lon, place.title))
+            val simplePointTheme = SimplePointTheme(points, true)
+            mapView?.overlays?.add(SimpleFastPointOverlay(simplePointTheme, overlayOptions))
             return true
         }
+    }
+
+    private fun setOverlayOptions(){
+        overlayOptions.setAlgorithm(SimpleFastPointOverlayOptions.RenderingAlgorithm.MAXIMUM_OPTIMIZATION)
+            .setRadius(1.0f)
+            .setSelectedRadius(100f)
+            .setIsClickable(true)
+            .setCellSize(10)
+            .setTextStyle(textStyle)
+            .selectedPointStyle = selectedTextStyle
+
     }
 
     override fun onResume() {
@@ -189,24 +204,6 @@ class MapFragment : Fragment() {
         resetLocationOverlay()
         setMapListener()
     }
-
-    private val wikimediaTileSource = XYTileSource(
-        "OsmNoLabels",
-        0,
-        19,
-        256,
-        ".png",
-        arrayOf(WIKIMEDIA_TILES_URL),
-        "© OpenStreetMap contributors",
-        TileSourcePolicy(
-            2,
-            TileSourcePolicy.FLAG_NO_BULK
-                    or TileSourcePolicy.FLAG_NO_PREVENTIVE
-                    or TileSourcePolicy.FLAG_USER_AGENT_MEANINGFUL
-                    or TileSourcePolicy.FLAG_USER_AGENT_NORMALIZED
-        )
-    )
-
 
     private lateinit var compassOverlay: CompassOverlay
 
