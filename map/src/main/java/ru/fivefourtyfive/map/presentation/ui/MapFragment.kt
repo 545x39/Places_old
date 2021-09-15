@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Button
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -28,13 +29,12 @@ import org.osmdroid.tileprovider.tilesource.XYTileSource
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.Overlay
 import org.osmdroid.views.overlay.Polygon
 import org.osmdroid.views.overlay.compass.CompassOverlay
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider
-import org.osmdroid.views.overlay.mylocation.DirectedLocationOverlay
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
-import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlayOptions
 import ru.fivefourtyfive.map.R
 import ru.fivefourtyfive.map.di.DaggerMapFragmentComponent
 import ru.fivefourtyfive.map.presentation.dto.PlaceDTO
@@ -61,9 +61,7 @@ class MapFragment : Fragment() {
     @Inject
     lateinit var viewModel: MapFragmentViewModel
 
-    private var locationOverlay: MyLocationNewOverlay? = null
-
-    private var locationProvider: GpsMyLocationProvider? = null
+    private lateinit var locationOverlay: MyLocationNewOverlay
 
     private lateinit var mapView: MapView
 
@@ -74,6 +72,22 @@ class MapFragment : Fragment() {
     private var currentSelection: PlaceDTO? = null
 
     lateinit var splitInstallManager: SplitInstallManager
+
+    private val selectedTextStyle = Paint()
+
+    private val textStyle = Paint()
+
+//    // set some visual options for the overlay
+//    // we use here MAXIMUM_OPTIMIZATION algorithm, which works well with >100k points
+//    private val overlayOptions = SimpleFastPointOverlayOptions.getDefaultStyle()
+//        .setAlgorithm(SimpleFastPointOverlayOptions.RenderingAlgorithm.MAXIMUM_OPTIMIZATION)
+//        .setRadius(1.0f)
+//        .setSelectedRadius(100f)
+//        .setIsClickable(true)
+//        .setCellSize(1)
+//        .setTextStyle(textStyle)
+//        .setSelectedPointStyle(selectedTextStyle)
+//
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -93,6 +107,23 @@ class MapFragment : Fragment() {
         viewModel = ViewModelProvider(this, providerFactory).get(MapFragmentViewModel::class.java)
         mapView = view.findViewById(R.id.map)
         progress = view.findViewById(R.id.progress)
+        ////
+        selectedTextStyle.apply {
+            color = ContextCompat.getColor(requireContext(), android.R.color.transparent)
+            strokeWidth = 1.0f
+            style = Paint.Style.STROKE
+        }
+
+        textStyle.apply {
+            style = Paint.Style.FILL
+            isAntiAlias = true
+            color = 0
+            textAlign = Paint.Align.LEFT;
+            textSize = 30.0f;
+            isFakeBoldText = true;
+            typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD);
+        }
+        ////
         view.findViewById<Button>(R.id.get_area_button).setOnClickListener {
             mapView.boundingBox.apply { viewModel.getArea(lonWest, latSouth, lonEast, latNorth) }
             viewModel.liveData.observe(viewLifecycleOwner, {
@@ -100,10 +131,14 @@ class MapFragment : Fragment() {
                     progress.visibility = progressVisibility
                     when (this) {
                         is MapViewState.Success -> {
-                            //TODO Удалить то, что вышло за пределы видимой области карты,
-                            // нарисовать то, что вновь попало в видимую область. То, что уже было, не трогать.
-                            //TODO перерисовывать своё местонахождение поверх всех оверлеев.
-                            //TODO Перерисовывать компас поверх всех оверлеев.
+                            //TODO Удалить то, что вышло за пределы видимой области карты, нарисовать то, что вновь попало в видимую область. То, что уже было, не трогать.
+                            //TODO Сделать отображение названия объекта по щелчку на нём.
+                            //TODO Сделать навигацию в описание объекта по щелчку на названии выбранного объекта.
+                            //TODO Выводить названия объектов (не кликабельные) при масштабировании и перемещении карты в зависимости от соотношения размера объекта к масштабу карты.
+                            //TODO Подобрать более контрастный цвет для контуров объектов.
+                            //TODO Решить проблему с медленной заливкой цветом выбранного объекта (посмотреть, будет ли быстре еработать изменение цвета контура).
+                            //TODO Организовать объекты в FolderOverlay, а названия - в FastOverlay.
+                            //TODO Добавить кнопку центровки на своём моложении, добавить ей возможность менять масштаб, аналогично оригинальному приложению.
 //                        it.places.retainAll()
                             MainScope().launch {
                                 currentPlaces.parallelMap { place ->
@@ -114,6 +149,8 @@ class MapFragment : Fragment() {
                                     mapView.overlayManager.add(place)
                                     place.setOnClickListener(Listener(place))
                                 }
+                                resetCompassOverlay()
+                                resetLocationOverlay()
                             }
                         }
                         is MapViewState.Error -> (requireActivity() as MainActivity)
@@ -127,43 +164,12 @@ class MapFragment : Fragment() {
         splitInstallManager = SplitInstallManagerFactory.create(requireContext())
     }
 
-    private val selectedTextStyle = Paint().apply {
-        color = ContextCompat.getColor(requireContext(), android.R.color.transparent)
-        strokeWidth = 1.0f
-        style = Paint.Style.STROKE
-    }
-
-    private val textStyle = Paint().apply {
-        style = Paint.Style.FILL
-        isAntiAlias = true
-        color = ContextCompat.getColor(
-            requireContext(),
-            0//R.color.
-        )
-        textAlign = Paint.Align.LEFT;
-        textSize = 30.0f;
-        isFakeBoldText = true;
-        typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD);
-    }
-
-
-    // set some visual options for the overlay
-    // we use here MAXIMUM_OPTIMIZATION algorithm, which works well with >100k points
-    private val overlayOptions = SimpleFastPointOverlayOptions.getDefaultStyle()
-        .setAlgorithm(SimpleFastPointOverlayOptions.RenderingAlgorithm.MAXIMUM_OPTIMIZATION)
-        .setRadius(1.0f)
-        .setSelectedRadius(100f)
-        .setIsClickable(true)
-        .setCellSize(1)
-        .setTextStyle(textStyle)
-        .setSelectedPointStyle(selectedTextStyle)
-
     inner class Listener(private val place: PlaceDTO) : Polygon.OnClickListener {
         override fun onClick(polygon: Polygon?, mapView: MapView?, eventPos: GeoPoint?): Boolean {
             currentSelection?.let { if (it != place) currentSelection?.setHighlighted(false) }
             currentSelection = place
             place.setHighlighted(!place.highlight)
-            //TODO Show place title.
+            Toast.makeText(requireContext(), place.title, Toast.LENGTH_SHORT).show()
 //            Marker(mapView).apply {
 //                icon = null
 //                title = place.title
@@ -202,50 +208,60 @@ class MapFragment : Fragment() {
         )
     )
 
+
+    private lateinit var compassOverlay: CompassOverlay
+
+    private fun resetLocationOverlay() {
+        if (!::locationOverlay.isInitialized) {
+            locationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(context), mapView)
+                .apply {
+                    enableMyLocation()
+                    enableFollowLocation()
+//                enableAutoStop = false
+                }
+        }
+        reset(locationOverlay)
+    }
+
+    private fun resetCompassOverlay() {
+        if (!::compassOverlay.isInitialized) {
+            compassOverlay = CompassOverlay(
+                context,
+                InternalCompassOrientationProvider(context),
+                mapView
+            ).apply { enableCompass() }
+        }
+        reset(compassOverlay)
+    }
+
+    private fun reset(overlay: Overlay){
+        mapView.overlays.apply {
+            remove(overlay)
+            add(overlay)
+        }
+    }
+
     //<editor-fold defaultstate="collapsed" desc="MAP">
     private fun setMap(context: Context) {
-    //val context: Context = mapView.context
-
-        fun setCompassOverlay() {
-            CompassOverlay(context, InternalCompassOrientationProvider(context), mapView).apply {
-                enableCompass()
-                mapView.overlays.add(this)
-            }
+        Configuration.getInstance().apply {
+            userAgentValue = BuildConfig.APPLICATION_ID
+            osmdroidBasePath = File(requireContext().getExternalFilesDir("osmdroid")!!.absolutePath)
+            osmdroidTileCache = File(osmdroidBasePath, "tiles")
         }
-
-        val configuration = Configuration.getInstance()
-        configuration.userAgentValue = BuildConfig.APPLICATION_ID
-        configuration.osmdroidBasePath =
-            File(requireActivity().applicationContext.getExternalFilesDir("osmdroid")!!.absolutePath)
-        configuration.osmdroidTileCache = File(configuration.osmdroidBasePath, "tiles")
         mapView.apply {
-//            setTileSource(TileSourceFactory.MAPNIK)
             setTileSource(wikimediaTileSource)
             setUseDataConnection(true)
-            isTilesScaledToDpi = true
             setMultiTouchControls(true)
+            isTilesScaledToDpi = true
             minZoomLevel = 2.0
             maxZoomLevel = 19.0
             zoomController.setVisibility(CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT)
             controller.setZoom(10.0)
             isVerticalMapRepetitionEnabled = false
             isHorizontalMapRepetitionEnabled = false
-//        zoomController.setZoomInEnabled(false)
-//        zoomController.setZoomOutEnabled(false)
         }
-        setCompassOverlay()
-        ///
-        locationProvider = GpsMyLocationProvider(context)
-        locationOverlay = MyLocationNewOverlay(locationProvider, mapView)
-        val directedLocationOverlay = DirectedLocationOverlay(context)
-        ////
-        mapView.overlays.add(locationOverlay)
-        mapView.overlays.add(directedLocationOverlay)
-        locationOverlay?.apply {
-            enableMyLocation()
-            enableFollowLocation()
-//        enableAutoStop = false
-        }
+        resetCompassOverlay()
+        resetLocationOverlay()
         mapView.invalidate()
     }
 //</editor-fold>
