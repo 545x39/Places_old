@@ -1,6 +1,5 @@
 package ru.fivefourtyfive.map.presentation.ui
 
-import android.content.Context
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
@@ -19,7 +18,6 @@ import com.google.android.play.core.splitinstall.SplitInstallManager
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import org.osmdroid.config.Configuration
 import org.osmdroid.events.DelayedMapListener
 import org.osmdroid.events.MapListener
 import org.osmdroid.events.ScrollEvent
@@ -27,7 +25,6 @@ import org.osmdroid.events.ZoomEvent
 import org.osmdroid.tileprovider.tilesource.TileSourcePolicy
 import org.osmdroid.tileprovider.tilesource.XYTileSource
 import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Overlay
 import org.osmdroid.views.overlay.Polygon
@@ -39,16 +36,15 @@ import ru.fivefourtyfive.map.R
 import ru.fivefourtyfive.map.di.DaggerMapFragmentComponent
 import ru.fivefourtyfive.map.presentation.dto.PlaceDTO
 import ru.fivefourtyfive.map.presentation.util.InstallObserver.observeInstall
+import ru.fivefourtyfive.map.presentation.util.MapConfig.config
 import ru.fivefourtyfive.map.presentation.util.parallelMap
 import ru.fivefourtyfive.map.presentation.viewmodel.MapFragmentViewModel
 import ru.fivefourtyfive.map.presentation.viewmodel.MapViewState
-import ru.fivefourtyfive.wikimapper.BuildConfig
 import ru.fivefourtyfive.wikimapper.Wikimapper
 import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Parameter.ID
 import ru.fivefourtyfive.wikimapper.di.factory.ViewModelProviderFactory
 import ru.fivefourtyfive.wikimapper.presentation.ui.MainActivity
 import ru.fivefourtyfive.wikimapper.util.Network.WIKIMEDIA_TILES_URL
-import java.io.File
 import javax.inject.Inject
 import kotlin.random.Random
 import ru.fivefourtyfive.wikimapper.R as appR
@@ -155,7 +151,8 @@ class MapFragment : Fragment() {
                         }
                         is MapViewState.Error -> (requireActivity() as MainActivity)
                             .showSnackBar(message)
-                        is MapViewState.Loading -> {/* Do nothing*/
+                        is MapViewState.Loading -> {
+                            /* Do nothing*/
                         }
                     }
                 }
@@ -187,7 +184,9 @@ class MapFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        setMap(requireContext())
+        mapView.config()
+        resetCompassOverlay()
+        resetLocationOverlay()
         setMapListener()
     }
 
@@ -234,37 +233,12 @@ class MapFragment : Fragment() {
         reset(compassOverlay)
     }
 
-    private fun reset(overlay: Overlay){
+    private fun reset(overlay: Overlay) {
         mapView.overlays.apply {
             remove(overlay)
             add(overlay)
         }
     }
-
-    //<editor-fold defaultstate="collapsed" desc="MAP">
-    private fun setMap(context: Context) {
-        Configuration.getInstance().apply {
-            userAgentValue = BuildConfig.APPLICATION_ID
-            osmdroidBasePath = File(requireContext().getExternalFilesDir("osmdroid")!!.absolutePath)
-            osmdroidTileCache = File(osmdroidBasePath, "tiles")
-        }
-        mapView.apply {
-            setTileSource(wikimediaTileSource)
-            setUseDataConnection(true)
-            setMultiTouchControls(true)
-            isTilesScaledToDpi = true
-            minZoomLevel = 2.0
-            maxZoomLevel = 19.0
-            zoomController.setVisibility(CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT)
-            controller.setZoom(10.0)
-            isVerticalMapRepetitionEnabled = false
-            isHorizontalMapRepetitionEnabled = false
-        }
-        resetCompassOverlay()
-        resetLocationOverlay()
-        mapView.invalidate()
-    }
-//</editor-fold>
 
     private fun setMapListener() {
         mapView.addMapListener(DelayedMapListener(object : MapListener {
