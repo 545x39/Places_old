@@ -12,12 +12,30 @@ import java.io.File
 object MapConfig {
 
     fun MapView.config() {
+
+        fun wikimediaTileSource() = XYTileSource(
+            "WikimediaNoLabelsTileSource",
+            0,
+            19,
+            256,
+            ".png",
+            arrayOf(Network.WIKIMEDIA_TILES_URL),
+            "© OpenStreetMap contributors",
+            TileSourcePolicy(
+                2,
+                TileSourcePolicy.FLAG_NO_BULK
+                        or TileSourcePolicy.FLAG_NO_PREVENTIVE
+                        or TileSourcePolicy.FLAG_USER_AGENT_MEANINGFUL
+                        or TileSourcePolicy.FLAG_USER_AGENT_NORMALIZED
+            )
+        )
+
         Configuration.getInstance().apply {
             userAgentValue = BuildConfig.APPLICATION_ID
             osmdroidBasePath = File(context.getExternalFilesDir("osmdroid")!!.absolutePath)
             osmdroidTileCache = File(osmdroidBasePath, "tiles")
         }
-        setTileSource(wikimediaTileSource)
+        setTileSource(wikimediaTileSource())
         setUseDataConnection(true)
         setMultiTouchControls(true)
         isTilesScaledToDpi = true
@@ -29,21 +47,4 @@ object MapConfig {
         isHorizontalMapRepetitionEnabled = false
         invalidate()
     }
-
-    private val wikimediaTileSource = XYTileSource(
-        "OsmNoLabels",
-        0,
-        19,
-        256,
-        ".png",
-        arrayOf(Network.WIKIMEDIA_TILES_URL),
-        "© OpenStreetMap contributors",
-        TileSourcePolicy(
-            2,
-            TileSourcePolicy.FLAG_NO_BULK
-                    or TileSourcePolicy.FLAG_NO_PREVENTIVE
-                    or TileSourcePolicy.FLAG_USER_AGENT_MEANINGFUL
-                    or TileSourcePolicy.FLAG_USER_AGENT_NORMALIZED
-        )
-    )
 }
