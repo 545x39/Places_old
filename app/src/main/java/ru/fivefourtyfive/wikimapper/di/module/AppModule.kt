@@ -1,5 +1,6 @@
 package ru.fivefourtyfive.wikimapper.di.module
 
+import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import androidx.work.WorkManager
@@ -19,7 +20,7 @@ class AppModule(private val application: Wikimapper) {
     @Provides
     fun provideWorkManager() = WorkManager.getInstance(application)
 
-//    @Singleton
-//    @Provides
-//    fun provideContext() = application.baseContext
+    @Singleton
+    @Provides
+    fun provideContext(): Context = application.baseContext
 }

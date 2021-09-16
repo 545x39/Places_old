@@ -7,7 +7,7 @@ import ru.fivefourtyfive.wikimapper.di.AppComponent
 @MapFragmentScope
 @Component(
     dependencies = [AppComponent::class],
-    modules = [MapFragmentModule::class]
+    modules = [MapFragmentViewModelModule::class, MapFragmentModule::class]
 )
 interface MapFragmentComponent {
 
