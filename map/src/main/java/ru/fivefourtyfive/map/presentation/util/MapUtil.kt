@@ -21,6 +21,7 @@ import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlayOptions
 import org.osmdroid.views.overlay.simplefastpoint.SimplePointTheme
 import ru.fivefourtyfive.wikimapper.BuildConfig
 import ru.fivefourtyfive.wikimapper.util.Network
+import ru.fivefourtyfive.wikimapper.util.ifTrue
 import java.io.File
 
 object MapUtil {
@@ -65,11 +66,13 @@ object MapUtil {
 
     fun MapView.addFolder(folder: FolderOverlay) = this.apply { overlays.add(folder) }
 
-    fun MapView.addCompass() =
+    fun MapView.addCompass(enable: Boolean = true) =
         this.apply {
-            CompassOverlay(context, InternalCompassOrientationProvider(context), this).apply {
-                enableCompass()
-                overlays.add(this)
+            enable.ifTrue {
+                CompassOverlay(context, InternalCompassOrientationProvider(context), this).let {
+                    it.enableCompass()
+                    overlays.add(it)
+                }
             }
         }
 
@@ -111,7 +114,7 @@ object MapUtil {
 
     fun MapView.addListener(listener: MapListener) = this.apply { addMapListener(listener) }
 
-    fun MapView.addScale() = this.apply {
-        overlays.add(ScaleBarOverlay(this).also { it.setAlignBottom(true) })
+    fun MapView.addScale(enable: Boolean = true) = this.apply {
+        enable.ifTrue { overlays.add(ScaleBarOverlay(this).also { it.setAlignBottom(true) }) }
     }
 }
