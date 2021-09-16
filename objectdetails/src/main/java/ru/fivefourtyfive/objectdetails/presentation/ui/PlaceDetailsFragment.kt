@@ -82,7 +82,7 @@ class PlaceDetailsFragment : Fragment(), Renderer<PlaceDetailsViewState> {
         inflater.inflate(R.menu.menu_place_details, menu)
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.findItem(R.id.action_slide_show).isChecked = viewModel.slideshow()
+        menu.findItem(R.id.action_slide_show).isChecked = binding.viewModel!!.slideshow()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -180,7 +180,7 @@ class PlaceDetailsFragment : Fragment(), Renderer<PlaceDetailsViewState> {
             .setPresetTransformer(SliderLayout.Transformer.Accordion)
             .setPresetIndicator(SliderLayout.PresetIndicators.Center_Top)
             .setCustomAnimation(DescriptionAnimation())
-            .enableAutoCycling(viewModel.slideshow())
+            .enableAutoCycling(binding.viewModel?.slideshow()?: false)
             .setDuration(4000)
             .stopCyclingWhenTouch(true)
             .buildWith(photos)
@@ -188,7 +188,6 @@ class PlaceDetailsFragment : Fragment(), Renderer<PlaceDetailsViewState> {
 
     private fun setLocation(place: String, country: String) =
         "$place, $country".let { binding.location.text = it }
-
 
     private fun setTags(tags: List<String>) {
         binding.tags.text = TagsBuilder.buildWith(tags)

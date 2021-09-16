@@ -1,18 +1,14 @@
 package ru.fivefourtyfive.map.di
 
-import androidx.lifecycle.ViewModel
-import dagger.Binds
+import android.content.Context
 import dagger.Module
-import dagger.multibindings.IntoMap
-import ru.fivefourtyfive.map.presentation.viewmodel.MapFragmentViewModel
-import ru.fivefourtyfive.wikimapper.di.key.ViewModelKey
+import dagger.Provides
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 
 @Module
-interface MapFragmentModule {
+class MapFragmentModule {
 
     @MapFragmentScope
-    @Binds
-    @IntoMap
-    @ViewModelKey(MapFragmentViewModel::class)
-    fun provideViewModel(viewModel: MapFragmentViewModel): ViewModel
+    @Provides
+    fun provideMyLocationProvider(context: Context) = GpsMyLocationProvider(context)
 }

@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.map.presentation.util
+package ru.fivefourtyfive.wikimapper.util
 
 import android.app.Activity
 import androidx.lifecycle.LifecycleOwner

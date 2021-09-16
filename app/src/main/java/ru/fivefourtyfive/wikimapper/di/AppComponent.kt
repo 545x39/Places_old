@@ -1,5 +1,6 @@
 package ru.fivefourtyfive.wikimapper.di
 
+import android.content.Context
 import android.content.SharedPreferences
 import dagger.Component
 import ru.fivefourtyfive.wikimapper.Wikimapper
@@ -29,6 +30,8 @@ interface AppComponent {
     fun getPlaceRepository(): PlaceRepository
 
     fun getAreaRepository(): AreaRepository
+
+    fun getContext(): Context
 
 //    fun workerProviderFactory(): WorkerProviderFactory
 

@@ -1,6 +1,5 @@
 package ru.fivefourtyfive.objectdetails.presentation.ui.view
 
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.colorResource
