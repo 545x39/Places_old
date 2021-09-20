@@ -10,21 +10,24 @@ import retrofit2.Response
 import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Parameters
 import ru.fivefourtyfive.wikimapper.data.repository.abstraction.RemoteDataSource
 import ru.fivefourtyfive.wikimapper.domain.datastate.AreaDataState
-import ru.fivefourtyfive.wikimapper.domain.datastate.PlaceDataState
+import ru.fivefourtyfive.wikimapper.domain.datastate.PlaceDetailsDataState
+import ru.fivefourtyfive.wikimapper.domain.dto.AreaDTO
+import ru.fivefourtyfive.wikimapper.domain.dto.MapPlaceDTO
+import ru.fivefourtyfive.wikimapper.domain.dto.PlaceDescriptionDTO
 import timber.log.Timber
 import javax.inject.Inject
 
 class RetrofitDataSource @Inject constructor(private val api: Api) : RemoteDataSource {
 
     override suspend fun getPlace(id: Int, dataBlocks: String?) = flow {
-        emit(PlaceDataState.Loading)
+        emit(PlaceDetailsDataState.Loading)
         api.getPlace(
             id = id,
             dataBlocks = dataBlocks
         ).apply {
             when (debugInfo) {
-                null -> emit(PlaceDataState.Success(this))
-                else -> emit(PlaceDataState.Error(message = debugInfo?.message ?: ""))
+                null -> emit(PlaceDetailsDataState.Success(PlaceDescriptionDTO(this)))
+                else -> emit(PlaceDetailsDataState.Error(message = debugInfo?.message ?: ""))
             }
         }
     }.flowOn(IO)
@@ -46,7 +49,7 @@ class RetrofitDataSource @Inject constructor(private val api: Api) : RemoteDataS
             language = language
         ).apply {
             when (debugInfo) {
-                null -> emit(AreaDataState.Success(this))
+                null -> emit(AreaDataState.Success(AreaDTO(this)))
                 else -> emit(AreaDataState.Error(message = debugInfo?.message ?: ""))
             }
         }

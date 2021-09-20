@@ -23,8 +23,8 @@ import ru.fivefourtyfive.objectdetails.presentation.viewmodel.PlaceEvent
 import ru.fivefourtyfive.wikimapper.Wikimapper
 import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Parameter.ID
 import ru.fivefourtyfive.wikimapper.di.factory.ViewModelProviderFactory
-import ru.fivefourtyfive.wikimapper.domain.entity.Comment
-import ru.fivefourtyfive.wikimapper.domain.entity.Photo
+import ru.fivefourtyfive.wikimapper.domain.dto.CommentDTO
+import ru.fivefourtyfive.wikimapper.domain.dto.PhotoDTO
 import ru.fivefourtyfive.wikimapper.presentation.ui.MainActivity
 import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.Renderer
 import ru.fivefourtyfive.wikimapper.util.Network.ROOT_URL
@@ -154,7 +154,7 @@ class PlaceDetailsFragment : Fragment(), Renderer<PlaceDetailsViewState> {
                 }
                 is PlaceDetailsViewState.Success -> {
                     setMain(title, description)
-                    setLocation(place, country)
+                    setLocation(location)
                     setTags(tags)
                     setPhotos(photos)
                     setComments(comments)
@@ -163,7 +163,7 @@ class PlaceDetailsFragment : Fragment(), Renderer<PlaceDetailsViewState> {
         }
     }
 
-    private fun setComments(comments: List<Comment>) {
+    private fun setComments(comments: List<CommentDTO>) {
         String.format(getString(appR.string.comments_count), comments.size)
             .let { binding.commentsCount.text = it }
         binding.commentsLayout.setContent { Column { comments.map { Comment(it) } } }
@@ -175,19 +175,20 @@ class PlaceDetailsFragment : Fragment(), Renderer<PlaceDetailsViewState> {
         binding.description.text = description
     }
 
-    private fun setPhotos(photos: List<Photo>) {
+    private fun setPhotos(photos: List<PhotoDTO>) {
         SliderBuilder(requireContext(), binding.slider)
             .setPresetTransformer(SliderLayout.Transformer.Accordion)
             .setPresetIndicator(SliderLayout.PresetIndicators.Center_Top)
             .setCustomAnimation(DescriptionAnimation())
-            .enableAutoCycling(binding.viewModel?.slideshow()?: false)
+            .enableAutoCycling(binding.viewModel?.slideshow() ?: false)
             .setDuration(4000)
             .stopCyclingWhenTouch(true)
             .buildWith(photos)
     }
 
-    private fun setLocation(place: String, country: String) =
-        "$place, $country".let { binding.location.text = it }
+    private fun setLocation(location: String) {
+        binding.location.text = location
+    }
 
     private fun setTags(tags: List<String>) {
         binding.tags.text = TagsBuilder.buildWith(tags)

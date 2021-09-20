@@ -1,10 +1,10 @@
 package ru.fivefourtyfive.map.presentation.util
 
 import org.osmdroid.util.GeoPoint
-import ru.fivefourtyfive.map.presentation.dto.PlaceDTO
+import ru.fivefourtyfive.map.presentation.dto.PlacePolygon
 import ru.fivefourtyfive.wikimapper.domain.entity.Place
 
-fun Place.toPlaceDto() = PlaceDTO(
+fun Place.toPlaceDto() = PlacePolygon(
     id = id,
     name = name ?: "",
     url = url ?: "",
@@ -14,5 +14,7 @@ fun Place.toPlaceDto() = PlaceDTO(
     west = location?.west ?: 0.0,
     lat = location?.lat ?: 0.0,
     lon = location?.lon ?: 0.0,
-    polygon = arrayListOf<GeoPoint>().apply { polygon?.map { add(GeoPoint(it.y, it.x)) } }
+    polygon = arrayListOf<GeoPoint>().apply { polygon?.map { add(GeoPoint(it.y, it.x))
+    }
+    }
 )

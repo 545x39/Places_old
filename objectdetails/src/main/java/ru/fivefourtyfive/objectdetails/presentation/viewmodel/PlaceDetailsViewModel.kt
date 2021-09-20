@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.fivefourtyfive.wikimapper.data.repository.implementation.PlaceRepository
-import ru.fivefourtyfive.wikimapper.domain.datastate.PlaceDataState
+import ru.fivefourtyfive.wikimapper.domain.datastate.PlaceDetailsDataState
 import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.EventHandler
 import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.Reducer
 import ru.fivefourtyfive.wikimapper.util.Preferences.PREFERENCE_SLIDESHOW
@@ -19,7 +19,7 @@ class PlaceDetailsViewModel @Inject constructor(
     private val repository: PlaceRepository,
     private val preferences: SharedPreferences
 ) :
-    ViewModel(), Reducer<PlaceDataState, PlaceDetailsViewState>, EventHandler<PlaceEvent> {
+    ViewModel(), Reducer<PlaceDetailsDataState, PlaceDetailsViewState>, EventHandler<PlaceEvent> {
 
     private val _viewStateLiveData: MutableLiveData<PlaceDetailsViewState> =
         MutableLiveData(PlaceDetailsViewState.Loading)
@@ -42,31 +42,30 @@ class PlaceDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             repository.getPlace(id)
                 .catch {
-                    _viewStateLiveData.postValue(reduce(PlaceDataState.Error()))
+                    _viewStateLiveData.postValue(reduce(PlaceDetailsDataState.Error()))
                 }.collect {
                     _viewStateLiveData.postValue(reduce(it))
                 }
         }
     }
 
-    override fun reduce(dataState: PlaceDataState): PlaceDetailsViewState {
+    override fun reduce(dataState: PlaceDetailsDataState): PlaceDetailsViewState {
         with(dataState) {
             return when (this) {
-                is PlaceDataState.Success -> PlaceDetailsViewState.Success(
-                    id = place.id,
-                    title = place.title,
+                is PlaceDetailsDataState.Success -> PlaceDetailsViewState.Success(
+                    id          = place.id,
+                    title       = place.title,
                     description = place.description,
                     languageIso = place.languageIso,
-                    photos = place.photos,
-                    comments = place.comments,
-                    tags = place.tags,
-                    lat = place.location?.lat,
-                    lon = place.location?.lon,
-                    place = place.location?.place,
-                    country = place.location?.country
+                    photos      = place.photos,
+                    comments    = place.comments,
+                    tags        = place.tags,
+                    lat         = place.lat,
+                    lon         = place.lon,
+                    location    = place.location
                 )
-                is PlaceDataState.Loading -> PlaceDetailsViewState.Loading
-                is PlaceDataState.Error -> PlaceDetailsViewState.Error(message = message)
+                is PlaceDetailsDataState.Loading -> PlaceDetailsViewState.Loading
+                is PlaceDetailsDataState.Error -> PlaceDetailsViewState.Error(message = message)
             }
         }
     }
