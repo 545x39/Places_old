@@ -58,5 +58,41 @@ data class Place(
     val comments: List<Comment>? = null,
     @SerializedName("location")
     @Expose
-    val location: Location? = null
+    val location: Location? = null,
+    @SerializedName("is_building")
+    @Expose
+    val isBuilding: Boolean = false,
+    @SerializedName("is_region")
+    @Expose
+    val isRegion: Boolean = false,
+    @SerializedName("is_deleted")
+    @Expose
+    val isDeleted: Boolean = false,
+    @SerializedName("x")
+    @Expose
+    val x: Int? = null,
+    @SerializedName("y")
+    @Expose
+    val y: Int? = null,
+    @SerializedName("pl")
+    @Expose
+    val pl: Double? = null,
+    @SerializedName("is_protected")
+    @Expose(deserialize = false)
+    val isProtected: Boolean? = null,
+//    @SerializedName("availableLanguages")
+//    @Expose
+//    val availableLanguages: AvailableLanguages? = null,
+//    @SerializedName("similarPlaces")
+//    @Expose
+//    val similarPlaces: SimilarPlaces? = null,
+//    @SerializedName("nearestPlaces")
+//    @Expose
+//    val nearestPlaces: NearestPlaces? = null,
+//    @SerializedName("nearestHotels")
+//    @Expose
+//    val nearestHotels: List<Object>? = null
+//    @SerializedName("edit_info")
+//    @Expose
+//    val editInfo: EditInfo,
 )

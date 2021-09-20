@@ -1,12 +1,10 @@
 package ru.fivefourtyfive.map.presentation.dto
 
 import android.graphics.Color
-import android.graphics.Paint
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Polygon
-import org.osmdroid.views.overlay.Polyline
 
-class PlaceDTO(
+class PlacePolygon(
     val id: Int,
     name: String,
     val url: String,
@@ -24,7 +22,7 @@ class PlaceDTO(
     init {
         //Forces the loop to close, as the first and the last points are the same.
         polygon.add(polygon[0])
-        outlinePaint.color = Color.WHITE
+        outlinePaint.color = Color.GRAY
         outlinePaint.strokeWidth = 3.0f
         points = polygon
         title = name
@@ -43,7 +41,7 @@ class PlaceDTO(
 
     override fun equals(other: Any?) = when (other) {
         null -> false
-        is PlaceDTO -> id == other.id
+        is PlacePolygon -> id == other.id
         else -> false
     }
 

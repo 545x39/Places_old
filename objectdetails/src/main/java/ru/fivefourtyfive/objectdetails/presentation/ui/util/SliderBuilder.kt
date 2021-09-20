@@ -9,6 +9,7 @@ import com.glide.slider.library.SliderLayout
 import com.glide.slider.library.animations.SliderAnimationInterface
 import com.glide.slider.library.slidertypes.TextSliderView
 import com.glide.slider.library.tricks.ViewPagerEx
+import ru.fivefourtyfive.wikimapper.domain.dto.PhotoDTO
 import ru.fivefourtyfive.wikimapper.domain.entity.Photo
 
 class SliderBuilder(private val context: Context, private val layout: SliderLayout) {
@@ -33,7 +34,7 @@ class SliderBuilder(private val context: Context, private val layout: SliderLayo
     fun setDuration(duration: Long) = this.apply { layout.setDuration(duration) }
 
     @SuppressLint("CheckResult")
-    fun buildWith(photos: List<Photo>) {
+    fun buildWith(photos: List<PhotoDTO>) {
         if (photos.isNotEmpty()) layout.visibility = View.VISIBLE
         val requestOptions = RequestOptions()
         requestOptions.centerCrop()
@@ -45,7 +46,7 @@ class SliderBuilder(private val context: Context, private val layout: SliderLayo
                 //There is also a DefaultSliderView, which cannot display any text.
                 TextSliderView(context)
                     .image(url1280)
-                    .description("$userName, $timeString")
+                    .description(description)
                     .setRequestOption(requestOptions)
                     .setProgressBarVisible(true)
                     .let { layout.addSlider(it) }

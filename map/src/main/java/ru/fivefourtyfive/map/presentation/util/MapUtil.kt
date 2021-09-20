@@ -34,7 +34,11 @@ object MapUtil {
             19,
             256,
             ".png",
-            arrayOf(Network.WIKIMEDIA_TILES_URL),
+            arrayOf(
+                Network.WIKIMEDIA_TILES_URL,
+                Network.WIKIMEDIA_TILES_URL2,
+                Network.WIKIMEDIA_TILES_URL3
+            ),
             "© OpenStreetMap contributors",
             TileSourcePolicy(
                 2,
@@ -81,7 +85,7 @@ object MapUtil {
     ) = this.apply {
         MyLocationNewOverlay(GpsMyLocationProvider(context), this).apply {
             enableMyLocation()
-            enableFollowLocation()
+//            enableFollowLocation()
             //enableAutoStop = false
             overlays.add(this)
         }
@@ -97,7 +101,7 @@ object MapUtil {
                 .setTextStyle(Paint().apply {
                     style = Paint.Style.FILL
                     isAntiAlias = true
-                    color = Color.WHITE
+                    color = Color.GRAY
                     textAlign = Paint.Align.CENTER
                     textSize = 28.0f
                     isFakeBoldText = true

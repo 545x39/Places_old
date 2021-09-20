@@ -7,8 +7,11 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.Default
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.osmdroid.api.IGeoPoint
 import org.osmdroid.events.DelayedMapListener
 import org.osmdroid.events.MapListener
@@ -20,7 +23,7 @@ import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.Polygon
 import ru.fivefourtyfive.map.R
 import ru.fivefourtyfive.map.di.DaggerMapFragmentComponent
-import ru.fivefourtyfive.map.presentation.dto.PlaceDTO
+import ru.fivefourtyfive.map.presentation.dto.PlacePolygon
 import ru.fivefourtyfive.map.presentation.dto.PlaceLabel
 import ru.fivefourtyfive.map.presentation.util.MAP_LISTENER_DELAY
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addCompass
@@ -37,6 +40,8 @@ import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Parameter.ID
 import ru.fivefourtyfive.wikimapper.di.factory.ViewModelProviderFactory
 import ru.fivefourtyfive.wikimapper.presentation.ui.MainActivity
 import ru.fivefourtyfive.wikimapper.presentation.ui.NavFragment
+import ru.fivefourtyfive.wikimapper.util.ifFalse
+import ru.fivefourtyfive.wikimapper.util.ifTrue
 import ru.fivefourtyfive.wikimapper.util.parallelMap
 import timber.log.Timber
 import javax.inject.Inject
@@ -54,9 +59,9 @@ class MapFragment : NavFragment() {
 
     private lateinit var progress: ProgressBar
 
-    private var places = arrayListOf<PlaceDTO>()
+    private var places = arrayListOf<PlacePolygon>()
 
-    private var currentSelection: PlaceDTO? = null
+    private var currentSelection: PlacePolygon? = null
 
     private val folder = FolderOverlay()
 
@@ -64,14 +69,15 @@ class MapFragment : NavFragment() {
 
     private val listener = DelayedMapListener(object : MapListener {
         override fun onScroll(event: ScrollEvent?): Boolean {
-//            requestLocation()
-            return false
+            requestLocation()
+            Timber.e("MAP SCROLLED. Coords: [${mapView.mapCenter.latitude}, ${mapView.mapCenter.longitude}]")
+            return true
         }
 
         override fun onZoom(event: ZoomEvent?): Boolean {
-//            requestLocation()
+            requestLocation()
             Timber.e("MAP RESIZED. Zoom: [${event?.zoomLevel}]")
-            return false
+            return true
         }
     }, MAP_LISTENER_DELAY)
 
@@ -98,54 +104,75 @@ class MapFragment : NavFragment() {
         mapView.config().addListener(listener)
         view.findViewById<Button>(R.id.get_area_button).setOnClickListener {
             requestLocation()
-            viewModel.liveData.observe(viewLifecycleOwner, {
-                with(it) {
-                    progress.visibility = progressVisibility
-                    when (this) {
-                        is MapViewState.Success -> onSuccess(places)
-                        is MapViewState.Error -> onError(message)
-                        is MapViewState.Loading -> {
-                        }
-                    }
-                }
-            })
         }
+        subscribeObserver()
     }
 
-    private fun onSuccess(newPlaces: ArrayList<PlaceDTO>) {
-        //TODO Подобрать более контрастный цвет для контуров объектов.
+    private fun subscribeObserver() {
+        viewModel.liveData.observe(viewLifecycleOwner, {
+            with(it) {
+                progress.visibility = progressVisibility
+                when (this) {
+                    is MapViewState.Success -> onSuccess(places)
+                    is MapViewState.Error -> onError(message)
+                    is MapViewState.Loading -> {
+                    }
+                }
+            }
+        })
+    }
+
+    private fun onSuccess(newPlaces: ArrayList<PlacePolygon>) {
+        // TODO СДЕЛАТЬ DEBOUNCE запросов!!!
         //TODO Сделать навигацию в описание объекта по щелчку на названии выбранного объекта.
         //TODO Добавить кнопку центровки на своём положении, добавить ей возможность менять масштаб, аналогично оригинальному приложению.
         //TODO ОТРЕФАКТОРИТЬ!!!!!!!!!!!!11111)
-//                        it.places.retainAll()
-        MainScope().launch {
-            //TODO Удалить то, что вышло за пределы видимой области карты, нарисовать то, что вновь попало в видимую область. То, что уже было, не трогать.
-            folder.items.clear()
+        CoroutineScope(Default).launch {
+            val itemsToRemove = arrayListOf<PlacePolygon>()
+            folder.items.map {
+                with(it as PlacePolygon) {
+                    newPlaces.contains(this).ifFalse { itemsToRemove.add(this) }
+                }
+            }
+            folder.items.removeAll(itemsToRemove)
+            itemsToRemove.clear()
+            newPlaces.map {
+                folder.items.contains(it).ifTrue { itemsToRemove.add(it) }
+            }
+            newPlaces.removeAll(itemsToRemove)
+            folder.items.addAll(newPlaces)
             labels.clear()
-            places.apply {
-                clear()
-                addAll(newPlaces)
+            folder.items.apply {
                 parallelMap { place ->
-                    folder.add(place)
-                    //TODO Добавлять название только для достаточно крупных объектов. Перенести в масштабирование
-                    labels.add(
-                        PlaceLabel(
-                            place.id,
-                            place.lat,
-                            place.lon,
-                            place.title
+                    (place as PlacePolygon).hasToShowLabel().ifTrue {
+                        labels.add(
+                            PlaceLabel(
+                                place.id,
+                                place.lat,
+                                place.lon,
+                                place.title
+                            )
                         )
-                    )
+                    }
                     place.setOnClickListener(PlaceOnClickListener(place))
                 }
             }
-            mapView.invalidate()
+            withContext(Main) { mapView.invalidate() }
+        }
+    }
+
+    private fun PlacePolygon.hasToShowLabel(): Boolean {
+        mapView.boundingBox.apply {
+            val widthDiff = (east - west) / (lonEast - lonWest)
+            val heightDiff = (north - south) / (latNorth - latSouth)
+            val isWithinTheBox =
+                (east - west) <= (lonEast - lonWest) && (north - south) <= (latNorth - latSouth)
+            return isWithinTheBox && (widthDiff >= 0.3 || heightDiff >= 0.3)
         }
     }
 
     private fun onError(message: String?) =
         (requireActivity() as MainActivity).showSnackBar(message)
-
 
     private fun requestLocation() {
         mapView.boundingBox.apply { viewModel.getArea(lonWest, latSouth, lonEast, latNorth) }
@@ -168,8 +195,8 @@ class MapFragment : NavFragment() {
 
     override fun onResume() {
         super.onResume()
-        mapView.addFolder(folder)
-            .addLabels(labels)
+        mapView.addLabels(labels)
+            .addFolder(folder)
             .addCompass()
             .addMyLocation()
             .addScale()
@@ -183,15 +210,13 @@ class MapFragment : NavFragment() {
         mapView.onPause()
     }
 
-    inner class PlaceOnClickListener(private val place: PlaceDTO) : Polygon.OnClickListener {
+    inner class PlaceOnClickListener(private val place: PlacePolygon) : Polygon.OnClickListener {
         override fun onClick(polygon: Polygon?, mapView: MapView?, eventPos: GeoPoint?): Boolean {
             currentSelection?.let { if (it != place) currentSelection?.setHighlighted(false) }
             currentSelection = place
             place.setHighlighted(!place.highlight)
             Toast.makeText(requireContext(), place.title, Toast.LENGTH_SHORT).show()
             mapView?.invalidate()
-            Timber.e("BOX WIDTH: ${this@MapFragment.mapView.boundingBox.lonEast - this@MapFragment.mapView.boundingBox.lonWest}, " +
-                    " PLACE WIDTH: : ${place.east - place.west}")
             return true
         }
     }

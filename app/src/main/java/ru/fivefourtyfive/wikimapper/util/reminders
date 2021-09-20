@@ -17,6 +17,18 @@ http://www.jsonschema2pojo.org/
 ОТРИСОВКА ПОЛИГОНОВ:
 https://osmdroid.github.io/osmdroid/Markers,-Lines-and-Polygons.html
 
+ОРИГИНАЛЬНЫЙ ЗАПРОС ОБЪЕКТОВ С ПОЛИГОНАМИ:
+https://wikimapia.org/z1/itiles/03.xy
+
+ОРИГИНАЛЬНЫЙ ЗАПРОС ТАЙЛОВ:
+Тип можно не присылать, дефолтный, по-видимому, простая карта, а не гибрид:
+http://88.99.95.183/?x=4760&y=2381&zoom=13&lng=1
+Можно указать тип гибрид:
+88.99.95.183/?x=5&y=3&zoom=3&type=hybrid&lng=1
+88.99.77.85
+88.99.77.89
+88.99.95.187
+
 РАЗНОЕ
         https://blog.cartong.org/2014/10/30/tutorial-using-wikimapia-data-in-qgis/
         %2C
@@ -38,3 +50,6 @@ https://stackoverflow.com/questions/38322233/how-to-share-a-text-link-via-text-i
 
 Map listener:
 https://stackoverflow.com/questions/39306301/osmdroid-load-marker-after-scroll
+
+DEBOUNCING:
+//https://www.hellsoft.se/instant-search-with-kotlin-coroutines/

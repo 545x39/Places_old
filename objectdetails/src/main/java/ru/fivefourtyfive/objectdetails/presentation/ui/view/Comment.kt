@@ -12,6 +12,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ru.fivefourtyfive.wikimapper.domain.dto.CommentDTO
 import ru.fivefourtyfive.wikimapper.domain.entity.Comment
 import java.text.SimpleDateFormat
 import java.util.*
@@ -19,7 +20,7 @@ import ru.fivefourtyfive.wikimapper.R as appR
 
 
 @Composable
-fun Comment(comment: Comment) {
+fun Comment(comment: CommentDTO) {
     Row(
         verticalAlignment = Alignment.Top,
         modifier = Modifier.padding(0.dp, 6.dp, 0.dp, 0.dp)

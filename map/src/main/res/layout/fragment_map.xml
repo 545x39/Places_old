@@ -27,5 +27,6 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="4dp"
+        android:visibility="gone"
         android:text="Update" />
 </RelativeLayout>
