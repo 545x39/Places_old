@@ -49,7 +49,7 @@ data class Place(
     val parentId: Int? = null,
     @SerializedName("polygon")
     @Expose
-    val polygon: List<Dot>? = null,
+    val polygon: List<PolyPoint>? = null,
     @SerializedName("photos")
     @Expose
     val photos: List<Photo>? = null,

@@ -1,7 +1,7 @@
 package ru.fivefourtyfive.wikimapper.domain.dto
 
 import ru.fivefourtyfive.wikimapper.domain.entity.DebugInfo
-import ru.fivefourtyfive.wikimapper.domain.entity.Dot
+import ru.fivefourtyfive.wikimapper.domain.entity.PolyPoint
 import ru.fivefourtyfive.wikimapper.domain.entity.Place
 
 class MapPlaceDTO(place: Place) {
@@ -9,7 +9,7 @@ class MapPlaceDTO(place: Place) {
     val id: Int                 = place.id
     val url: String             = place.url ?: ""
     val title: String           = place.title ?: ""
-    val polygon: List<Dot>      = place.polygon ?: listOf()
+    val polygon: List<PolyPoint>      = place.polygon ?: listOf()
     val north                   = place.location?.north ?: 0.0
     val south                   = place.location?.south ?: 0.0
     val east                    = place.location?.east ?: 0.0
