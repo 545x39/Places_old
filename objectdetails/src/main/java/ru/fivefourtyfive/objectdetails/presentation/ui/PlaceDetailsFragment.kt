@@ -20,7 +20,7 @@ import ru.fivefourtyfive.objectdetails.presentation.ui.view.Comment
 import ru.fivefourtyfive.objectdetails.presentation.viewmodel.PlaceDetailsViewModel
 import ru.fivefourtyfive.objectdetails.presentation.viewmodel.PlaceDetailsViewState
 import ru.fivefourtyfive.objectdetails.presentation.viewmodel.PlaceEvent
-import ru.fivefourtyfive.wikimapper.Wikimapper
+import ru.fivefourtyfive.wikimapper.Places
 import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Parameter.ID
 import ru.fivefourtyfive.wikimapper.di.factory.ViewModelProviderFactory
 import ru.fivefourtyfive.wikimapper.domain.dto.CommentDTO
@@ -62,7 +62,7 @@ class PlaceDetailsFragment : Fragment(), Renderer<PlaceDetailsViewState> {
     ): View {
         setHasOptionsMenu(true)
         DaggerPlaceDetailsComponent.factory()
-            .create((requireActivity().application as Wikimapper).appComponent)
+            .create((requireActivity().application as Places).appComponent)
             .inject(this)
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_place_details, container, false)

@@ -6,11 +6,11 @@ import androidx.preference.PreferenceManager
 import androidx.work.WorkManager
 import dagger.Module
 import dagger.Provides
-import ru.fivefourtyfive.wikimapper.Wikimapper
+import ru.fivefourtyfive.wikimapper.Places
 import javax.inject.Singleton
 
 @Module
-class AppModule(private val application: Wikimapper) {
+class AppModule(private val application: Places) {
 
     @Singleton
     @Provides
