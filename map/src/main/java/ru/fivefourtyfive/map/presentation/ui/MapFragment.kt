@@ -23,15 +23,17 @@ import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.Polygon
 import ru.fivefourtyfive.map.R
 import ru.fivefourtyfive.map.di.DaggerMapFragmentComponent
-import ru.fivefourtyfive.map.presentation.dto.PlacePolygon
 import ru.fivefourtyfive.map.presentation.dto.PlaceLabel
+import ru.fivefourtyfive.map.presentation.dto.PlacePolygon
 import ru.fivefourtyfive.map.presentation.util.MAP_LISTENER_DELAY
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addCompass
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addFolder
+import ru.fivefourtyfive.map.presentation.util.MapUtil.addGrid
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addLabels
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addListener
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addMyLocation
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addScale
+import ru.fivefourtyfive.map.presentation.util.MapUtil.addWikimapiaTiles
 import ru.fivefourtyfive.map.presentation.util.MapUtil.config
 import ru.fivefourtyfive.map.presentation.viewmodel.MapFragmentViewModel
 import ru.fivefourtyfive.map.presentation.viewmodel.MapViewState
@@ -101,7 +103,7 @@ class MapFragment : NavFragment() {
             mapView = findViewById(R.id.map)
             progress = findViewById(R.id.progress)
         }
-        mapView.config().addListener(listener)
+        mapView.config().addWikimapiaTiles().addGrid().addListener(listener)
         view.findViewById<Button>(R.id.get_area_button).setOnClickListener {
             requestLocation()
         }
@@ -195,8 +197,11 @@ class MapFragment : NavFragment() {
 
     override fun onResume() {
         super.onResume()
-        mapView.addLabels(labels)
+        mapView
+            .addWikimapiaTiles()
             .addFolder(folder)
+//            .addLabels(labels)
+            .addGrid()
             .addCompass()
             .addMyLocation()
             .addScale()
