@@ -6,39 +6,42 @@ import android.graphics.Typeface
 import org.osmdroid.api.IGeoPoint
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapListener
+import org.osmdroid.tileprovider.MapTileProviderBasic
+import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 import org.osmdroid.tileprovider.tilesource.TileSourcePolicy
 import org.osmdroid.tileprovider.tilesource.XYTileSource
+import org.osmdroid.util.MapTileIndex
 import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.ScaleBarOverlay
+import org.osmdroid.views.overlay.TilesOverlay
 import org.osmdroid.views.overlay.compass.CompassOverlay
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider
+import org.osmdroid.views.overlay.gridlines.LatLonGridlineOverlay2
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlay
 import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlayOptions
 import org.osmdroid.views.overlay.simplefastpoint.SimplePointTheme
 import ru.fivefourtyfive.wikimapper.BuildConfig
-import ru.fivefourtyfive.wikimapper.util.Network
+import ru.fivefourtyfive.wikimapper.util.Network.WIKIMAPIA_TILE_SERVERS
+import ru.fivefourtyfive.wikimapper.util.Network.WIKIMEDIA_TILE_SERVERS
 import ru.fivefourtyfive.wikimapper.util.ifTrue
 import java.io.File
+
 
 object MapUtil {
 
     fun MapView.config(): MapView {
 
-        fun wikimediaTileSource() = XYTileSource(
+        val wikimediaTileSource = XYTileSource(
             "WikimediaNoLabelsTileSource",
             0,
             19,
             256,
             ".png",
-            arrayOf(
-                Network.WIKIMEDIA_TILES_URL,
-                Network.WIKIMEDIA_TILES_URL2,
-                Network.WIKIMEDIA_TILES_URL3
-            ),
+            WIKIMEDIA_TILE_SERVERS,
             "© OpenStreetMap contributors",
             TileSourcePolicy(
                 2,
@@ -54,7 +57,8 @@ object MapUtil {
             osmdroidBasePath = File(context.getExternalFilesDir("osmdroid")!!.absolutePath)
             osmdroidTileCache = File(osmdroidBasePath, "tiles")
         }
-        setTileSource(wikimediaTileSource())
+        setTileSource(wikimediaTileSource)
+//        setTileSource(wikimapiaTileSource)
         setUseDataConnection(true)
         setMultiTouchControls(true)
         isTilesScaledToDpi = true
@@ -65,6 +69,36 @@ object MapUtil {
         isVerticalMapRepetitionEnabled = false
         isHorizontalMapRepetitionEnabled = false
 //        invalidate()
+        return this
+    }
+
+    fun MapView.addWikimapiaTiles():MapView {
+        //<editor-fold defaultstate="collapsed" desc="INNER FUNCTIONS">
+        val wikimapiaTileSource = object : OnlineTileSourceBase(
+            "WikimapiaTileSource",
+            0,
+            19,
+            256,
+            ".png",
+            WIKIMAPIA_TILE_SERVERS,
+            "© OpenStreetMap contributors",
+        ) {
+            //88.99.95.183/?x=5&y=3&zoom=3&type=hybrid&lng=1
+            override fun getTileURLString(pMapTileIndex: Long) =
+                "$baseUrl/?x=${MapTileIndex.getX(pMapTileIndex)}&y=${MapTileIndex.getY(pMapTileIndex)}&zoom=${
+                    MapTileIndex.getZoom(
+                        pMapTileIndex
+                    )
+                }&type=hybrid&lng=1"
+        }
+
+        fun wikimapiaTilesOverlay() = TilesOverlay(MapTileProviderBasic(context).apply {
+            tileSource = wikimapiaTileSource
+        }, context).apply {
+            //loadingBackgroundColor = Color.TRANSPARENT
+        }
+        //</editor-fold>
+        overlays.add(wikimapiaTilesOverlay())
         return this
     }
 
@@ -115,6 +149,8 @@ object MapUtil {
         }
         overlays.add(SimpleFastPointOverlay(SimplePointTheme(labels, true), options))
     }
+
+    fun MapView.addGrid() = this.apply {overlays.add(LatLonGridlineOverlay2())}
 
     fun MapView.addListener(listener: MapListener) = this.apply { addMapListener(listener) }
 

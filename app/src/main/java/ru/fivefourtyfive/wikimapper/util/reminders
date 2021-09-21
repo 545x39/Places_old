@@ -27,7 +27,16 @@ http://88.99.95.183/?x=4760&y=2381&zoom=13&lng=1
 88.99.95.183/?x=5&y=3&zoom=3&type=hybrid&lng=1
 88.99.77.85
 88.99.77.89
+88.99.95.183
 88.99.95.187
+------------------
+Примеры запроса (GET) тайла карт Генштаба:
+http://88.99.52.155/cgi-bin/tapp/tilecache.py/1.0.0/topomapper_v2/12/2381/1181
+88.99.52.155/cgi-bin/tapp/tilecache.py/1.0.0/topomapper_v2/10/594/293
+http://88.99.52.155/cgi-bin/tapp/tilecache.py/1.0.0/topomapper_v2/11/1189/590
+Само приложение запрашивает только /10/, /11/, /12/ и /13/.
+------------------
+
 
 РАЗНОЕ
         https://blog.cartong.org/2014/10/30/tutorial-using-wikimapia-data-in-qgis/
