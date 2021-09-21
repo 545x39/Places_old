@@ -2,7 +2,10 @@
 http://www.jsonschema2pojo.org/
 
 ОБЪЕКТ
-    http://api.wikimapia.org/?key=example&function=place.getbyid&id=55&format=json&=&language=ru&data_blocks=main,comments,photos,location
+Пример запроса:
+http://api.wikimapia.org/?key=example&function=box&coordsby=bbox&bbox=35.2886%2C13.9666%2C35.5152%2C14.1093&category=203&count=100&format=json
+Так - НЕ РАБОТАЕТ, возвращает пустой объект
+http://api.wikimapia.org/?key=example&function=place.getbyid&id=55&format=json&=&language=ru&data_blocks=main,comments,photos,location
 
 ОБЪЕКТЫ
     http://api.wikimapia.org/?key=example&function=box&coordsby=bbox&bbox=35.2886%2C13.9666%2C35.5152%2C14.1093&category=203&count=100&format=json
