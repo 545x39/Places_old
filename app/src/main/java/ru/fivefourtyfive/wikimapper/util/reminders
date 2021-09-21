@@ -2,7 +2,10 @@
 http://www.jsonschema2pojo.org/
 
 ОБЪЕКТ
-    http://api.wikimapia.org/?key=example&function=place.getbyid&id=55&format=json&=&language=ru&data_blocks=main,comments,photos,location
+Пример запроса:
+http://api.wikimapia.org/?key=example&function=box&coordsby=bbox&bbox=35.2886%2C13.9666%2C35.5152%2C14.1093&category=203&count=100&format=json
+Так - НЕ РАБОТАЕТ, возвращает пустой объект
+http://api.wikimapia.org/?key=example&function=place.getbyid&id=55&format=json&=&language=ru&data_blocks=main,comments,photos,location
 
 ОБЪЕКТЫ
     http://api.wikimapia.org/?key=example&function=box&coordsby=bbox&bbox=35.2886%2C13.9666%2C35.5152%2C14.1093&category=203&count=100&format=json
@@ -27,7 +30,19 @@ http://88.99.95.183/?x=4760&y=2381&zoom=13&lng=1
 88.99.95.183/?x=5&y=3&zoom=3&type=hybrid&lng=1
 88.99.77.85
 88.99.77.89
+88.99.95.183
 88.99.95.187
+------------------
+Примеры запроса (GET) тайла карт Генштаба:
+http://88.99.52.155/cgi-bin/tapp/tilecache.py/1.0.0/topomapper_v2/12/2381/1181
+88.99.52.155/cgi-bin/tapp/tilecache.py/1.0.0/topomapper_v2/10/594/293
+http://88.99.52.155/cgi-bin/tapp/tilecache.py/1.0.0/topomapper_v2/11/1189/590
+Само приложение запрашивает только /10/, /11/, /12/ и /13/.
+------------------
+
+Примеры запросов (GET) тайлов ArcGIS:
+http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/17/38053/76359
+
 
 РАЗНОЕ
         https://blog.cartong.org/2014/10/30/tutorial-using-wikimapia-data-in-qgis/

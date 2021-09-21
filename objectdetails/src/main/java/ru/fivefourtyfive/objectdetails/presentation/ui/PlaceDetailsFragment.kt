@@ -20,7 +20,7 @@ import ru.fivefourtyfive.objectdetails.presentation.ui.view.Comment
 import ru.fivefourtyfive.objectdetails.presentation.viewmodel.PlaceDetailsViewModel
 import ru.fivefourtyfive.objectdetails.presentation.viewmodel.PlaceDetailsViewState
 import ru.fivefourtyfive.objectdetails.presentation.viewmodel.PlaceEvent
-import ru.fivefourtyfive.wikimapper.Wikimapper
+import ru.fivefourtyfive.wikimapper.Places
 import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Parameter.ID
 import ru.fivefourtyfive.wikimapper.di.factory.ViewModelProviderFactory
 import ru.fivefourtyfive.wikimapper.domain.dto.CommentDTO
@@ -30,20 +30,6 @@ import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.Renderer
 import ru.fivefourtyfive.wikimapper.util.Network.ROOT_URL
 import javax.inject.Inject
 import ru.fivefourtyfive.wikimapper.R as appR
-
-
-//TODO Переделать меню
-//TODO Добавить возможность отправки ссылки/открытия на сайте
-//TODO Переделать ViewState чтобы он не содержал объекта Place.
-//TODO Сделать Action-ы на запрос места и пункты меню
-//TODO Привязать слайдшоу к настройке (в ViewModel)
-//TODO Перенести обработку action-ов в ViewModel
-
-//TODO Сделать переход с описания на карту с центровкой на соответствующем месте.
-
-//TODO Показывать ссылку на википедию, если она есть.
-///
-//TODO Сделать перехват ссылок на wikimapia.org.
 
 class PlaceDetailsFragment : Fragment(), Renderer<PlaceDetailsViewState> {
 
@@ -62,7 +48,7 @@ class PlaceDetailsFragment : Fragment(), Renderer<PlaceDetailsViewState> {
     ): View {
         setHasOptionsMenu(true)
         DaggerPlaceDetailsComponent.factory()
-            .create((requireActivity().application as Wikimapper).appComponent)
+            .create((requireActivity().application as Places).appComponent)
             .inject(this)
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_place_details, container, false)

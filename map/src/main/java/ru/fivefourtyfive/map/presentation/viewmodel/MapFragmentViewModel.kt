@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.osmdroid.util.GeoPoint
-import ru.fivefourtyfive.map.presentation.dto.PlacePolygon
+import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
 import ru.fivefourtyfive.wikimapper.data.repository.implementation.AreaRepository
 import ru.fivefourtyfive.wikimapper.domain.datastate.AreaDataState
 import ru.fivefourtyfive.wikimapper.domain.dto.MapPlaceDTO

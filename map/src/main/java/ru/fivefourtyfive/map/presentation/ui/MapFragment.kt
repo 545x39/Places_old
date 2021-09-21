@@ -23,19 +23,20 @@ import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.Polygon
 import ru.fivefourtyfive.map.R
 import ru.fivefourtyfive.map.di.DaggerMapFragmentComponent
-import ru.fivefourtyfive.map.presentation.dto.PlacePolygon
-import ru.fivefourtyfive.map.presentation.dto.PlaceLabel
+import ru.fivefourtyfive.map.presentation.ui.overlay.PlaceLabel
+import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
 import ru.fivefourtyfive.map.presentation.util.MAP_LISTENER_DELAY
+import ru.fivefourtyfive.map.presentation.util.MapUtil.addImageryLayer
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addCompass
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addFolder
-import ru.fivefourtyfive.map.presentation.util.MapUtil.addLabels
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addListener
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addMyLocation
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addScale
+import ru.fivefourtyfive.map.presentation.util.MapUtil.addWikimapiaTileLayer
 import ru.fivefourtyfive.map.presentation.util.MapUtil.config
 import ru.fivefourtyfive.map.presentation.viewmodel.MapFragmentViewModel
 import ru.fivefourtyfive.map.presentation.viewmodel.MapViewState
-import ru.fivefourtyfive.wikimapper.Wikimapper
+import ru.fivefourtyfive.wikimapper.Places
 import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Parameter.ID
 import ru.fivefourtyfive.wikimapper.di.factory.ViewModelProviderFactory
 import ru.fivefourtyfive.wikimapper.presentation.ui.MainActivity
@@ -76,7 +77,7 @@ class MapFragment : NavFragment() {
 
         override fun onZoom(event: ZoomEvent?): Boolean {
             requestLocation()
-            Timber.e("MAP RESIZED. Zoom: [${event?.zoomLevel}]")
+//            Timber.e("MAP RESIZED. Zoom: [${event?.zoomLevel}]")
             return true
         }
     }, MAP_LISTENER_DELAY)
@@ -87,7 +88,7 @@ class MapFragment : NavFragment() {
         savedInstanceState: Bundle?
     ): View? {
         DaggerMapFragmentComponent.factory()
-            .create((requireActivity().application as Wikimapper).appComponent)
+            .create((requireActivity().application as Places).appComponent)
             .inject(this)
         return inflater.inflate(R.layout.fragment_map, container, false)
     }
@@ -123,10 +124,6 @@ class MapFragment : NavFragment() {
     }
 
     private fun onSuccess(newPlaces: ArrayList<PlacePolygon>) {
-        // TODO СДЕЛАТЬ DEBOUNCE запросов!!!
-        //TODO Сделать навигацию в описание объекта по щелчку на названии выбранного объекта.
-        //TODO Добавить кнопку центровки на своём положении, добавить ей возможность менять масштаб, аналогично оригинальному приложению.
-        //TODO ОТРЕФАКТОРИТЬ!!!!!!!!!!!!11111)
         CoroutineScope(Default).launch {
             val itemsToRemove = arrayListOf<PlacePolygon>()
             folder.items.map {
@@ -195,8 +192,13 @@ class MapFragment : NavFragment() {
 
     override fun onResume() {
         super.onResume()
-        mapView.addLabels(labels)
+        mapView
+            .addImageryLayer()
+            .addWikimapiaTileLayer()
+//            .addGeneralHeadquartersTiles()
             .addFolder(folder)
+//            .addLabels(labels)
+//            .addGrid()
             .addCompass()
             .addMyLocation()
             .addScale()

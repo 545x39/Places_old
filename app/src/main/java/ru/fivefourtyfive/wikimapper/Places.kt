@@ -8,7 +8,7 @@ import ru.fivefourtyfive.wikimapper.di.DaggerAppComponent
 import ru.fivefourtyfive.wikimapper.di.module.AppModule
 import timber.log.Timber
 
-class Wikimapper : Application() {
+class Places : Application() {
 
     lateinit var appComponent: AppComponent
 
@@ -17,7 +17,7 @@ class Wikimapper : Application() {
         initTimber()
         DaggerAppComponent.factory().create(AppModule(this)).apply {
             appComponent = this
-            inject(this@Wikimapper)
+            inject(this@Places)
         }
         setNightMode()
     }
