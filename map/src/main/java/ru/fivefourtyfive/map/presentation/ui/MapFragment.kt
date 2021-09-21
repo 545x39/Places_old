@@ -23,8 +23,8 @@ import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.Polygon
 import ru.fivefourtyfive.map.R
 import ru.fivefourtyfive.map.di.DaggerMapFragmentComponent
-import ru.fivefourtyfive.map.presentation.dto.PlaceLabel
-import ru.fivefourtyfive.map.presentation.dto.PlacePolygon
+import ru.fivefourtyfive.map.presentation.ui.overlay.PlaceLabel
+import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
 import ru.fivefourtyfive.map.presentation.util.MAP_LISTENER_DELAY
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addImageryLayer
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addCompass

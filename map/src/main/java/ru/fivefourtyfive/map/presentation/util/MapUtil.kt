@@ -11,7 +11,6 @@ import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 import org.osmdroid.tileprovider.tilesource.TileSourcePolicy
 import org.osmdroid.tileprovider.tilesource.XYTileSource
 import org.osmdroid.util.MapTileIndex
-import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.MapView
 import org.osmdroid.views.MapView.getTileSystem
 import org.osmdroid.views.overlay.FolderOverlay
@@ -68,12 +67,15 @@ object MapUtil {
             getTileSystem().maxLongitude,
             80
         )
-        setScrollableAreaLimitLatitude(getTileSystem().maxLatitude, getTileSystem().minLatitude, 0)
+        setScrollableAreaLimitLatitude(
+            getTileSystem().maxLatitude,
+            getTileSystem().minLatitude,
+            0)
         isTilesScaledToDpi = true
-        minZoomLevel = 2.0
-        maxZoomLevel = 19.0
-        zoomController.setVisibility(CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT)
-        controller.setZoom(10.0)
+        minZoomLevel = ZOOM_MIN
+        maxZoomLevel = ZOOM_MAX
+        zoomController.setVisibility(ZOOM_CONTROLS_VISIBILITY)
+        controller.setZoom(ZOOM_DEFAULT)
         isVerticalMapRepetitionEnabled = false
         isHorizontalMapRepetitionEnabled = false
     }

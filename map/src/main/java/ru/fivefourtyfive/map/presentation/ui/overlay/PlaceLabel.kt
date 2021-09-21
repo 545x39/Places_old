@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.map.presentation.dto
+package ru.fivefourtyfive.map.presentation.ui.overlay
 
 import org.osmdroid.views.overlay.simplefastpoint.LabelledGeoPoint
 
