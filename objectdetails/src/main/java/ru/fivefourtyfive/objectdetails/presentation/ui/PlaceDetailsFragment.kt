@@ -31,20 +31,6 @@ import ru.fivefourtyfive.wikimapper.util.Network.ROOT_URL
 import javax.inject.Inject
 import ru.fivefourtyfive.wikimapper.R as appR
 
-
-//TODO Переделать меню
-//TODO Добавить возможность отправки ссылки/открытия на сайте
-//TODO Переделать ViewState чтобы он не содержал объекта Place.
-//TODO Сделать Action-ы на запрос места и пункты меню
-//TODO Привязать слайдшоу к настройке (в ViewModel)
-//TODO Перенести обработку action-ов в ViewModel
-
-//TODO Сделать переход с описания на карту с центровкой на соответствующем месте.
-
-//TODO Показывать ссылку на википедию, если она есть.
-///
-//TODO Сделать перехват ссылок на wikimapia.org.
-
 class PlaceDetailsFragment : Fragment(), Renderer<PlaceDetailsViewState> {
 
     @Inject

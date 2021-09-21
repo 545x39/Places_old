@@ -77,7 +77,7 @@ class MapFragment : NavFragment() {
 
         override fun onZoom(event: ZoomEvent?): Boolean {
             requestLocation()
-            Timber.e("MAP RESIZED. Zoom: [${event?.zoomLevel}]")
+//            Timber.e("MAP RESIZED. Zoom: [${event?.zoomLevel}]")
             return true
         }
     }, MAP_LISTENER_DELAY)
@@ -124,10 +124,6 @@ class MapFragment : NavFragment() {
     }
 
     private fun onSuccess(newPlaces: ArrayList<PlacePolygon>) {
-        // TODO СДЕЛАТЬ DEBOUNCE запросов!!!
-        //TODO Сделать навигацию в описание объекта по щелчку на названии выбранного объекта.
-        //TODO Добавить кнопку центровки на своём положении, добавить ей возможность менять масштаб, аналогично оригинальному приложению.
-        //TODO ОТРЕФАКТОРИТЬ!!!!!!!!!!!!11111)
         CoroutineScope(Default).launch {
             val itemsToRemove = arrayListOf<PlacePolygon>()
             folder.items.map {

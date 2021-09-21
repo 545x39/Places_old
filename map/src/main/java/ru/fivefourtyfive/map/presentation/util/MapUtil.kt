@@ -13,6 +13,7 @@ import org.osmdroid.tileprovider.tilesource.XYTileSource
 import org.osmdroid.util.MapTileIndex
 import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.MapView
+import org.osmdroid.views.MapView.getTileSystem
 import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.ScaleBarOverlay
 import org.osmdroid.views.overlay.TilesOverlay
@@ -35,8 +36,8 @@ import java.io.File
 
 object MapUtil {
 
-    fun MapView.config()= this.apply{
-    //<editor-fold defaultstate="collapsed" desc="TILE SOURCE">
+    fun MapView.config() = this.apply {
+        //<editor-fold defaultstate="collapsed" desc="TILE SOURCE">
         val wikimediaTileSource = XYTileSource(
             "WikimediaNoLabelsTileSource",
             0,
@@ -62,6 +63,12 @@ object MapUtil {
         setTileSource(wikimediaTileSource)
         setUseDataConnection(true)
         setMultiTouchControls(true)
+        setScrollableAreaLimitLongitude(
+            getTileSystem().minLongitude,
+            getTileSystem().maxLongitude,
+            80
+        )
+        setScrollableAreaLimitLatitude(getTileSystem().maxLatitude, getTileSystem().minLatitude, 0)
         isTilesScaledToDpi = true
         minZoomLevel = 2.0
         maxZoomLevel = 19.0
@@ -71,7 +78,7 @@ object MapUtil {
         isHorizontalMapRepetitionEnabled = false
     }
 
-    fun MapView.addWikimapiaTileLayer() = this.apply{
+    fun MapView.addWikimapiaTileLayer() = this.apply {
         //<editor-fold defaultstate="collapsed" desc="TILE SOURCE">
         val wikimapiaTileSource = object : OnlineTileSourceBase(
             "WikimapiaTileSource",
@@ -88,10 +95,10 @@ object MapUtil {
                 }&type=hybrid&lng=1"
         }
         //</editor-fold>
-        addTileOverlayFrom(wikimapiaTileSource)
+        addTilesFrom(wikimapiaTileSource)
     }
 
-    fun MapView.addGeneralHeadquartersTiles() = this.apply{
+    fun MapView.addGeneralHeadquartersTiles() = this.apply {
         //<editor-fold defaultstate="collapsed" desc="TILE SOURCE">
         val generalHeadquartersTileSource = object : OnlineTileSourceBase(
             "GeneralHeadquartersTileSource",
@@ -107,39 +114,37 @@ object MapUtil {
                     MapTileIndex.getZoom(pMapTileIndex)
                 }/${MapTileIndex.getX(pMapTileIndex)}/${MapTileIndex.getY(pMapTileIndex)}"
         }
-    //</editor-fold>
-        addTileOverlayFrom(generalHeadquartersTileSource)
+        //</editor-fold>
+        addTilesFrom(generalHeadquartersTileSource)
     }
 
-    /** Maximum zoom level for this source is 18, in case of greater number it sends gray tiles with "No tile data available" text on them.*/
+    /** Maximum zoom level for this source is 17, in case of greater number it sends gray tiles with "No tile data available" text on them.*/
     fun MapView.addImageryLayer() = this.apply {
         //<editor-fold defaultstate="collapsed" desc="TILE SOURCE">
         val arcGisTileSource = object : OnlineTileSourceBase(
             "ArcGISTileSource",
             0,
-            18,
+            17,
             256,
             ".png",
             ARCGIS_TILE_SERVERS,
             "© OpenStreetMap contributors",
         ) {
-            //http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/17/38053/76359
             override fun getTileURLString(pMapTileIndex: Long) =
                 "$baseUrl/ArcGIS/rest/services/World_Imagery/MapServer/tile/${
                     MapTileIndex.getZoom(pMapTileIndex)
                 }/${MapTileIndex.getY(pMapTileIndex)}/${MapTileIndex.getX(pMapTileIndex)}"
         }
         //</editor-fold>
-        addTileOverlayFrom(arcGisTileSource)
+        addTilesFrom(arcGisTileSource)
     }
 
-    private fun MapView.addTileOverlayFrom(source: OnlineTileSourceBase) = this.apply {
+    private fun MapView.addTilesFrom(source: OnlineTileSourceBase) =
         with(MapTileProviderBasic(context).also { it.tileSource = source }) {
             overlays.add(TilesOverlay(this, context).apply {
                 loadingBackgroundColor = Color.TRANSPARENT
             })
         }
-    }
 
     fun MapView.addFolder(folder: FolderOverlay) = this.apply { overlays.add(folder) }
 
