@@ -201,7 +201,7 @@ class MapFragment : NavFragment() {
             .addWikimapiaTiles()
             .addFolder(folder)
 //            .addLabels(labels)
-            .addGrid()
+//            .addGrid()
             .addCompass()
             .addMyLocation()
             .addScale()

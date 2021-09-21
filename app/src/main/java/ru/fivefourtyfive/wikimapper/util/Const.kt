@@ -14,9 +14,9 @@ object Network {
     )
     val WIKIMAPIA_TILE_SERVERS = arrayOf(
         "http://88.99.77.85",
-        "http://88.99.77.8588.99.77.89",
-        "http://88.99.77.8588.99.95.183",
-        "http://88.99.77.8588.99.95.187",
+        "http://88.99.77.89",
+        "http://88.99.95.183",
+        "http://88.99.95.187",
     )
     const val CONNECT_TIMEOUT = 120L
     const val READ_TIMEOUT = 120L
