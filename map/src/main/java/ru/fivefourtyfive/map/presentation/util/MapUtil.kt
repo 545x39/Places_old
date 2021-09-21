@@ -25,6 +25,8 @@ import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlay
 import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlayOptions
 import org.osmdroid.views.overlay.simplefastpoint.SimplePointTheme
 import ru.fivefourtyfive.wikimapper.BuildConfig
+import ru.fivefourtyfive.wikimapper.util.Network.ARCGIS_TILE_SERVERS
+import ru.fivefourtyfive.wikimapper.util.Network.GENERAL_HEADQUARTERS_TILE_SERVERS
 import ru.fivefourtyfive.wikimapper.util.Network.WIKIMAPIA_TILE_SERVERS
 import ru.fivefourtyfive.wikimapper.util.Network.WIKIMEDIA_TILE_SERVERS
 import ru.fivefourtyfive.wikimapper.util.ifTrue
@@ -33,8 +35,8 @@ import java.io.File
 
 object MapUtil {
 
-    fun MapView.config(): MapView {
-
+    fun MapView.config()= this.apply{
+    //<editor-fold defaultstate="collapsed" desc="TILE SOURCE">
         val wikimediaTileSource = XYTileSource(
             "WikimediaNoLabelsTileSource",
             0,
@@ -51,14 +53,13 @@ object MapUtil {
                         or TileSourcePolicy.FLAG_USER_AGENT_NORMALIZED
             )
         )
-
+        //</editor-fold>
         Configuration.getInstance().apply {
             userAgentValue = BuildConfig.APPLICATION_ID
             osmdroidBasePath = File(context.getExternalFilesDir("osmdroid")!!.absolutePath)
             osmdroidTileCache = File(osmdroidBasePath, "tiles")
         }
         setTileSource(wikimediaTileSource)
-//        setTileSource(wikimapiaTileSource)
         setUseDataConnection(true)
         setMultiTouchControls(true)
         isTilesScaledToDpi = true
@@ -68,12 +69,10 @@ object MapUtil {
         controller.setZoom(10.0)
         isVerticalMapRepetitionEnabled = false
         isHorizontalMapRepetitionEnabled = false
-//        invalidate()
-        return this
     }
 
-    fun MapView.addWikimapiaTiles():MapView {
-        //<editor-fold defaultstate="collapsed" desc="INNER FUNCTIONS">
+    fun MapView.addWikimapiaTileLayer() = this.apply{
+        //<editor-fold defaultstate="collapsed" desc="TILE SOURCE">
         val wikimapiaTileSource = object : OnlineTileSourceBase(
             "WikimapiaTileSource",
             0,
@@ -83,23 +82,63 @@ object MapUtil {
             WIKIMAPIA_TILE_SERVERS,
             "© OpenStreetMap contributors",
         ) {
-            //88.99.95.183/?x=5&y=3&zoom=3&type=hybrid&lng=1
             override fun getTileURLString(pMapTileIndex: Long) =
                 "$baseUrl/?x=${MapTileIndex.getX(pMapTileIndex)}&y=${MapTileIndex.getY(pMapTileIndex)}&zoom=${
-                    MapTileIndex.getZoom(
-                        pMapTileIndex
-                    )
+                    MapTileIndex.getZoom(pMapTileIndex)
                 }&type=hybrid&lng=1"
         }
+        //</editor-fold>
+        addTileOverlayFrom(wikimapiaTileSource)
+    }
 
-        fun wikimapiaTilesOverlay() = TilesOverlay(MapTileProviderBasic(context).apply {
-            tileSource = wikimapiaTileSource
-        }, context).apply {
-            //loadingBackgroundColor = Color.TRANSPARENT
+    fun MapView.addGeneralHeadquartersTiles() = this.apply{
+        //<editor-fold defaultstate="collapsed" desc="TILE SOURCE">
+        val generalHeadquartersTileSource = object : OnlineTileSourceBase(
+            "GeneralHeadquartersTileSource",
+            10,
+            13,
+            256,
+            ".png",
+            GENERAL_HEADQUARTERS_TILE_SERVERS,
+            "© OpenStreetMap contributors",
+        ) {
+            override fun getTileURLString(pMapTileIndex: Long) =
+                "$baseUrl/cgi-bin/tapp/tilecache.py/1.0.0/topomapper_v2/${
+                    MapTileIndex.getZoom(pMapTileIndex)
+                }/${MapTileIndex.getX(pMapTileIndex)}/${MapTileIndex.getY(pMapTileIndex)}"
+        }
+    //</editor-fold>
+        addTileOverlayFrom(generalHeadquartersTileSource)
+    }
+
+    /** Maximum zoom level for this source is 18, in case of greater number it sends gray tiles with "No tile data available" text on them.*/
+    fun MapView.addImageryLayer() = this.apply {
+        //<editor-fold defaultstate="collapsed" desc="TILE SOURCE">
+        val arcGisTileSource = object : OnlineTileSourceBase(
+            "ArcGISTileSource",
+            0,
+            18,
+            256,
+            ".png",
+            ARCGIS_TILE_SERVERS,
+            "© OpenStreetMap contributors",
+        ) {
+            //http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/17/38053/76359
+            override fun getTileURLString(pMapTileIndex: Long) =
+                "$baseUrl/ArcGIS/rest/services/World_Imagery/MapServer/tile/${
+                    MapTileIndex.getZoom(pMapTileIndex)
+                }/${MapTileIndex.getY(pMapTileIndex)}/${MapTileIndex.getX(pMapTileIndex)}"
         }
         //</editor-fold>
-        overlays.add(wikimapiaTilesOverlay())
-        return this
+        addTileOverlayFrom(arcGisTileSource)
+    }
+
+    private fun MapView.addTileOverlayFrom(source: OnlineTileSourceBase) = this.apply {
+        with(MapTileProviderBasic(context).also { it.tileSource = source }) {
+            overlays.add(TilesOverlay(this, context).apply {
+                loadingBackgroundColor = Color.TRANSPARENT
+            })
+        }
     }
 
     fun MapView.addFolder(folder: FolderOverlay) = this.apply { overlays.add(folder) }
@@ -150,7 +189,7 @@ object MapUtil {
         overlays.add(SimpleFastPointOverlay(SimplePointTheme(labels, true), options))
     }
 
-    fun MapView.addGrid() = this.apply {overlays.add(LatLonGridlineOverlay2())}
+    fun MapView.addGrid() = this.apply { overlays.add(LatLonGridlineOverlay2()) }
 
     fun MapView.addListener(listener: MapListener) = this.apply { addMapListener(listener) }
 

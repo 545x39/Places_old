@@ -3,7 +3,7 @@ package ru.fivefourtyfive.wikimapper.di
 import android.content.Context
 import android.content.SharedPreferences
 import dagger.Component
-import ru.fivefourtyfive.wikimapper.Wikimapper
+import ru.fivefourtyfive.wikimapper.Places
 import ru.fivefourtyfive.wikimapper.data.repository.implementation.AreaRepository
 import ru.fivefourtyfive.wikimapper.data.repository.implementation.PlaceRepository
 import ru.fivefourtyfive.wikimapper.di.module.AppModule
@@ -23,7 +23,7 @@ import javax.inject.Singleton
 )
 interface AppComponent {
 
-    fun inject(app: Wikimapper)
+    fun inject(app: Places)
 
     fun getPreferences(): SharedPreferences
 
