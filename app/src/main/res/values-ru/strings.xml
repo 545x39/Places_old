@@ -10,6 +10,10 @@
     <string name="share_link">Отправить ссылку</string>
     <string name="share_coordinates">Отправить координаты</string>
     <string name="slide_show">Слайд-шоу</string>
+    <string name="map_mode_scheme">Схема</string>
+    <string name="map_mode_satellite">Спутник</string>
+    <string name="map_mode_hq">Карты Генштаба</string>
+    <string name="map_mode_wikimapia_overlay">Слой Wikimapia</string>
     <string name="title_objectdetails">Объект</string>
     <string name="title_overlays">Режим карты</string>
     <string name="title_center_selection">Центрировать на выбранном</string>
