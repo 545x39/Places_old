@@ -2,9 +2,8 @@ package ru.fivefourtyfive.map.presentation.ui
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Button
 import android.widget.ProgressBar
-import android.widget.Toast
+import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.CoroutineScope
@@ -26,9 +25,9 @@ import ru.fivefourtyfive.map.di.DaggerMapFragmentComponent
 import ru.fivefourtyfive.map.presentation.ui.overlay.PlaceLabel
 import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
 import ru.fivefourtyfive.map.presentation.util.MAP_LISTENER_DELAY
-import ru.fivefourtyfive.map.presentation.util.MapUtil.addImageryLayer
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addCompass
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addFolder
+import ru.fivefourtyfive.map.presentation.util.MapUtil.addImageryLayer
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addListener
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addMyLocation
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addScale
@@ -44,7 +43,6 @@ import ru.fivefourtyfive.wikimapper.presentation.ui.NavFragment
 import ru.fivefourtyfive.wikimapper.util.ifFalse
 import ru.fivefourtyfive.wikimapper.util.ifTrue
 import ru.fivefourtyfive.wikimapper.util.parallelMap
-import timber.log.Timber
 import javax.inject.Inject
 import ru.fivefourtyfive.wikimapper.R as appR
 
@@ -58,6 +56,8 @@ class MapFragment : NavFragment() {
 
     private lateinit var mapView: MapView
 
+    private lateinit var placeTitle: TextView
+
     private lateinit var progress: ProgressBar
 
     private var places = arrayListOf<PlacePolygon>()
@@ -70,17 +70,28 @@ class MapFragment : NavFragment() {
 
     private val listener = DelayedMapListener(object : MapListener {
         override fun onScroll(event: ScrollEvent?): Boolean {
-            requestLocation()
-            Timber.e("MAP SCROLLED. Coords: [${mapView.mapCenter.latitude}, ${mapView.mapCenter.longitude}]")
+            updatePositionAndRequestLocation()
             return true
         }
 
         override fun onZoom(event: ZoomEvent?): Boolean {
-            requestLocation()
-//            Timber.e("MAP RESIZED. Zoom: [${event?.zoomLevel}]")
+            updatePositionAndRequestLocation()
             return true
         }
     }, MAP_LISTENER_DELAY)
+
+    private fun updatePositionAndRequestLocation() {
+        with(mapView) {
+            viewModel.setLastLocation(mapCenter.latitude, mapCenter.longitude)
+                .setLastZoom(zoomLevelDouble)
+                .getArea(
+                    boundingBox.lonWest,
+                    boundingBox.latSouth,
+                    boundingBox.lonEast,
+                    boundingBox.latNorth
+                )
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -101,11 +112,13 @@ class MapFragment : NavFragment() {
         view.apply {
             mapView = findViewById(R.id.map)
             progress = findViewById(R.id.progress)
+            placeTitle = findViewById(R.id.place_title)
         }
         mapView.config().addListener(listener)
-        view.findViewById<Button>(R.id.get_area_button).setOnClickListener {
-            requestLocation()
+        viewModel.getLastLocation().apply {
+            mapView.controller.animateTo(GeoPoint(first, second))
         }
+        mapView.controller.setZoom(viewModel.getLastZoom())
         subscribeObserver()
     }
 
@@ -171,20 +184,12 @@ class MapFragment : NavFragment() {
     private fun onError(message: String?) =
         (requireActivity() as MainActivity).showSnackBar(message)
 
-    private fun requestLocation() {
-        mapView.boundingBox.apply { viewModel.getArea(lonWest, latSouth, lonEast, latNorth) }
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) =
         inflater.inflate(R.menu.menu_map, menu)
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_settings -> navigate(appR.id.action_mapFragment_to_searchFragment)
-            R.id.action_object_details -> navigate(
-                appR.id.action_mapFragment_to_placeDetailsFragment,
-                bundleOf(ID to currentSelection?.id)
-            )
             R.id.action_search -> navigate(appR.id.action_mapFragment_to_settingsFragment)
         }
         return super.onOptionsItemSelected(item)
@@ -216,8 +221,14 @@ class MapFragment : NavFragment() {
         override fun onClick(polygon: Polygon?, mapView: MapView?, eventPos: GeoPoint?): Boolean {
             currentSelection?.let { if (it != place) currentSelection?.setHighlighted(false) }
             currentSelection = place
+            when (place.highlight) {
+                true -> navigate(
+                    appR.id.action_mapFragment_to_placeDetailsFragment,
+                    bundleOf(ID to place.id)
+                )
+                false -> placeTitle.text = currentSelection?.title ?: ""
+            }
             place.setHighlighted(!place.highlight)
-            Toast.makeText(requireContext(), place.title, Toast.LENGTH_SHORT).show()
             mapView?.invalidate()
             return true
         }

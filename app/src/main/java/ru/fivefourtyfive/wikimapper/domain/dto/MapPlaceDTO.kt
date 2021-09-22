@@ -8,7 +8,7 @@ class MapPlaceDTO(place: Place) {
     var debugInfo: DebugInfo?   = place.debugInfo
     val id: Int                 = place.id
     val url: String             = place.url ?: ""
-    val title: String           = place.title ?: ""
+    val title: String           = place.name ?: ""
     val polygon: List<Dot>      = place.polygon ?: listOf()
     val north                   = place.location?.north ?: 0.0
     val south                   = place.location?.south ?: 0.0

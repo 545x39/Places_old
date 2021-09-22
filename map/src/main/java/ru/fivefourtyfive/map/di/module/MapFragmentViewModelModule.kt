@@ -1,9 +1,10 @@
-package ru.fivefourtyfive.map.di
+package ru.fivefourtyfive.map.di.module
 
 import androidx.lifecycle.ViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
+import ru.fivefourtyfive.map.di.MapFragmentScope
 import ru.fivefourtyfive.map.presentation.viewmodel.MapFragmentViewModel
 import ru.fivefourtyfive.wikimapper.di.key.ViewModelKey
 
