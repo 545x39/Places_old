@@ -13,7 +13,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.fivefourtyfive.wikimapper.domain.dto.CommentDTO
-import ru.fivefourtyfive.wikimapper.domain.entity.Comment
 import java.text.SimpleDateFormat
 import java.util.*
 import ru.fivefourtyfive.wikimapper.R as appR
@@ -32,17 +31,18 @@ fun Comment(comment: CommentDTO) {
                 .padding(6.dp, 0.dp, 0.dp, 0.dp)
         ) {
             Text(
-                comment.name ?: "",
+                comment.name,
                 color = colorResource(id = appR.color.green),
                 fontWeight = FontWeight.Bold
             )
-            comment.date?.let {
-                Text(
-                    SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(Date(it * 1000)),
-                    color = colorResource(id = appR.color.light_green),
-                    fontSize = 12.sp
-                )
-            }
+            Text(
+                SimpleDateFormat(
+                    "yyyy-MM-dd HH:mm:ss",
+                    Locale.US
+                ).format(Date(comment.date * 1000)),
+                color = colorResource(id = appR.color.light_green),
+                fontSize = 12.sp
+            )
             ContentText(text = comment.message)
             Divider()
         }

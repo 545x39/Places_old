@@ -50,8 +50,8 @@ class PlaceDetailsFragment : Fragment(), Renderer<PlaceDetailsViewState> {
         DaggerPlaceDetailsComponent.factory()
             .create((requireActivity().application as Places).appComponent)
             .inject(this)
-        binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_place_details, container, false)
+        binding = DataBindingUtil
+            .inflate(inflater, R.layout.fragment_place_details, container, false)
         return binding.root
     }
 
