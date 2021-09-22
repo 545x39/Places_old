@@ -4,30 +4,58 @@
     tools:context="ru.fivefourtyfive.wikimapper.presentation.ui.MainActivity">
     <item
         android:id="@+id/action_search"
-        android:orderInCategory="1"
         android:icon="@drawable/icon_lens"
+        android:orderInCategory="1"
         android:title="@string/search"
         app:showAsAction="always" />
-<!--    <item-->
-<!--        android:id="@+id/action_search"-->
-<!--        android:orderInCategory="1"-->
-<!--        android:title="@string/search"-->
-<!--        app:actionViewClass="androidx.appcompat.widget.SearchView"-->
-<!--        android:icon="@drawable/icon_lens"-->
-<!--        app:showAsAction="always" />-->
+    <!--    <item-->
+    <!--        android:id="@+id/action_search"-->
+    <!--        android:orderInCategory="1"-->
+    <!--        android:title="@string/search"-->
+    <!--        app:actionViewClass="androidx.appcompat.widget.SearchView"-->
+    <!--        android:icon="@drawable/icon_lens"-->
+    <!--        app:showAsAction="always" />-->
     <!--    app:actionViewClass="androidx.appcompat.widget.SearchView$SearchAutoComplete"-->
 
     <item
         android:id="@+id/action_object_details"
-        android:orderInCategory="99"
         android:icon="@drawable/icon_overlays"
         android:iconTint="@color/white"
+        android:orderInCategory="99"
         android:title="@string/title_objectdetails"
-        app:showAsAction="always" />
+        app:showAsAction="always">
+        <menu>
+            <group
+                android:id="@+id/group"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/action_map_mode_scheme"
+                    android:orderInCategory="94"
+                    android:title="@string/map_mode_scheme"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_map_mode_satellite"
+                    android:orderInCategory="95"
+                    android:title="@string/map_mode_satellite"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_map_mode_general_hq"
+                    android:orderInCategory="94"
+                    android:title="@string/share_coordinates"
+                    app:showAsAction="never" />
+            </group>
+            <item
+                android:id="@+id/action_slide_show"
+                android:checkable="true"
+                android:orderInCategory="98"
+                android:title="@string/map_mode_wikimapia_overlay"
+                app:showAsAction="never" />
+        </menu>
+    </item>
     <item
         android:id="@+id/action_settings"
+        android:checkable="true"
         android:orderInCategory="100"
-        android:icon="@drawable/icon_gear"
-        android:title="@string/settings"
-        app:showAsAction="ifRoom" />
+        android:title="@string/title_center_selection"
+        app:showAsAction="never" />
 </menu>
