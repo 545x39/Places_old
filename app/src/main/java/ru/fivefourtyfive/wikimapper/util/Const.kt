@@ -35,4 +35,7 @@ object Permissions {
 
 object Preferences {
     const val PREFERENCE_SLIDESHOW = "preference_slideshow"
+    const val PREFERENCE_LAST_LOCATION = "preference_last_location"
+    const val PREFERENCE_LAST_ZOOM = "preference_last_zoom"
+    const val DEFAULT_LOCATION = "59.939039;30.315780"
 }

@@ -3,6 +3,7 @@ package ru.fivefourtyfive.map.presentation.ui.overlay
 import android.graphics.Color
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Polygon
+import timber.log.Timber
 
 class PlacePolygon(
     val id: Int,
@@ -22,9 +23,14 @@ class PlacePolygon(
     init {
         //Forces the loop to close, as the first and the last points are the same.
         polygon.add(polygon[0])
-        outlinePaint.color = Color.GRAY
-        outlinePaint.strokeWidth = 3.0f
-        points = polygon
+        outlinePaint.color = Color.WHITE
+        outlinePaint.strokeWidth = 3.5f
+        runCatching {
+            points = polygon
+        }.onFailure {
+            Timber.e(it)
+            Timber.e("POLYGON: $polygon")
+        }
         title = name
     }
 
