@@ -11,5 +11,7 @@
     <string name="share_coordinates">Отправить координаты</string>
     <string name="slide_show">Слайд-шоу</string>
     <string name="title_objectdetails">Объект</string>
+    <string name="title_overlays">Режим карты</string>
+    <string name="title_center_selection">Центрировать на выбранном</string>
     <string name="comments_count">Комментариев: %s</string>
 </resources>

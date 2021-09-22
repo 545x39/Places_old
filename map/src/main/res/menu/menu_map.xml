@@ -17,13 +17,13 @@
 <!--        app:showAsAction="always" />-->
     <!--    app:actionViewClass="androidx.appcompat.widget.SearchView$SearchAutoComplete"-->
 
-    <!--    TODO Remove it when necessary-->
     <item
         android:id="@+id/action_object_details"
         android:orderInCategory="99"
-        android:icon="@drawable/icon_hammer"
+        android:icon="@drawable/icon_overlays"
+        android:iconTint="@color/white"
         android:title="@string/title_objectdetails"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

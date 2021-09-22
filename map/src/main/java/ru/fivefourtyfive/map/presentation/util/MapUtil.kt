@@ -62,15 +62,15 @@ object MapUtil {
         setTileSource(wikimediaTileSource)
         setUseDataConnection(true)
         setMultiTouchControls(true)
+        setScrollableAreaLimitLatitude(
+            getTileSystem().maxLatitude,
+            getTileSystem().minLatitude,
+            0)
         setScrollableAreaLimitLongitude(
             getTileSystem().minLongitude,
             getTileSystem().maxLongitude,
             80
         )
-        setScrollableAreaLimitLatitude(
-            getTileSystem().maxLatitude,
-            getTileSystem().minLatitude,
-            0)
         isTilesScaledToDpi = true
         minZoomLevel = ZOOM_MIN
         maxZoomLevel = ZOOM_MAX

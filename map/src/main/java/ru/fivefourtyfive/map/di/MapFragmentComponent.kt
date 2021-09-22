@@ -1,6 +1,8 @@
 package ru.fivefourtyfive.map.di
 
 import dagger.Component
+import ru.fivefourtyfive.map.di.module.MapFragmentModule
+import ru.fivefourtyfive.map.di.module.MapFragmentViewModelModule
 import ru.fivefourtyfive.map.presentation.ui.MapFragment
 import ru.fivefourtyfive.wikimapper.di.AppComponent
 
