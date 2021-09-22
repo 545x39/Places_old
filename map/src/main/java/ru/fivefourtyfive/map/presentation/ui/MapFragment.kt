@@ -197,13 +197,13 @@ class MapFragment : NavFragment() {
 
     override fun onResume() {
         super.onResume()
-        mapView
-            .addImageryLayer()
-            .addWikimapiaTileLayer()
-//            .addGeneralHeadquartersTiles()
+        /** Overlay addition order matters. */
+        mapView.addImageryLayer()
+            //.addGeneralHeadquartersTiles()
             .addFolder(folder)
-//            .addLabels(labels)
-//            .addGrid()
+            .addWikimapiaTileLayer()
+            //.addLabels(labels)
+            //.addGrid()
             .addCompass()
             .addMyLocation()
             .addScale()

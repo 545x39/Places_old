@@ -28,8 +28,8 @@ class PlacePolygon(
         runCatching {
             points = polygon
         }.onFailure {
-            Timber.e(it)
-            Timber.e("POLYGON: $polygon")
+            points = listOf()
+//            Timber.e("POLYGON: $polygon\n$it")
         }
         title = name
     }

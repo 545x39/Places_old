@@ -15,5 +15,7 @@
     <string name="title_search" translatable="false">Search</string>
     <string name="title_settings" translatable="false">Settings</string>
     <string name="title_objectdetails">Object</string>
+    <string name="title_overlays">Map mode</string>
+    <string name="title_center_selection">Center on selection</string>
     <string name="comments_count">Comments: %s</string>
 </resources>
