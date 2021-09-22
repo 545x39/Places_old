@@ -213,8 +213,12 @@ class MapFragment : NavFragment() {
 
     override fun onPause() {
         super.onPause()
-        mapView.overlays.clear()
         mapView.onPause()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mapView.overlays.clear()
     }
 
     inner class PlaceOnClickListener(private val place: PlacePolygon) : Polygon.OnClickListener {
