@@ -20,6 +20,10 @@
     <string name="title_settings" translatable="false">Settings</string>
     <string name="title_objectdetails">Object</string>
     <string name="title_overlays">Map mode</string>
-    <string name="title_center_selection">Center on selection</string>
+    <string name="title_center_selection">Center selection</string>
+    <string name="title_follow_location">Follow location</string>
+    <string name="title_compass">Compass</string>
+    <string name="title_grid">Grid</string>
+    <string name="title_scale">Scale</string>
     <string name="comments_count">Comments: %s</string>
 </resources>

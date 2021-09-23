@@ -1,6 +1,5 @@
 package ru.fivefourtyfive.map.presentation.viewmodel
 
-import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,22 +7,39 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 import org.osmdroid.util.GeoPoint
 import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
-import ru.fivefourtyfive.map.presentation.util.ZOOM_DEFAULT
+import ru.fivefourtyfive.map.presentation.util.MapSettingsUtil
+import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_LABELS_TILE_SOURCE
+import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_TILE_SOURCE
+import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_TRANSPORTATION_TILE_SOURCE
+import ru.fivefourtyfive.map.presentation.util.TileSource.GENERAL_HEADQUARTERS_TILE_SOURCE
+import ru.fivefourtyfive.map.presentation.util.TileSource.WIKIMAPIA_TILE_SOURCE
+import ru.fivefourtyfive.map.presentation.util.TileSource.WIKIMEDIA_NO_LABELS_TILE_SOURCE
 import ru.fivefourtyfive.wikimapper.data.repository.implementation.AreaRepository
 import ru.fivefourtyfive.wikimapper.domain.datastate.AreaDataState
 import ru.fivefourtyfive.wikimapper.domain.dto.MapPlaceDTO
 import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.EventHandler
 import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.Reducer
-import ru.fivefourtyfive.wikimapper.util.Preferences.DEFAULT_LOCATION
-import ru.fivefourtyfive.wikimapper.util.Preferences.PREFERENCE_LAST_LOCATION
-import ru.fivefourtyfive.wikimapper.util.Preferences.PREFERENCE_LAST_ZOOM
 import javax.inject.Inject
+import javax.inject.Named
 
 class MapFragmentViewModel @Inject constructor(
     private val repository: AreaRepository,
-    private val preferences: SharedPreferences
+    private val settings: MapSettingsUtil,
+    @Named(WIKIMEDIA_NO_LABELS_TILE_SOURCE)
+    private val wikimediaTileSource: OnlineTileSourceBase,
+    @Named(ARCGIS_IMAGERY_TILE_SOURCE)
+    private val satelliteTileSource: OnlineTileSourceBase,
+    @Named(ARCGIS_IMAGERY_LABELS_TILE_SOURCE)
+    private val labelsTileSource: OnlineTileSourceBase,
+    @Named(ARCGIS_IMAGERY_TRANSPORTATION_TILE_SOURCE)
+    private val transportationTileSource: OnlineTileSourceBase,
+    @Named(WIKIMAPIA_TILE_SOURCE)
+    private val wikimapiaTileSource: OnlineTileSourceBase,
+    @Named(GENERAL_HEADQUARTERS_TILE_SOURCE)
+    private val generalHeadquartersTileSource: OnlineTileSourceBase,
 ) :
     ViewModel(), Reducer<AreaDataState, MapViewState>, EventHandler<MapEvent> {
 
@@ -31,21 +47,36 @@ class MapFragmentViewModel @Inject constructor(
 
     val liveData = _liveData as LiveData<MapViewState>
 
-
-    fun getLastLocation(): Pair<Double, Double> {
-        preferences.getString(PREFERENCE_LAST_LOCATION, DEFAULT_LOCATION)!!.split(";").apply {
-            return this[0].toDouble() to this[1].toDouble()
-        }
-    }
+    //<editor-fold defaultstate="collapsed" desc="PREFERENCES">
+    //TODO Remove it when actions and view state are completed.
+    fun getLastLocation(): Pair<Double, Double> = settings.getLastLocation()
 
     fun setLastLocation(x: Double, y: Double): MapFragmentViewModel =
-        this.apply { preferences.edit().putString(PREFERENCE_LAST_LOCATION, "$x;$y").apply() }
+        this.apply { settings.setLastLocation(x, y) }
 
-    fun getLastZoom() =
-        preferences.getFloat(PREFERENCE_LAST_ZOOM, ZOOM_DEFAULT.toFloat()).toDouble()
+    fun getLastZoom() = settings.getLastZoom()
 
     fun setLastZoom(zoom: Double): MapFragmentViewModel =
-        this.apply { preferences.edit().putFloat(PREFERENCE_LAST_ZOOM, zoom.toFloat()).apply() }
+        this.apply { settings.setLastZoom(zoom) }
+
+    fun getMapMode(): Int = settings.getMapMode()
+
+    fun setMapMode(mode: Int) = settings.setMapMode(mode)
+
+    fun areWikimapiaOverlayEnabled() = settings.getWikimapiaOverlays()
+
+    fun setWikimapiaOverlays(enabled: Boolean) = settings.setWikimapiaOverlays(enabled)
+
+    fun isFollowLocationEnabled() = settings.getFollowLocation()
+
+    fun isCenterSelectionEnabled() = settings.getCenterSelection()
+
+    fun isGridEnabled() = settings.getGrid()
+
+    fun isScaleEnabled() = settings.getScale()
+
+    fun setFollowLocation(enable: Boolean) = settings.setFollowLocation(enable)
+    //</editor-fold>
 
     fun getArea(
         latMin: Double,
@@ -99,6 +130,13 @@ class MapFragmentViewModel @Inject constructor(
             is MapEvent.GetAreaEvent -> {
                 event.apply { getArea(latMin, lonMin, latMax, lonMax) }
             }
+            is MapEvent.SwitchMapModeEvent -> settings.setMapMode(event.mode)
+            is MapEvent.SwitchWikimapiaOverlayEvent -> settings.setWikimapiaOverlays(event.enable)
+            is MapEvent.SwitchTransportationOverlayEvent -> settings.setTransportationOverlay(event.enable)
+            is MapEvent.SwitchFollowLocationEvent -> settings.setFollowLocation(event.enable)
+            is MapEvent.SwitchCenterSelectionEvent -> settings.setCenterSelection(event.enable)
+            is MapEvent.SwitchScaleEvent -> settings.setScale(event.enable)
+            is MapEvent.SwitchGridEvent -> settings.setGrid(event.enable)
         }
     }
 }

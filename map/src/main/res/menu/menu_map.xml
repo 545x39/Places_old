@@ -21,41 +21,67 @@
         android:id="@+id/action_object_details"
         android:icon="@drawable/icon_overlays"
         android:iconTint="@color/white"
-        android:orderInCategory="99"
+        android:orderInCategory="86"
         android:title="@string/title_objectdetails"
         app:showAsAction="always">
         <menu>
             <group
-                android:id="@+id/group"
+                android:id="@+id/group_map_mode"
                 android:checkableBehavior="single">
                 <item
                     android:id="@+id/action_map_mode_scheme"
-                    android:orderInCategory="94"
+                    android:orderInCategory="87"
                     android:title="@string/map_mode_scheme"
                     app:showAsAction="never" />
                 <item
                     android:id="@+id/action_map_mode_satellite"
-                    android:orderInCategory="95"
+                    android:orderInCategory="88"
                     android:title="@string/map_mode_satellite"
                     app:showAsAction="never" />
                 <item
                     android:id="@+id/action_map_mode_general_hq"
-                    android:orderInCategory="94"
-                    android:title="@string/share_coordinates"
+                    android:orderInCategory="89"
+                    android:title="@string/map_mode_hq"
                     app:showAsAction="never" />
             </group>
-            <item
-                android:id="@+id/action_slide_show"
-                android:checkable="true"
-                android:orderInCategory="98"
-                android:title="@string/map_mode_wikimapia_overlay"
-                app:showAsAction="never" />
+            <group>
+                <item
+                    android:id="@+id/action_wikimapia_overlays"
+                    android:checkable="true"
+                    android:orderInCategory="90"
+                    android:title="@string/map_mode_wikimapia_overlay"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_show_scale"
+                    android:checkable="true"
+                    android:orderInCategory="91"
+                    android:title="@string/title_scale"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_show_grid"
+                    android:checkable="true"
+                    android:orderInCategory="92"
+                    android:title="@string/title_grid"
+                    app:showAsAction="never" />
+            </group>
         </menu>
     </item>
+<!--    <item-->
+<!--        android:id="@+id/action_compass"-->
+<!--        android:checkable="true"-->
+<!--        android:orderInCategory="91"-->
+<!--        android:title="@string/title_compass"-->
+<!--        app:showAsAction="never" />-->
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_follow_location"
         android:checkable="true"
-        android:orderInCategory="100"
+        android:orderInCategory="93"
+        android:title="@string/title_follow_location"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_center_selection"
+        android:checkable="true"
+        android:orderInCategory="94"
         android:title="@string/title_center_selection"
         app:showAsAction="never" />
 </menu>

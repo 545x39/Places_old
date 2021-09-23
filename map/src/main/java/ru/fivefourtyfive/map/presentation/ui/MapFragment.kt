@@ -3,6 +3,7 @@ package ru.fivefourtyfive.map.presentation.ui
 import android.os.Bundle
 import android.view.*
 import android.widget.ProgressBar
+import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
@@ -25,6 +26,7 @@ import ru.fivefourtyfive.map.di.DaggerMapFragmentComponent
 import ru.fivefourtyfive.map.presentation.ui.overlay.PlaceLabel
 import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
 import ru.fivefourtyfive.map.presentation.util.MAP_LISTENER_DELAY
+import ru.fivefourtyfive.map.presentation.util.MapMode
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addCompass
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addFolder
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addImageryLayer
@@ -33,6 +35,7 @@ import ru.fivefourtyfive.map.presentation.util.MapUtil.addMyLocation
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addScale
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addWikimapiaTileLayer
 import ru.fivefourtyfive.map.presentation.util.MapUtil.config
+import ru.fivefourtyfive.map.presentation.viewmodel.MapEvent
 import ru.fivefourtyfive.map.presentation.viewmodel.MapFragmentViewModel
 import ru.fivefourtyfive.map.presentation.viewmodel.MapViewState
 import ru.fivefourtyfive.wikimapper.Places
@@ -40,13 +43,14 @@ import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Parameter.ID
 import ru.fivefourtyfive.wikimapper.di.factory.ViewModelProviderFactory
 import ru.fivefourtyfive.wikimapper.presentation.ui.MainActivity
 import ru.fivefourtyfive.wikimapper.presentation.ui.NavFragment
+import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.EventDispatcher
 import ru.fivefourtyfive.wikimapper.util.ifFalse
 import ru.fivefourtyfive.wikimapper.util.ifTrue
 import ru.fivefourtyfive.wikimapper.util.parallelMap
 import javax.inject.Inject
 import ru.fivefourtyfive.wikimapper.R as appR
 
-class MapFragment : NavFragment() {
+class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
 
     @Inject
     lateinit var providerFactory: ViewModelProviderFactory
@@ -84,12 +88,14 @@ class MapFragment : NavFragment() {
         with(mapView) {
             viewModel.setLastLocation(mapCenter.latitude, mapCenter.longitude)
                 .setLastZoom(zoomLevelDouble)
-                .getArea(
+            viewModel.areWikimapiaOverlayEnabled().ifTrue {
+                viewModel.getArea(
                     boundingBox.lonWest,
                     boundingBox.latSouth,
                     boundingBox.lonEast,
                     boundingBox.latNorth
                 )
+            }
         }
     }
 
@@ -114,12 +120,17 @@ class MapFragment : NavFragment() {
             progress = findViewById(R.id.progress)
             placeTitle = findViewById(R.id.place_title)
         }
-        mapView.config().addListener(listener)
-        viewModel.getLastLocation().apply {
-            mapView.controller.animateTo(GeoPoint(first, second))
-        }
-        mapView.controller.setZoom(viewModel.getLastZoom())
+        centerAndZoom()
         subscribeObserver()
+    }
+
+    private fun centerAndZoom() {
+        mapView.config().addListener(listener)
+        val (lat, lon) = viewModel.getLastLocation()
+        mapView.controller.apply {
+            animateTo(GeoPoint(lat, lon))
+            setZoom(viewModel.getLastZoom())
+        }
     }
 
     private fun subscribeObserver() {
@@ -154,7 +165,7 @@ class MapFragment : NavFragment() {
             labels.clear()
             folder.items.apply {
                 parallelMap { place ->
-                    (place as PlacePolygon).hasToShowLabel().ifTrue {
+                    (place as PlacePolygon).haveToShowLabel(mapView).ifTrue {
                         labels.add(
                             PlaceLabel(
                                 place.id,
@@ -187,18 +198,70 @@ class MapFragment : NavFragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) =
         inflater.inflate(R.menu.menu_map, menu)
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        fun item(id: Int) = menu.findItem(id)
+        super.onPrepareOptionsMenu(menu)
+        with(viewModel) {
+            item(R.id.action_wikimapia_overlays).isChecked = areWikimapiaOverlayEnabled()
+            item(R.id.action_follow_location).isChecked = isFollowLocationEnabled()
+            item(R.id.action_center_selection).isChecked = isCenterSelectionEnabled()
+            item(R.id.action_show_scale).isChecked = isScaleEnabled()
+            item(R.id.action_show_grid).isChecked = isGridEnabled()
+                when (getMapMode()) {
+                    MapMode.SCHEME -> item(R.id.action_map_mode_scheme).setChecked(true)
+                    MapMode.SATELLITE -> item(R.id.action_map_mode_satellite).setChecked(true)
+                    MapMode.GENERAL_HQ -> item(R.id.action_map_mode_general_hq).setChecked(true)
+                    else -> item(R.id.action_map_mode_scheme).setChecked(true)
+                }
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_settings -> navigate(appR.id.action_mapFragment_to_searchFragment)
+            R.id.action_map_mode_scheme -> {
+                item.isChecked = true
+                dispatchEvent(MapEvent.SwitchMapModeEvent(MapMode.SCHEME))
+            }
+            R.id.action_map_mode_satellite -> {
+                item.isChecked = true
+                dispatchEvent(MapEvent.SwitchMapModeEvent(MapMode.SATELLITE))
+            }
+            R.id.action_map_mode_general_hq -> {
+                item.isChecked = true
+                dispatchEvent(MapEvent.SwitchMapModeEvent(MapMode.GENERAL_HQ))
+            }
+            R.id.action_wikimapia_overlays -> {
+                item.isChecked = !item.isChecked
+                dispatchEvent(MapEvent.SwitchWikimapiaOverlayEvent(item.isChecked))
+            }
+            R.id.action_follow_location -> {
+                item.isChecked = !item.isChecked
+                dispatchEvent(MapEvent.SwitchFollowLocationEvent(item.isChecked))
+            }
+            R.id.action_center_selection -> {
+                item.isChecked = !item.isChecked
+                dispatchEvent(MapEvent.SwitchCenterSelectionEvent(item.isChecked))
+            }
+            R.id.action_show_scale -> {
+                item.isChecked = !item.isChecked
+                dispatchEvent(MapEvent.SwitchScaleEvent(item.isChecked))
+            }
+            R.id.action_show_grid -> {
+                item.isChecked = !item.isChecked
+                dispatchEvent(MapEvent.SwitchGridEvent(item.isChecked))
+            }
             R.id.action_search -> navigate(appR.id.action_mapFragment_to_settingsFragment)
         }
         return super.onOptionsItemSelected(item)
     }
 
+    override fun dispatchEvent(event: MapEvent) = viewModel.handleEvent(event)
+
     override fun onResume() {
         super.onResume()
         /** Overlay addition order matters. */
-        mapView.addImageryLayer()
+        mapView
+            .addImageryLayer()
             //.addGeneralHeadquartersTiles()
             .addFolder(folder)
             .addWikimapiaTileLayer()
@@ -213,12 +276,8 @@ class MapFragment : NavFragment() {
 
     override fun onPause() {
         super.onPause()
-        mapView.onPause()
-    }
-
-    override fun onStop() {
-        super.onStop()
         mapView.overlays.clear()
+        mapView.onPause()
     }
 
     inner class PlaceOnClickListener(private val place: PlacePolygon) : Polygon.OnClickListener {

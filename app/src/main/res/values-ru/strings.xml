@@ -17,5 +17,9 @@
     <string name="title_objectdetails">Объект</string>
     <string name="title_overlays">Режим карты</string>
     <string name="title_center_selection">Центрировать на выбранном</string>
+    <string name="title_follow_location">Отслеживать местоположение</string>
+    <string name="title_compass">Компас</string>
+    <string name="title_grid">Сетка</string>
+    <string name="title_scale">Масштаб</string>
     <string name="comments_count">Комментариев: %s</string>
 </resources>
