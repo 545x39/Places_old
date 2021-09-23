@@ -9,4 +9,11 @@ sealed class MapEvent : Event {
         val latMax: Double,
         val lonMax: Double
     ) : MapEvent()
+    class SwitchMapModeEvent(val mode: Int): MapEvent()
+    class SwitchWikimapiaOverlayEvent(val enable: Boolean): MapEvent()
+    class SwitchTransportationOverlayEvent(val enable: Boolean): MapEvent()
+    class SwitchFollowLocationEvent(val enable: Boolean): MapEvent()
+    class SwitchCenterSelectionEvent(val enable: Boolean): MapEvent()
+    class SwitchScaleEvent(val enable: Boolean): MapEvent()
+    class SwitchGridEvent(val enable: Boolean): MapEvent()
 }

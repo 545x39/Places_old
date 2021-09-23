@@ -3,14 +3,18 @@ package ru.fivefourtyfive.map.presentation.util
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
+import android.os.Environment
+import android.util.Log
 import org.osmdroid.api.IGeoPoint
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapListener
 import org.osmdroid.tileprovider.MapTileProviderBasic
+import org.osmdroid.tileprovider.modules.SqlTileWriter
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 import org.osmdroid.tileprovider.tilesource.TileSourcePolicy
 import org.osmdroid.tileprovider.tilesource.XYTileSource
 import org.osmdroid.util.MapTileIndex
+import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.MapView
 import org.osmdroid.views.MapView.getTileSystem
 import org.osmdroid.views.overlay.FolderOverlay
@@ -24,12 +28,16 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlay
 import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlayOptions
 import org.osmdroid.views.overlay.simplefastpoint.SimplePointTheme
+import ru.fivefourtyfive.map.presentation.util.Zoom.ZOOM_DEFAULT
+import ru.fivefourtyfive.map.presentation.util.Zoom.ZOOM_MAX
+import ru.fivefourtyfive.map.presentation.util.Zoom.ZOOM_MIN
 import ru.fivefourtyfive.wikimapper.BuildConfig
 import ru.fivefourtyfive.wikimapper.util.Network.ARCGIS_TILE_SERVERS
 import ru.fivefourtyfive.wikimapper.util.Network.GENERAL_HEADQUARTERS_TILE_SERVERS
 import ru.fivefourtyfive.wikimapper.util.Network.WIKIMAPIA_TILE_SERVERS
 import ru.fivefourtyfive.wikimapper.util.Network.WIKIMEDIA_TILE_SERVERS
 import ru.fivefourtyfive.wikimapper.util.ifTrue
+import timber.log.Timber
 import java.io.File
 
 
@@ -74,7 +82,7 @@ object MapUtil {
         isTilesScaledToDpi = true
         minZoomLevel = ZOOM_MIN
         maxZoomLevel = ZOOM_MAX
-        zoomController.setVisibility(ZOOM_CONTROLS_VISIBILITY)
+        zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
         controller.setZoom(ZOOM_DEFAULT)
         isVerticalMapRepetitionEnabled = false
         isHorizontalMapRepetitionEnabled = false
@@ -134,6 +142,7 @@ object MapUtil {
         ) {
             override fun getTileURLString(pMapTileIndex: Long) =
                 "$baseUrl/ArcGIS/rest/services/World_Imagery/MapServer/tile/${
+//                "$baseUrl/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/${
                     MapTileIndex.getZoom(pMapTileIndex)
                 }/${MapTileIndex.getY(pMapTileIndex)}/${MapTileIndex.getX(pMapTileIndex)}"
         }
@@ -141,7 +150,7 @@ object MapUtil {
         addTilesFrom(arcGisTileSource)
     }
 
-    private fun MapView.addTilesFrom(source: OnlineTileSourceBase) =
+    fun MapView.addTilesFrom(source: OnlineTileSourceBase) =
         with(MapTileProviderBasic(context).also { it.tileSource = source }) {
             overlays.add(TilesOverlay(this, context).apply {
                 loadingBackgroundColor = Color.TRANSPARENT
@@ -153,9 +162,9 @@ object MapUtil {
     fun MapView.addCompass(enable: Boolean = true) =
         this.apply {
             enable.ifTrue {
-                CompassOverlay(context, InternalCompassOrientationProvider(context), this).let {
-                    it.enableCompass()
-                    overlays.add(it)
+                CompassOverlay(context, InternalCompassOrientationProvider(context), this).apply {
+                    enableCompass()
+                    overlays.add(this)
                 }
             }
         }
@@ -196,11 +205,24 @@ object MapUtil {
         overlays.add(SimpleFastPointOverlay(SimplePointTheme(labels, true), options))
     }
 
-    fun MapView.addGrid() = this.apply { overlays.add(LatLonGridlineOverlay2()) }
+    fun MapView.addGrid(enable: Boolean = false) = this.apply { overlays.add(LatLonGridlineOverlay2()) }
 
     fun MapView.addListener(listener: MapListener) = this.apply { addMapListener(listener) }
 
     fun MapView.addScale(enable: Boolean = true) = this.apply {
-        enable.ifTrue { overlays.add(ScaleBarOverlay(this).also { it.setAlignBottom(true) }) }
+        enable.ifTrue { overlays.add(ScaleBarOverlay(this).also {
+            it.setAlignBottom(true)
+        }) }
+    }
+
+    private fun MapView.clearTileCache() {
+        val cache =
+            File(Environment.getExternalStorageDirectory().absolutePath + File.separator + "osmdroid" + File.separator + "tiles")
+        val filenames = cache.list()
+        for (filename in filenames) {
+            Timber.e("Cache file $filename")
+        }
+        val sqlTileWriter = SqlTileWriter()
+        val isCleared = SqlTileWriter().purgeCache(tileProvider.tileSource.name())
     }
 }

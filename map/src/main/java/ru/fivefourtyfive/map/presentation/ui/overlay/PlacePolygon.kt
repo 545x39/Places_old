@@ -2,6 +2,7 @@ package ru.fivefourtyfive.map.presentation.ui.overlay
 
 import android.graphics.Color
 import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Polygon
 import timber.log.Timber
 
@@ -43,6 +44,16 @@ class PlacePolygon(
             false -> transparentColor
         }
         highlight = enable
+    }
+
+    fun haveToShowLabel(mapView: MapView): Boolean {
+        mapView.boundingBox.apply {
+            val widthDiff = (east - west) / (lonEast - lonWest)
+            val heightDiff = (north - south) / (latNorth - latSouth)
+            val isWithinTheBox =
+                (east - west) <= (lonEast - lonWest) && (north - south) <= (latNorth - latSouth)
+            return isWithinTheBox && (widthDiff >= 0.3 || heightDiff >= 0.3)
+        }
     }
 
     override fun equals(other: Any?) = when (other) {
