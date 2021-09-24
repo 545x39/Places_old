@@ -12,7 +12,6 @@
     <string name="slide_show">Slide show</string>
     <string name="map_mode_scheme">Scheme</string>
     <string name="map_mode_satellite">Satellite</string>
-    <string name="map_mode_hq">General HQ maps</string>
     <string name="map_mode_wikimapia_overlay">Wikimapia layer</string>
     <string name="title_map" translatable="false">Map</string>
     <string name="title_object" translatable="false">Object</string>

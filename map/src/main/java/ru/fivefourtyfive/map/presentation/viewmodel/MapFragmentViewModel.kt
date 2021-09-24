@@ -10,11 +10,11 @@ import kotlinx.coroutines.launch
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 import org.osmdroid.util.GeoPoint
 import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
+import ru.fivefourtyfive.map.presentation.util.MapMode
 import ru.fivefourtyfive.map.presentation.util.MapSettingsUtil
 import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_LABELS_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_TRANSPORTATION_TILE_SOURCE
-import ru.fivefourtyfive.map.presentation.util.TileSource.GENERAL_HEADQUARTERS_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.WIKIMAPIA_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.WIKIMEDIA_NO_LABELS_TILE_SOURCE
 import ru.fivefourtyfive.wikimapper.data.repository.implementation.AreaRepository
@@ -33,13 +33,11 @@ class MapFragmentViewModel @Inject constructor(
     @Named(ARCGIS_IMAGERY_TILE_SOURCE)
     private val satelliteTileSource: OnlineTileSourceBase,
     @Named(ARCGIS_IMAGERY_LABELS_TILE_SOURCE)
-    private val labelsTileSource: OnlineTileSourceBase,
+    val labelsTileSource: OnlineTileSourceBase,
     @Named(ARCGIS_IMAGERY_TRANSPORTATION_TILE_SOURCE)
-    private val transportationTileSource: OnlineTileSourceBase,
+    val transportationTileSource: OnlineTileSourceBase,
     @Named(WIKIMAPIA_TILE_SOURCE)
-    private val wikimapiaTileSource: OnlineTileSourceBase,
-    @Named(GENERAL_HEADQUARTERS_TILE_SOURCE)
-    private val generalHeadquartersTileSource: OnlineTileSourceBase,
+    val wikimapiaTileSource: OnlineTileSourceBase
 ) :
     ViewModel(), Reducer<AreaDataState, MapViewState>, EventHandler<MapEvent> {
 
@@ -77,6 +75,11 @@ class MapFragmentViewModel @Inject constructor(
 
     fun setFollowLocation(enable: Boolean) = settings.setFollowLocation(enable)
     //</editor-fold>
+
+    fun getTileSource() = when (settings.getMapMode()) {
+        MapMode.SATELLITE -> satelliteTileSource
+        else -> wikimediaTileSource
+    }
 
     fun getArea(
         latMin: Double,
@@ -117,7 +120,7 @@ class MapFragmentViewModel @Inject constructor(
         )
 
         return when (dataState) {
-            is AreaDataState.Success -> MapViewState.Success(arrayListOf<PlacePolygon>().apply {
+            is AreaDataState.Success -> MapViewState.DataLoaded(arrayListOf<PlacePolygon>().apply {
                 dataState.area.places.map { add(it.toPlacePolygon()) }
             })
             is AreaDataState.Loading -> MapViewState.Loading

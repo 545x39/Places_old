@@ -14,7 +14,6 @@ object Zoom {
 object MapMode {
     const val SCHEME = 0
     const val SATELLITE = 1
-    const val GENERAL_HQ = 2
 }
 
 object TileSource {
@@ -36,5 +35,4 @@ object TileSource {
     const val ARCGIS_IMAGERY_LABELS_TILE_SOURCE = "ArcGISImageryLabels"
     const val ARCGIS_IMAGERY_TRANSPORTATION_TILE_SOURCE = "ArcGISImageryTransportation"
     const val WIKIMAPIA_TILE_SOURCE = "Wikimapia"
-    const val GENERAL_HEADQUARTERS_TILE_SOURCE = "GeneralHeadquarters"
 }

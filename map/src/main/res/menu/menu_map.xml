@@ -38,11 +38,6 @@
                     android:orderInCategory="88"
                     android:title="@string/map_mode_satellite"
                     app:showAsAction="never" />
-                <item
-                    android:id="@+id/action_map_mode_general_hq"
-                    android:orderInCategory="89"
-                    android:title="@string/map_mode_hq"
-                    app:showAsAction="never" />
             </group>
             <group>
                 <item
