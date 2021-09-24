@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.Provides
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.tileprovider.tilesource.TileSourcePolicy
 import org.osmdroid.tileprovider.tilesource.XYTileSource
 import org.osmdroid.util.MapTileIndex
 import ru.fivefourtyfive.map.di.MapFragmentScope
@@ -12,7 +13,6 @@ import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_TILE_SO
 import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_TRANSPORTATION_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_MIN_ZOOM
 import ru.fivefourtyfive.map.presentation.util.TileSource.COPYRIGHT
-import ru.fivefourtyfive.map.presentation.util.TileSource.GENERAL_HEADQUARTERS_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.OSM_DEFAULT_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.POLICY
 import ru.fivefourtyfive.map.presentation.util.TileSource.TILE_EXTENSION
@@ -41,7 +41,7 @@ class TileSourceModule {
         0,
         19,
         TILE_PIXELS,
-        TILE_EXTENSION,
+        ".png",
         WIKIMEDIA_TILE_SERVERS,
         COPYRIGHT,
         POLICY
@@ -123,25 +123,5 @@ class TileSourceModule {
             "$baseUrl/?x=${MapTileIndex.getX(pMapTileIndex)}&y=${MapTileIndex.getY(pMapTileIndex)}&zoom=${
                 MapTileIndex.getZoom(pMapTileIndex)
             }&type=hybrid&lng=1"
-    }
-
-    /** This one is only 10 to 13, because no other zoom levels are available for these maps. */
-    @MapFragmentScope
-    @Provides
-    @Named(GENERAL_HEADQUARTERS_TILE_SOURCE)
-    fun provideGeneralHeadquartersTileSource(): OnlineTileSourceBase = object : OnlineTileSourceBase(
-        GENERAL_HEADQUARTERS_TILE_SOURCE,
-        10,
-        13,
-        TILE_PIXELS,
-        TILE_EXTENSION,
-        GENERAL_HEADQUARTERS_TILE_SERVERS,
-        COPYRIGHT,
-        POLICY
-    ) {
-        override fun getTileURLString(pMapTileIndex: Long) =
-            "$baseUrl/cgi-bin/tapp/tilecache.py/1.0.0/topomapper_v2/${
-                MapTileIndex.getZoom(pMapTileIndex)
-            }/${MapTileIndex.getX(pMapTileIndex)}/${MapTileIndex.getY(pMapTileIndex)}"
     }
 }

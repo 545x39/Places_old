@@ -46,14 +46,15 @@ class PlacePolygon(
         highlight = enable
     }
 
-    fun haveToShowLabel(mapView: MapView): Boolean {
-        mapView.boundingBox.apply {
+    fun haveToShowLabel(mapView: MapView?): Boolean {
+        mapView?.boundingBox?.apply {
             val widthDiff = (east - west) / (lonEast - lonWest)
             val heightDiff = (north - south) / (latNorth - latSouth)
             val isWithinTheBox =
                 (east - west) <= (lonEast - lonWest) && (north - south) <= (latNorth - latSouth)
             return isWithinTheBox && (widthDiff >= 0.3 || heightDiff >= 0.3)
         }
+        return false
     }
 
     override fun equals(other: Any?) = when (other) {

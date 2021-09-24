@@ -12,7 +12,6 @@ import ru.fivefourtyfive.wikimapper.data.repository.abstraction.RemoteDataSource
 import ru.fivefourtyfive.wikimapper.domain.datastate.AreaDataState
 import ru.fivefourtyfive.wikimapper.domain.datastate.PlaceDetailsDataState
 import ru.fivefourtyfive.wikimapper.domain.dto.AreaDTO
-import ru.fivefourtyfive.wikimapper.domain.dto.MapPlaceDTO
 import ru.fivefourtyfive.wikimapper.domain.dto.PlaceDescriptionDTO
 import timber.log.Timber
 import javax.inject.Inject

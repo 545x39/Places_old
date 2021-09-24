@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Environment
-import android.util.Log
 import org.osmdroid.api.IGeoPoint
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapListener
@@ -43,6 +42,39 @@ import java.io.File
 
 object MapUtil {
 
+    fun MapView.init() = this.apply {
+        Configuration.getInstance().apply {
+            userAgentValue = BuildConfig.APPLICATION_ID
+            osmdroidBasePath = File("${context.filesDir}")
+            osmdroidTileCache = File(osmdroidBasePath, "cache")
+            Timber.e("CACHE DIR: " + osmdroidTileCache.absolutePath)
+        }
+        setUseDataConnection(true)
+        setMultiTouchControls(true)
+        setScrollableAreaLimitLatitude(
+            getTileSystem().maxLatitude,
+            getTileSystem().minLatitude,
+            0
+        )
+        setScrollableAreaLimitLongitude(
+            getTileSystem().minLongitude,
+            getTileSystem().maxLongitude,
+            80
+        )
+        minZoomLevel = ZOOM_MIN
+        maxZoomLevel = ZOOM_MAX
+        isTilesScaledToDpi = true
+        zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
+        controller.setZoom(ZOOM_DEFAULT)
+        isVerticalMapRepetitionEnabled = false
+        isHorizontalMapRepetitionEnabled = false
+    }
+
+    fun MapView.setZoomLevels(levels: Pair<Double, Double> = ZOOM_MIN to ZOOM_MAX) = this.apply {
+        minZoomLevel = levels.first
+        maxZoomLevel = levels.second
+    }
+
     fun MapView.config() = this.apply {
         //<editor-fold defaultstate="collapsed" desc="TILE SOURCE">
         val wikimediaTileSource = XYTileSource(
@@ -73,15 +105,16 @@ object MapUtil {
         setScrollableAreaLimitLatitude(
             getTileSystem().maxLatitude,
             getTileSystem().minLatitude,
-            0)
+            0
+        )
         setScrollableAreaLimitLongitude(
             getTileSystem().minLongitude,
             getTileSystem().maxLongitude,
             80
         )
-        isTilesScaledToDpi = true
         minZoomLevel = ZOOM_MIN
         maxZoomLevel = ZOOM_MAX
+        isTilesScaledToDpi = true
         zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
         controller.setZoom(ZOOM_DEFAULT)
         isVerticalMapRepetitionEnabled = false
@@ -150,14 +183,25 @@ object MapUtil {
         addTilesFrom(arcGisTileSource)
     }
 
-    fun MapView.addTilesFrom(source: OnlineTileSourceBase) =
-        with(MapTileProviderBasic(context).also { it.tileSource = source }) {
-            overlays.add(TilesOverlay(this, context).apply {
-                loadingBackgroundColor = Color.TRANSPARENT
-            })
+    fun MapView.addTilesFrom(source: OnlineTileSourceBase, add: Boolean = false) = this.apply {
+        add.ifTrue {
+            with(MapTileProviderBasic(context).also { it.tileSource = source }) {
+                overlays.add(TilesOverlay(this, context).apply {
+                    loadingBackgroundColor = Color.TRANSPARENT
+                })
+            }
         }
+    }
 
-    fun MapView.addFolder(folder: FolderOverlay) = this.apply { overlays.add(folder) }
+    fun MapView.tileSource(tileSource: OnlineTileSourceBase) =
+        this.apply { setTileSource(tileSource) }
+
+    fun MapView.clear() = this.apply {
+        overlays.clear()
+    }
+
+    fun MapView.addFolder(folder: FolderOverlay, add: Boolean = false) =
+        this.apply { add.ifTrue { overlays.add(folder) } }
 
     fun MapView.addCompass(enable: Boolean = true) =
         this.apply {
@@ -180,39 +224,44 @@ object MapUtil {
         }
     }
 
-    fun MapView.addLabels(labels: ArrayList<IGeoPoint>) = this.apply {
-        val options = SimpleFastPointOverlayOptions.getDefaultStyle().apply {
-            setAlgorithm(SimpleFastPointOverlayOptions.RenderingAlgorithm.MAXIMUM_OPTIMIZATION)
-                .setRadius(1.0f)
-                .setSelectedRadius(100f)
-                .setIsClickable(true)
-                .setCellSize(10)
-                .setTextStyle(Paint().apply {
-                    style = Paint.Style.FILL
-                    isAntiAlias = true
-                    color = Color.GRAY
-                    textAlign = Paint.Align.CENTER
-                    textSize = 28.0f
-                    isFakeBoldText = true
-                    typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-                })
-                .selectedPointStyle = Paint().apply {
-                color = 0x00000000//android.R.color.transparent
-                strokeWidth = 1.0f
-                style = Paint.Style.STROKE
+    fun MapView.addLabels(labels: ArrayList<IGeoPoint>, add: Boolean = true) = this.apply {
+        add.ifTrue {
+            val options = SimpleFastPointOverlayOptions.getDefaultStyle().apply {
+                setAlgorithm(SimpleFastPointOverlayOptions.RenderingAlgorithm.MAXIMUM_OPTIMIZATION)
+                    .setRadius(1.0f)
+                    .setSelectedRadius(100f)
+                    .setIsClickable(true)
+                    .setCellSize(10)
+                    .setTextStyle(Paint().apply {
+                        style = Paint.Style.FILL
+                        isAntiAlias = true
+                        color = Color.GRAY
+                        textAlign = Paint.Align.CENTER
+                        textSize = 28.0f
+                        isFakeBoldText = true
+                        typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+                    })
+                    .selectedPointStyle = Paint().apply {
+                    color = 0x00000000//android.R.color.transparent
+                    strokeWidth = 1.0f
+                    style = Paint.Style.STROKE
+                }
             }
+            overlays.add(SimpleFastPointOverlay(SimplePointTheme(labels, true), options))
         }
-        overlays.add(SimpleFastPointOverlay(SimplePointTheme(labels, true), options))
     }
 
-    fun MapView.addGrid(enable: Boolean = false) = this.apply { overlays.add(LatLonGridlineOverlay2()) }
+    fun MapView.addGrid(add: Boolean = false) =
+        this.apply { add.ifTrue { overlays.add(LatLonGridlineOverlay2()) }}
 
     fun MapView.addListener(listener: MapListener) = this.apply { addMapListener(listener) }
 
     fun MapView.addScale(enable: Boolean = true) = this.apply {
-        enable.ifTrue { overlays.add(ScaleBarOverlay(this).also {
-            it.setAlignBottom(true)
-        }) }
+        enable.ifTrue {
+            overlays.add(ScaleBarOverlay(this).also {
+                it.setAlignBottom(true)
+            })
+        }
     }
 
     private fun MapView.clearTileCache() {

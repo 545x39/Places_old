@@ -2,8 +2,9 @@ package ru.fivefourtyfive.map.presentation.ui
 
 import android.os.Bundle
 import android.view.*
+import android.view.View.GONE
+import android.widget.FrameLayout
 import android.widget.ProgressBar
-import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
@@ -27,14 +28,15 @@ import ru.fivefourtyfive.map.presentation.ui.overlay.PlaceLabel
 import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
 import ru.fivefourtyfive.map.presentation.util.MAP_LISTENER_DELAY
 import ru.fivefourtyfive.map.presentation.util.MapMode
-import ru.fivefourtyfive.map.presentation.util.MapUtil.addCompass
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addFolder
-import ru.fivefourtyfive.map.presentation.util.MapUtil.addImageryLayer
+import ru.fivefourtyfive.map.presentation.util.MapUtil.addGrid
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addListener
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addMyLocation
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addScale
-import ru.fivefourtyfive.map.presentation.util.MapUtil.addWikimapiaTileLayer
-import ru.fivefourtyfive.map.presentation.util.MapUtil.config
+import ru.fivefourtyfive.map.presentation.util.MapUtil.addTilesFrom
+import ru.fivefourtyfive.map.presentation.util.MapUtil.clear
+import ru.fivefourtyfive.map.presentation.util.MapUtil.init
+import ru.fivefourtyfive.map.presentation.util.MapUtil.tileSource
 import ru.fivefourtyfive.map.presentation.viewmodel.MapEvent
 import ru.fivefourtyfive.map.presentation.viewmodel.MapFragmentViewModel
 import ru.fivefourtyfive.map.presentation.viewmodel.MapViewState
@@ -71,6 +73,8 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
     private val folder = FolderOverlay()
 
     private val labels = arrayListOf<IGeoPoint>()
+
+    private var currentMode = MapMode.SCHEME
 
     private val listener = DelayedMapListener(object : MapListener {
         override fun onScroll(event: ScrollEvent?): Boolean {
@@ -116,16 +120,35 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
         setHasOptionsMenu(true)
         viewModel = ViewModelProvider(this, providerFactory).get(MapFragmentViewModel::class.java)
         view.apply {
-            mapView = findViewById(R.id.map)
+//            mapView = findViewById(R.id.map)
+            mapView = MapView(context).init().addListener(listener)
+            findViewById<FrameLayout>(R.id.mapPlaceholder).addView(mapView)
             progress = findViewById(R.id.progress)
             placeTitle = findViewById(R.id.place_title)
         }
+
+        setMap()
         centerAndZoom()
         subscribeObserver()
     }
 
+    private fun setMap() {
+        with(viewModel) {
+            progress.visibility = GONE
+            mapView.clear()
+                .tileSource(getTileSource())
+                .addTilesFrom(transportationTileSource, !areWikimapiaOverlayEnabled())
+                .addTilesFrom(labelsTileSource, !areWikimapiaOverlayEnabled())
+                .addFolder(folder, areWikimapiaOverlayEnabled())
+                .addTilesFrom(wikimapiaTileSource, areWikimapiaOverlayEnabled())
+                .addGrid(isGridEnabled())
+                .addScale(isScaleEnabled())
+                .addMyLocation()
+                .invalidate()
+        }
+    }
+
     private fun centerAndZoom() {
-        mapView.config().addListener(listener)
         val (lat, lon) = viewModel.getLastLocation()
         mapView.controller.apply {
             animateTo(GeoPoint(lat, lon))
@@ -138,9 +161,9 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
             with(it) {
                 progress.visibility = progressVisibility
                 when (this) {
-                    is MapViewState.Success -> onSuccess(places)
+                    is MapViewState.DataLoaded -> onSuccess(places)
                     is MapViewState.Error -> onError(message)
-                    is MapViewState.Loading -> {
+                    else -> {
                     }
                 }
             }
@@ -162,23 +185,26 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
             }
             newPlaces.removeAll(itemsToRemove)
             folder.items.addAll(newPlaces)
-            labels.clear()
-            folder.items.apply {
-                parallelMap { place ->
-                    (place as PlacePolygon).haveToShowLabel(mapView).ifTrue {
-                        labels.add(
-                            PlaceLabel(
-                                place.id,
-                                place.lat,
-                                place.lon,
-                                place.title
-                            )
-                        )
-                    }
-                    place.setOnClickListener(PlaceOnClickListener(place))
-                }
-            }
+            folder.items.map { (it as PlacePolygon).setOnClickListener(PlaceOnClickListener(it)) }
             withContext(Main) { mapView.invalidate() }
+        }
+    }
+
+    private suspend fun filLabels() {
+        folder.items.apply {
+            parallelMap { place ->
+                (place as PlacePolygon).haveToShowLabel(mapView).ifTrue {
+                    labels.add(
+                        PlaceLabel(
+                            place.id,
+                            place.lat,
+                            place.lon,
+                            place.title
+                        )
+                    )
+                }
+                place.setOnClickListener(PlaceOnClickListener(place))
+            }
         }
     }
 
@@ -207,12 +233,11 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
             item(R.id.action_center_selection).isChecked = isCenterSelectionEnabled()
             item(R.id.action_show_scale).isChecked = isScaleEnabled()
             item(R.id.action_show_grid).isChecked = isGridEnabled()
-                when (getMapMode()) {
-                    MapMode.SCHEME -> item(R.id.action_map_mode_scheme).setChecked(true)
-                    MapMode.SATELLITE -> item(R.id.action_map_mode_satellite).setChecked(true)
-                    MapMode.GENERAL_HQ -> item(R.id.action_map_mode_general_hq).setChecked(true)
-                    else -> item(R.id.action_map_mode_scheme).setChecked(true)
-                }
+            when (getMapMode()) {
+                MapMode.SCHEME -> item(R.id.action_map_mode_scheme).setChecked(true)
+                MapMode.SATELLITE -> item(R.id.action_map_mode_satellite).setChecked(true)
+                else -> item(R.id.action_map_mode_scheme).setChecked(true)
+            }
         }
     }
 
@@ -221,34 +246,37 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
             R.id.action_map_mode_scheme -> {
                 item.isChecked = true
                 dispatchEvent(MapEvent.SwitchMapModeEvent(MapMode.SCHEME))
+                setMap()
             }
             R.id.action_map_mode_satellite -> {
                 item.isChecked = true
                 dispatchEvent(MapEvent.SwitchMapModeEvent(MapMode.SATELLITE))
-            }
-            R.id.action_map_mode_general_hq -> {
-                item.isChecked = true
-                dispatchEvent(MapEvent.SwitchMapModeEvent(MapMode.GENERAL_HQ))
+                setMap()
             }
             R.id.action_wikimapia_overlays -> {
                 item.isChecked = !item.isChecked
                 dispatchEvent(MapEvent.SwitchWikimapiaOverlayEvent(item.isChecked))
+                setMap()
             }
             R.id.action_follow_location -> {
                 item.isChecked = !item.isChecked
                 dispatchEvent(MapEvent.SwitchFollowLocationEvent(item.isChecked))
+                setMap()
             }
             R.id.action_center_selection -> {
                 item.isChecked = !item.isChecked
                 dispatchEvent(MapEvent.SwitchCenterSelectionEvent(item.isChecked))
+                setMap()
             }
             R.id.action_show_scale -> {
                 item.isChecked = !item.isChecked
                 dispatchEvent(MapEvent.SwitchScaleEvent(item.isChecked))
+                setMap()
             }
             R.id.action_show_grid -> {
                 item.isChecked = !item.isChecked
                 dispatchEvent(MapEvent.SwitchGridEvent(item.isChecked))
+                setMap()
             }
             R.id.action_search -> navigate(appR.id.action_mapFragment_to_settingsFragment)
         }
@@ -259,25 +287,13 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
 
     override fun onResume() {
         super.onResume()
-        /** Overlay addition order matters. */
-        mapView
-            .addImageryLayer()
-            //.addGeneralHeadquartersTiles()
-            .addFolder(folder)
-            .addWikimapiaTileLayer()
-            //.addLabels(labels)
-            //.addGrid()
-            .addCompass()
-            .addMyLocation()
-            .addScale()
-            .invalidate()
+        setMap()
         mapView.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        mapView.overlays.clear()
-        mapView.onPause()
+        mapView.clear().onPause()
     }
 
     inner class PlaceOnClickListener(private val place: PlacePolygon) : Polygon.OnClickListener {
