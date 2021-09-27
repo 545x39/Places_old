@@ -21,8 +21,8 @@ import org.osmdroid.views.overlay.ScaleBarOverlay
 import org.osmdroid.views.overlay.TilesOverlay
 import org.osmdroid.views.overlay.compass.CompassOverlay
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider
+import org.osmdroid.views.overlay.gestures.RotationGestureOverlay
 import org.osmdroid.views.overlay.gridlines.LatLonGridlineOverlay2
-import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlay
 import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlayOptions
@@ -32,7 +32,6 @@ import ru.fivefourtyfive.map.presentation.util.Zoom.ZOOM_MAX
 import ru.fivefourtyfive.map.presentation.util.Zoom.ZOOM_MIN
 import ru.fivefourtyfive.wikimapper.BuildConfig
 import ru.fivefourtyfive.wikimapper.util.Network.ARCGIS_TILE_SERVERS
-import ru.fivefourtyfive.wikimapper.util.Network.GENERAL_HEADQUARTERS_TILE_SERVERS
 import ru.fivefourtyfive.wikimapper.util.Network.WIKIMAPIA_TILE_SERVERS
 import ru.fivefourtyfive.wikimapper.util.Network.WIKIMEDIA_TILE_SERVERS
 import ru.fivefourtyfive.wikimapper.util.ifTrue
@@ -141,26 +140,6 @@ object MapUtil {
         addTilesFrom(wikimapiaTileSource)
     }
 
-    fun MapView.addGeneralHeadquartersTiles() = this.apply {
-        //<editor-fold defaultstate="collapsed" desc="TILE SOURCE">
-        val generalHeadquartersTileSource = object : OnlineTileSourceBase(
-            "GeneralHeadquartersTileSource",
-            10,
-            13,
-            256,
-            ".png",
-            GENERAL_HEADQUARTERS_TILE_SERVERS,
-            "© OpenStreetMap contributors",
-        ) {
-            override fun getTileURLString(pMapTileIndex: Long) =
-                "$baseUrl/cgi-bin/tapp/tilecache.py/1.0.0/topomapper_v2/${
-                    MapTileIndex.getZoom(pMapTileIndex)
-                }/${MapTileIndex.getX(pMapTileIndex)}/${MapTileIndex.getY(pMapTileIndex)}"
-        }
-        //</editor-fold>
-        addTilesFrom(generalHeadquartersTileSource)
-    }
-
     /** Maximum zoom level for this source is 17, in case of greater number it sends gray tiles with "No tile data available" text on them.*/
     fun MapView.addImageryLayer() = this.apply {
         //<editor-fold defaultstate="collapsed" desc="TILE SOURCE">
@@ -200,6 +179,10 @@ object MapUtil {
         overlays.clear()
     }
 
+    fun MapView.addRotationGestureOverlay() = this.apply {
+        overlays.add(RotationGestureOverlay(this).also { it.isEnabled = true })
+    }
+
     fun MapView.addFolder(folder: FolderOverlay, add: Boolean = false) =
         this.apply { add.ifTrue { overlays.add(folder) } }
 
@@ -213,16 +196,7 @@ object MapUtil {
             }
         }
 
-    fun MapView.addMyLocation(
-//        locationOverlay: MyLocationNewOverlay
-    ) = this.apply {
-        MyLocationNewOverlay(GpsMyLocationProvider(context), this).apply {
-            enableMyLocation()
-//            enableFollowLocation()
-            //enableAutoStop = false
-            overlays.add(this)
-        }
-    }
+    fun MapView.addMyLocation(overlay: MyLocationNewOverlay) = this.apply {overlays.add(overlay)}
 
     fun MapView.addLabels(labels: ArrayList<IGeoPoint>, add: Boolean = true) = this.apply {
         add.ifTrue {
@@ -252,7 +226,7 @@ object MapUtil {
     }
 
     fun MapView.addGrid(add: Boolean = false) =
-        this.apply { add.ifTrue { overlays.add(LatLonGridlineOverlay2()) }}
+        this.apply { add.ifTrue { overlays.add(LatLonGridlineOverlay2()) } }
 
     fun MapView.addListener(listener: MapListener) = this.apply { addMapListener(listener) }
 
