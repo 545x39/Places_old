@@ -18,7 +18,7 @@ object Network {
                                                 "http://88.99.95.183",
                                                 "http://88.99.95.187",
                                             )
-    val GENERAL_HEADQUARTERS_TILE_SERVERS   = arrayOf("http://88.99.52.155")
+
     val ARCGIS_TILE_SERVERS                 = arrayOf(
                                                 "http://server.arcgisonline.com/",
                                                 "http://services.arcgisonline.com/"

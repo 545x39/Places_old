@@ -15,6 +15,7 @@ import ru.fivefourtyfive.map.presentation.util.MapSettingsUtil
 import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_LABELS_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_TRANSPORTATION_TILE_SOURCE
+import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_STREETS_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.WIKIMAPIA_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.WIKIMEDIA_NO_LABELS_TILE_SOURCE
 import ru.fivefourtyfive.wikimapper.data.repository.implementation.AreaRepository
@@ -29,7 +30,7 @@ class MapFragmentViewModel @Inject constructor(
     private val repository: AreaRepository,
     private val settings: MapSettingsUtil,
     @Named(WIKIMEDIA_NO_LABELS_TILE_SOURCE)
-    private val wikimediaTileSource: OnlineTileSourceBase,
+    private val schemeTileSource: OnlineTileSourceBase,
     @Named(ARCGIS_IMAGERY_TILE_SOURCE)
     private val satelliteTileSource: OnlineTileSourceBase,
     @Named(ARCGIS_IMAGERY_LABELS_TILE_SOURCE)
@@ -78,7 +79,7 @@ class MapFragmentViewModel @Inject constructor(
 
     fun getTileSource() = when (settings.getMapMode()) {
         MapMode.SATELLITE -> satelliteTileSource
-        else -> wikimediaTileSource
+        else -> schemeTileSource
     }
 
     fun getArea(

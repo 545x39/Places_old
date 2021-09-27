@@ -31,6 +31,7 @@ object TileSource {
     )
     const val OSM_DEFAULT_TILE_SOURCE = "Mapnik"
     const val WIKIMEDIA_NO_LABELS_TILE_SOURCE = "WikimediaNoLabels"
+    const val ARCGIS_STREETS_TILE_SOURCE = "ArcGISStreets"
     const val ARCGIS_IMAGERY_TILE_SOURCE = "ArcGISImagery"
     const val ARCGIS_IMAGERY_LABELS_TILE_SOURCE = "ArcGISImageryLabels"
     const val ARCGIS_IMAGERY_TRANSPORTATION_TILE_SOURCE = "ArcGISImageryTransportation"

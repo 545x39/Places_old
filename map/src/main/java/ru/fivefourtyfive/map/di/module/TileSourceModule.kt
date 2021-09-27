@@ -4,7 +4,6 @@ import dagger.Module
 import dagger.Provides
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
-import org.osmdroid.tileprovider.tilesource.TileSourcePolicy
 import org.osmdroid.tileprovider.tilesource.XYTileSource
 import org.osmdroid.util.MapTileIndex
 import ru.fivefourtyfive.map.di.MapFragmentScope
@@ -12,6 +11,7 @@ import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_LABELS_
 import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_TRANSPORTATION_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_MIN_ZOOM
+import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_STREETS_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.COPYRIGHT
 import ru.fivefourtyfive.map.presentation.util.TileSource.OSM_DEFAULT_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.POLICY
@@ -20,7 +20,6 @@ import ru.fivefourtyfive.map.presentation.util.TileSource.TILE_PIXELS
 import ru.fivefourtyfive.map.presentation.util.TileSource.WIKIMAPIA_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.WIKIMEDIA_NO_LABELS_TILE_SOURCE
 import ru.fivefourtyfive.wikimapper.util.Network.ARCGIS_TILE_SERVERS
-import ru.fivefourtyfive.wikimapper.util.Network.GENERAL_HEADQUARTERS_TILE_SERVERS
 import ru.fivefourtyfive.wikimapper.util.Network.WIKIMAPIA_TILE_SERVERS
 import ru.fivefourtyfive.wikimapper.util.Network.WIKIMEDIA_TILE_SERVERS
 import javax.inject.Named
@@ -64,6 +63,25 @@ class TileSourceModule {
     ) {
         override fun getTileURLString(pMapTileIndex: Long) =
             "$baseUrl/ArcGIS/rest/services/World_Imagery/MapServer/tile/${
+                MapTileIndex.getZoom(pMapTileIndex)
+            }/${MapTileIndex.getY(pMapTileIndex)}/${MapTileIndex.getX(pMapTileIndex)}"
+    }
+
+    @MapFragmentScope
+    @Provides
+    @Named(ARCGIS_STREETS_TILE_SOURCE)
+    fun provideStreetsTileSource(): OnlineTileSourceBase = object : OnlineTileSourceBase(
+        ARCGIS_STREETS_TILE_SOURCE,
+        ARCGIS_MIN_ZOOM,
+        17,
+        TILE_PIXELS,
+        TILE_EXTENSION,
+        ARCGIS_TILE_SERVERS,
+        COPYRIGHT,
+        POLICY
+    ) {
+        override fun getTileURLString(pMapTileIndex: Long) =
+            "$baseUrl/ArcGIS/rest/services/World_Street_Map/MapServer/tile/${
                 MapTileIndex.getZoom(pMapTileIndex)
             }/${MapTileIndex.getY(pMapTileIndex)}/${MapTileIndex.getX(pMapTileIndex)}"
     }
