@@ -23,21 +23,20 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.Polygon
+import org.osmdroid.views.overlay.ScaleBarOverlay
+import org.osmdroid.views.overlay.gestures.RotationGestureOverlay
+import org.osmdroid.views.overlay.gridlines.LatLonGridlineOverlay2
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import ru.fivefourtyfive.map.R
 import ru.fivefourtyfive.map.di.DaggerMapFragmentComponent
 import ru.fivefourtyfive.map.presentation.ui.overlay.PlaceLabel
 import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
-import ru.fivefourtyfive.map.presentation.util.*
+import ru.fivefourtyfive.map.presentation.util.MAP_LISTENER_DELAY
+import ru.fivefourtyfive.map.presentation.util.MapMode
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addFolder
-import ru.fivefourtyfive.map.presentation.util.MapUtil.addGrid
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addListener
-import ru.fivefourtyfive.map.presentation.util.MapUtil.addMyLocation
-import ru.fivefourtyfive.map.presentation.util.MapUtil.addRotationGestureOverlay
-import ru.fivefourtyfive.map.presentation.util.MapUtil.addScale
 import ru.fivefourtyfive.map.presentation.util.MapUtil.addTilesFrom
 import ru.fivefourtyfive.map.presentation.util.MapUtil.clear
-import ru.fivefourtyfive.map.presentation.util.MapUtil.init
 import ru.fivefourtyfive.map.presentation.util.MapUtil.tileSource
 import ru.fivefourtyfive.map.presentation.viewmodel.MapEvent
 import ru.fivefourtyfive.map.presentation.viewmodel.MapFragmentViewModel
@@ -69,33 +68,39 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
     @Inject
     lateinit var myLocation: MyLocationNewOverlay
 
+    @Inject
+    lateinit var rotationOverlay: RotationGestureOverlay
+
+    @Inject
+    lateinit var gridOverlay: LatLonGridlineOverlay2
+
+    @Inject
+    lateinit var scaleOverlay: ScaleBarOverlay
+
+    @Inject
+    lateinit var folder: FolderOverlay
+
+    @Inject
+    lateinit var places: ArrayList<PlacePolygon>
+
+    @Inject
+    lateinit var labels: ArrayList<IGeoPoint>
+
     private lateinit var placeTitle: TextView
 
     private lateinit var progress: ProgressBar
 
-    private var places = arrayListOf<PlacePolygon>()
-
     private var currentSelection: PlacePolygon? = null
-
-    private val folder = FolderOverlay()
-
-    private val labels = arrayListOf<IGeoPoint>()
 
     private var currentMode = MapMode.SCHEME
 
     private val listener = DelayedMapListener(object : MapListener {
-        override fun onScroll(event: ScrollEvent?): Boolean {
-            updatePositionAndRequestLocation()
-            return true
-        }
+        override fun onScroll(event: ScrollEvent?) = updatePositionAndRequestLocation()
 
-        override fun onZoom(event: ZoomEvent?): Boolean {
-            updatePositionAndRequestLocation()
-            return true
-        }
+        override fun onZoom(event: ZoomEvent?) = updatePositionAndRequestLocation()
     }, MAP_LISTENER_DELAY)
 
-    private fun updatePositionAndRequestLocation() {
+    private fun updatePositionAndRequestLocation(): Boolean {
         with(mapView) {
             viewModel.setLastLocation(mapCenter.latitude, mapCenter.longitude)
                 .setLastZoom(zoomLevelDouble)
@@ -108,6 +113,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
                 )
             }
         }
+        return true
     }
 
     override fun onCreateView(
@@ -127,45 +133,49 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
         setHasOptionsMenu(true)
         viewModel = ViewModelProvider(this, providerFactory).get(MapFragmentViewModel::class.java)
         view.apply {
-            mapView.init().addListener(listener)
+            mapView.addListener(listener)
             findViewById<FrameLayout>(R.id.map_placeholder).addView(mapView)
             progress = findViewById(R.id.progress)
             placeTitle = findViewById(R.id.place_title)
         }
-        setMap()
-        centerAndZoom()
         subscribeObserver()
     }
 
     private fun setMap() {
         with(viewModel) {
             progress.visibility = GONE
-            mapView.clear()
+            mapView
+                .clear()
                 .tileSource(getTileSource())
-                .addRotationGestureOverlay()
-                .addTilesFrom(transportationTileSource, !areWikimapiaOverlayEnabled())
+                mapView.overlays.add(rotationOverlay)
+                mapView.addTilesFrom(transportationTileSource, !areWikimapiaOverlayEnabled())
                 .addTilesFrom(labelsTileSource, !areWikimapiaOverlayEnabled())
                 .addFolder(folder, areWikimapiaOverlayEnabled())
                 .addTilesFrom(wikimapiaTileSource, areWikimapiaOverlayEnabled())
-                .addGrid(isGridEnabled())
-                .addScale(isScaleEnabled())
-                .addMyLocation(myLocation)
-                .invalidate()
+            mapView.overlays.apply{
+                add(gridOverlay)
+                add(scaleOverlay)
+                add(myLocation)
+            }
+            folder.isEnabled = areWikimapiaOverlayEnabled()
+            gridOverlay.isEnabled = isGridEnabled()
+            scaleOverlay.isEnabled = isScaleEnabled()
             switchFollowLocation(viewModel.isFollowLocationEnabled())
         }
     }
 
     private fun switchFollowLocation(enable: Boolean){
-        Timber.e("SWITCHING FOLLOWING TO $enable")
-//        myLocation.enableAutoStop = enable
+        myLocation.enableAutoStop = !enable
+        rotationOverlay.isEnabled = !enable
         when(enable){
             true -> {myLocation.enableFollowLocation()
-//                myLocation.runOnFirstFix{
-//                    MainScope().launch {
-//                        mapView.controller.animateTo(myLocation.myLocation)
-//                        mapView.controller.setZoom(9.5)
-//                    }
-//                }
+                val (lat, lon) = viewModel.getLastLocation()
+                myLocation.runOnFirstFix{
+                    MainScope().launch {
+                        mapView.controller.animateTo(lat.toInt(), lon.toInt())
+                        mapView.controller.setZoom(9.5)
+                    }
+                }
             }
             false -> myLocation.disableFollowLocation()
         }
@@ -227,7 +237,6 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
                         )
                     )
                 }
-                place.setOnClickListener(PlaceOnClickListener(place))
             }
         }
     }
@@ -290,17 +299,18 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
             R.id.action_center_selection -> {
                 item.isChecked = !item.isChecked
                 dispatchEvent(MapEvent.SwitchCenterSelectionEvent(item.isChecked))
-                setMap()
+//                setMap()
+                //TODO implement it!
             }
             R.id.action_show_scale -> {
                 item.isChecked = !item.isChecked
                 dispatchEvent(MapEvent.SwitchScaleEvent(item.isChecked))
-                setMap()
+                scaleOverlay.isEnabled = item.isChecked
             }
             R.id.action_show_grid -> {
                 item.isChecked = !item.isChecked
                 dispatchEvent(MapEvent.SwitchGridEvent(item.isChecked))
-                setMap()
+                gridOverlay.isEnabled = item.isChecked
             }
             R.id.action_search -> navigate(appR.id.action_mapFragment_to_settingsFragment)
         }
@@ -313,6 +323,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
         super.onResume()
         myLocation.enableMyLocation()
         setMap()
+        centerAndZoom()
         mapView.onResume()
     }
 
