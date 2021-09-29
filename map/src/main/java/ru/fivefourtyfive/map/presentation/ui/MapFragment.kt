@@ -14,30 +14,18 @@ import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.osmdroid.api.IGeoPoint
 import org.osmdroid.events.DelayedMapListener
 import org.osmdroid.events.MapListener
 import org.osmdroid.events.ScrollEvent
 import org.osmdroid.events.ZoomEvent
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.Polygon
-import org.osmdroid.views.overlay.ScaleBarOverlay
-import org.osmdroid.views.overlay.gestures.RotationGestureOverlay
-import org.osmdroid.views.overlay.gridlines.LatLonGridlineOverlay2
-import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import ru.fivefourtyfive.map.R
 import ru.fivefourtyfive.map.di.DaggerMapFragmentComponent
 import ru.fivefourtyfive.map.presentation.ui.overlay.PlaceLabel
 import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
-import ru.fivefourtyfive.map.presentation.util.MAP_LISTENER_DELAY
 import ru.fivefourtyfive.map.presentation.util.MapMode
-import ru.fivefourtyfive.map.presentation.util.MapUtil.addFolder
-import ru.fivefourtyfive.map.presentation.util.MapUtil.addListener
-import ru.fivefourtyfive.map.presentation.util.MapUtil.addTilesFrom
-import ru.fivefourtyfive.map.presentation.util.MapUtil.clear
-import ru.fivefourtyfive.map.presentation.util.MapUtil.tileSource
 import ru.fivefourtyfive.map.presentation.viewmodel.MapEvent
 import ru.fivefourtyfive.map.presentation.viewmodel.MapFragmentViewModel
 import ru.fivefourtyfive.map.presentation.viewmodel.MapViewState
@@ -50,7 +38,6 @@ import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.EventDispatcher
 import ru.fivefourtyfive.wikimapper.util.ifFalse
 import ru.fivefourtyfive.wikimapper.util.ifTrue
 import ru.fivefourtyfive.wikimapper.util.parallelMap
-import timber.log.Timber
 import javax.inject.Inject
 import ru.fivefourtyfive.wikimapper.R as appR
 
@@ -65,27 +52,6 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
     @Inject
     lateinit var mapView: MapView
 
-    @Inject
-    lateinit var myLocation: MyLocationNewOverlay
-
-    @Inject
-    lateinit var rotationOverlay: RotationGestureOverlay
-
-    @Inject
-    lateinit var gridOverlay: LatLonGridlineOverlay2
-
-    @Inject
-    lateinit var scaleOverlay: ScaleBarOverlay
-
-    @Inject
-    lateinit var folder: FolderOverlay
-
-    @Inject
-    lateinit var places: ArrayList<PlacePolygon>
-
-    @Inject
-    lateinit var labels: ArrayList<IGeoPoint>
-
     private lateinit var placeTitle: TextView
 
     private lateinit var progress: ProgressBar
@@ -94,23 +60,25 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
 
     private var currentMode = MapMode.SCHEME
 
-    private val listener = DelayedMapListener(object : MapListener {
-        override fun onScroll(event: ScrollEvent?) = updatePositionAndRequestLocation()
+    private fun updatePositionAndGetArea(force: Boolean = false): Boolean {
 
-        override fun onZoom(event: ZoomEvent?) = updatePositionAndRequestLocation()
-    }, MAP_LISTENER_DELAY)
+        fun isLocationTheSame() =
+            viewModel.getLastLocation().first != mapView.mapCenter.latitude
+                    || viewModel.getLastLocation().second != mapView.mapCenter.longitude
 
-    private fun updatePositionAndRequestLocation(): Boolean {
-        with(mapView) {
-            viewModel.setLastLocation(mapCenter.latitude, mapCenter.longitude)
-                .setLastZoom(zoomLevelDouble)
-            viewModel.areWikimapiaOverlayEnabled().ifTrue {
-                viewModel.getArea(
-                    boundingBox.lonWest,
-                    boundingBox.latSouth,
-                    boundingBox.lonEast,
-                    boundingBox.latNorth
-                )
+        with(viewModel) {
+            mapView.let { map ->
+                setLastLocation(map.mapCenter.latitude, map.mapCenter.longitude)
+                setLastZoom(map.zoomLevelDouble)
+                val get = force || (wikimapiaOverlaysEnabled() && !isLocationTheSame())
+                get.ifTrue {
+                    getArea(
+                        map.boundingBox.lonWest,
+                        map.boundingBox.latSouth,
+                        map.boundingBox.lonEast,
+                        map.boundingBox.latNorth
+                    )
+                }
             }
         }
         return true
@@ -133,7 +101,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
         setHasOptionsMenu(true)
         viewModel = ViewModelProvider(this, providerFactory).get(MapFragmentViewModel::class.java)
         view.apply {
-            mapView.addListener(listener)
+            mapView.setListener()
             findViewById<FrameLayout>(R.id.map_placeholder).addView(mapView)
             progress = findViewById(R.id.progress)
             placeTitle = findViewById(R.id.place_title)
@@ -141,45 +109,65 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
         subscribeObserver()
     }
 
+    private fun MapView.setListener() {
+        addMapListener(DelayedMapListener(object : MapListener {
+            override fun onScroll(event: ScrollEvent?) = updatePositionAndGetArea()
+
+            override fun onZoom(event: ZoomEvent?) = updatePositionAndGetArea()
+        }, viewModel.mapListenerDelay))
+    }
+
     private fun setMap() {
         with(viewModel) {
             progress.visibility = GONE
-            mapView
-                .clear()
-                .tileSource(getTileSource())
-                mapView.overlays.add(rotationOverlay)
-                mapView.addTilesFrom(transportationTileSource, !areWikimapiaOverlayEnabled())
-                .addTilesFrom(labelsTileSource, !areWikimapiaOverlayEnabled())
-                .addFolder(folder, areWikimapiaOverlayEnabled())
-                .addTilesFrom(wikimapiaTileSource, areWikimapiaOverlayEnabled())
-            mapView.overlays.apply{
+            mapView.setTileSource(getTileSource())
+            mapView.overlays.apply {
+                clear()
+                add(rotationOverlay)
+                add(transportationOverlay)
+                add(imageryLabelsOverlay)
+                add(folder)
+                add(wikimapiaOverlay)
                 add(gridOverlay)
                 add(scaleOverlay)
                 add(myLocation)
             }
-            folder.isEnabled = areWikimapiaOverlayEnabled()
+            switchMode()
             gridOverlay.isEnabled = isGridEnabled()
             scaleOverlay.isEnabled = isScaleEnabled()
             switchFollowLocation(viewModel.isFollowLocationEnabled())
         }
     }
 
-    private fun switchFollowLocation(enable: Boolean){
-        myLocation.enableAutoStop = !enable
-        rotationOverlay.isEnabled = !enable
-        when(enable){
-            true -> {myLocation.enableFollowLocation()
-                val (lat, lon) = viewModel.getLastLocation()
-                myLocation.runOnFirstFix{
-                    MainScope().launch {
-                        mapView.controller.animateTo(lat.toInt(), lon.toInt())
-                        mapView.controller.setZoom(9.5)
-                    }
-                }
-            }
-            false -> myLocation.disableFollowLocation()
+    private fun switchMode() {
+        viewModel.apply {
+            transportationOverlay.isEnabled = !wikimapiaOverlaysEnabled()
+            imageryLabelsOverlay.isEnabled = !wikimapiaOverlaysEnabled()
+            folder.isEnabled = wikimapiaOverlaysEnabled()
+            wikimapiaOverlay.isEnabled = wikimapiaOverlaysEnabled()
         }
         mapView.invalidate()
+    }
+
+    private fun switchFollowLocation(enable: Boolean) {
+        with(viewModel) {
+            myLocation.enableAutoStop = !enable
+            rotationOverlay.isEnabled = !enable
+            when (enable) {
+                true -> {
+                    myLocation.enableFollowLocation()
+                    val (lat, lon) = viewModel.getLastLocation()
+                    myLocation.runOnFirstFix {
+                        MainScope().launch {
+                            mapView.controller.animateTo(lat.toInt(), lon.toInt())
+                            mapView.controller.setZoom(9.5)
+                        }
+                    }
+                }
+                false -> myLocation.disableFollowLocation()
+            }
+            mapView.invalidate()
+        }
     }
 
     private fun centerAndZoom() {
@@ -207,35 +195,39 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
     private fun onSuccess(newPlaces: ArrayList<PlacePolygon>) {
         CoroutineScope(Default).launch {
             val itemsToRemove = arrayListOf<PlacePolygon>()
-            folder.items.map {
-                with(it as PlacePolygon) {
-                    newPlaces.contains(this).ifFalse { itemsToRemove.add(this) }
+            with(viewModel) {
+                folder.items.map {
+                    with(it as PlacePolygon) {
+                        newPlaces.contains(this).ifFalse { itemsToRemove.add(this) }
+                    }
                 }
+                folder.items.removeAll(itemsToRemove)
+                itemsToRemove.clear()
+                newPlaces.map {
+                    folder.items.contains(it).ifTrue { itemsToRemove.add(it) }
+                }
+                newPlaces.removeAll(itemsToRemove)
+                folder.items.addAll(newPlaces)
+                folder.items.map { (it as PlacePolygon).setOnClickListener(PlaceOnClickListener(it)) }
+                withContext(Main) { mapView.invalidate() }
             }
-            folder.items.removeAll(itemsToRemove)
-            itemsToRemove.clear()
-            newPlaces.map {
-                folder.items.contains(it).ifTrue { itemsToRemove.add(it) }
-            }
-            newPlaces.removeAll(itemsToRemove)
-            folder.items.addAll(newPlaces)
-            folder.items.map { (it as PlacePolygon).setOnClickListener(PlaceOnClickListener(it)) }
-            withContext(Main) { mapView.invalidate() }
         }
     }
 
     private suspend fun filLabels() {
-        folder.items.apply {
-            parallelMap { place ->
-                (place as PlacePolygon).haveToShowLabel(mapView).ifTrue {
-                    labels.add(
-                        PlaceLabel(
-                            place.id,
-                            place.lat,
-                            place.lon,
-                            place.title
+        with(viewModel) {
+            folder.items.apply {
+                parallelMap { place ->
+                    (place as PlacePolygon).haveToShowLabel(mapView).ifTrue {
+                        labels.add(
+                            PlaceLabel(
+                                place.id,
+                                place.lat,
+                                place.lon,
+                                place.title
+                            )
                         )
-                    )
+                    }
                 }
             }
         }
@@ -261,7 +253,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
         fun item(id: Int) = menu.findItem(id)
         super.onPrepareOptionsMenu(menu)
         with(viewModel) {
-            item(R.id.action_wikimapia_overlays).isChecked = areWikimapiaOverlayEnabled()
+            item(R.id.action_wikimapia_overlays).isChecked = wikimapiaOverlaysEnabled()
             item(R.id.action_follow_location).isChecked = isFollowLocationEnabled()
             item(R.id.action_center_selection).isChecked = isCenterSelectionEnabled()
             item(R.id.action_show_scale).isChecked = isScaleEnabled()
@@ -279,17 +271,18 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
             R.id.action_map_mode_scheme -> {
                 item.isChecked = true
                 dispatchEvent(MapEvent.SwitchMapModeEvent(MapMode.SCHEME))
-                setMap()
+                mapView.setTileSource(viewModel.getTileSource())
             }
             R.id.action_map_mode_satellite -> {
                 item.isChecked = true
                 dispatchEvent(MapEvent.SwitchMapModeEvent(MapMode.SATELLITE))
-                setMap()
+                mapView.setTileSource(viewModel.getTileSource())
             }
             R.id.action_wikimapia_overlays -> {
                 item.isChecked = !item.isChecked
                 dispatchEvent(MapEvent.SwitchWikimapiaOverlayEvent(item.isChecked))
-                setMap()
+                switchMode()
+                updatePositionAndGetArea()
             }
             R.id.action_follow_location -> {
                 item.isChecked = !item.isChecked
@@ -299,18 +292,19 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
             R.id.action_center_selection -> {
                 item.isChecked = !item.isChecked
                 dispatchEvent(MapEvent.SwitchCenterSelectionEvent(item.isChecked))
-//                setMap()
                 //TODO implement it!
             }
             R.id.action_show_scale -> {
                 item.isChecked = !item.isChecked
                 dispatchEvent(MapEvent.SwitchScaleEvent(item.isChecked))
-                scaleOverlay.isEnabled = item.isChecked
+                viewModel.scaleOverlay.isEnabled = item.isChecked
+                mapView.invalidate()
             }
             R.id.action_show_grid -> {
                 item.isChecked = !item.isChecked
                 dispatchEvent(MapEvent.SwitchGridEvent(item.isChecked))
-                gridOverlay.isEnabled = item.isChecked
+                viewModel.gridOverlay.isEnabled = item.isChecked
+                mapView.invalidate()
             }
             R.id.action_search -> navigate(appR.id.action_mapFragment_to_settingsFragment)
         }
@@ -321,16 +315,19 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
 
     override fun onResume() {
         super.onResume()
-        myLocation.enableMyLocation()
         setMap()
+        viewModel.myLocation.enableMyLocation()
         centerAndZoom()
         mapView.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        myLocation.disableMyLocation()
-        mapView.clear().onPause()
+        viewModel.myLocation.disableMyLocation()
+        mapView.apply {
+            overlays.clear()
+            onPause()
+        }
     }
 
     inner class PlaceOnClickListener(private val place: PlacePolygon) : Polygon.OnClickListener {

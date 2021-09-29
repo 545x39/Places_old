@@ -9,6 +9,7 @@ import org.osmdroid.events.MapListener
 import org.osmdroid.tileprovider.MapTileProviderBasic
 import org.osmdroid.tileprovider.modules.SqlTileWriter
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
+import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.ScaleBarOverlay
@@ -21,32 +22,13 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlay
 import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlayOptions
 import org.osmdroid.views.overlay.simplefastpoint.SimplePointTheme
+import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
+import ru.fivefourtyfive.wikimapper.domain.dto.MapPlaceDTO
 import ru.fivefourtyfive.wikimapper.util.ifTrue
 import java.io.File
 
 
 object MapUtil {
-
-    fun MapView.addTilesFrom(source: OnlineTileSourceBase, add: Boolean = false) = this.apply {
-        add.ifTrue {
-            with(MapTileProviderBasic(context).also { it.tileSource = source }) {
-                overlays.add(TilesOverlay(this, context).apply {
-                    loadingBackgroundColor = Color.TRANSPARENT
-                })
-            }
-        }
-    }
-
-    fun MapView.tileSource(tileSource: OnlineTileSourceBase) =
-        this.apply { setTileSource(tileSource) }
-
-    fun MapView.clear() = this.apply {
-        overlays.clear()
-    }
-
-    fun MapView.addFolder(folder: FolderOverlay, add: Boolean = false) =
-        this.apply { add.ifTrue { overlays.add(folder) } }
-
 
     fun MapView.addLabels(labels: ArrayList<IGeoPoint>, add: Boolean = true) = this.apply {
         add.ifTrue {
@@ -86,4 +68,20 @@ object MapUtil {
 //        }
         SqlTileWriter().purgeCache(tileProvider.tileSource.name())
     }
+
 }
+
+fun MapPlaceDTO.toPlacePolygon() = PlacePolygon(
+    id = id,
+    name = title,
+    url = url,
+    north = north,
+    south = south,
+    east = east,
+    west = west,
+    lat = lat,
+    lon = lon,
+    polygon = arrayListOf<GeoPoint>().apply {
+        polygon.map { add(GeoPoint(it.y, it.x)) }
+    }
+)
