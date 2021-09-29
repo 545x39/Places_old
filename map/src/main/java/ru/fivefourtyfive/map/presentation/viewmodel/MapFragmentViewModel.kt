@@ -57,8 +57,8 @@ class MapFragmentViewModel @Inject constructor(
 
     val liveData = _liveData as LiveData<MapViewState>
 
-    val mapListenerDelay =
-        if (settings.getFollowLocation()) DEFAULT_DELAY else FOLLOWING_LOCATION_DELAY
+    val mapListenerDelay
+        get() = if (settings.getFollowLocation()) DEFAULT_DELAY else FOLLOWING_LOCATION_DELAY
 
     //<editor-fold defaultstate="collapsed" desc="PREFERENCES">
     fun getLastLocation(): Pair<Double, Double> = settings.getLastLocation()

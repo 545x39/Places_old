@@ -1,11 +1,18 @@
 package ru.fivefourtyfive.map.presentation.ui
 
+import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.content.Context.LOCATION_SERVICE
+import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
 import android.view.*
 import android.view.View.GONE
 import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.CoroutineScope
@@ -39,9 +46,10 @@ import ru.fivefourtyfive.wikimapper.util.ifFalse
 import ru.fivefourtyfive.wikimapper.util.ifTrue
 import ru.fivefourtyfive.wikimapper.util.parallelMap
 import javax.inject.Inject
+import kotlin.math.roundToLong
 import ru.fivefourtyfive.wikimapper.R as appR
 
-class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
+class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
 
     @Inject
     lateinit var providerFactory: ViewModelProviderFactory
@@ -59,6 +67,8 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
     private var currentSelection: PlacePolygon? = null
 
     private var currentMode = MapMode.SCHEME
+
+    private lateinit var locationManager: LocationManager
 
     private fun updatePositionAndGetArea(force: Boolean = false): Boolean {
 
@@ -99,6 +109,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().setTitle(appR.string.app_name)
         setHasOptionsMenu(true)
+        locationManager = requireContext().getSystemService(LOCATION_SERVICE) as LocationManager
         viewModel = ViewModelProvider(this, providerFactory).get(MapFragmentViewModel::class.java)
         view.apply {
             mapView.setListener()
@@ -151,18 +162,15 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
 
     private fun switchFollowLocation(enable: Boolean) {
         with(viewModel) {
-            myLocation.enableAutoStop = !enable
-            rotationOverlay.isEnabled = !enable
+//            myLocation.enableAutoStop = !enable
+//            rotationOverlay.isEnabled = !enable
             when (enable) {
                 true -> {
                     myLocation.enableFollowLocation()
                     val (lat, lon) = viewModel.getLastLocation()
                     myLocation.runOnFirstFix {
                         MainScope().launch {
-                            mapView.controller.apply {
-                                animateTo(lat.toInt(), lon.toInt())
-                                setZoom(9.5)
-                            }
+                            mapView.controller.animateTo(lat.toInt(), lon.toInt())
                         }
                     }
                 }
@@ -175,7 +183,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
     private fun centerAndZoom() {
         val (lat, lon) = viewModel.getLastLocation()
         mapView.controller.apply {
-            animateTo(GeoPoint(lat, lon))
+            setCenter(GeoPoint(lat, lon))
             setZoom(viewModel.getLastZoom())
         }
     }
@@ -281,29 +289,29 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
                 mapView.setTileSource(viewModel.getTileSource())
             }
             R.id.action_wikimapia_overlays -> {
-                item.isChecked = !item.isChecked
+                item.isChecked = item.isChecked.not()
                 dispatchEvent(MapEvent.SwitchWikimapiaOverlayEvent(item.isChecked))
                 switchMode()
                 updatePositionAndGetArea()
             }
             R.id.action_follow_location -> {
-                item.isChecked = !item.isChecked
+                item.isChecked = item.isChecked.not()
                 dispatchEvent(MapEvent.SwitchFollowLocationEvent(item.isChecked))
                 switchFollowLocation(item.isChecked)
             }
             R.id.action_center_selection -> {
-                item.isChecked = !item.isChecked
+                item.isChecked = item.isChecked.not()
                 dispatchEvent(MapEvent.SwitchCenterSelectionEvent(item.isChecked))
                 //TODO implement it!
             }
             R.id.action_show_scale -> {
-                item.isChecked = !item.isChecked
+                item.isChecked = item.isChecked.not()
                 dispatchEvent(MapEvent.SwitchScaleEvent(item.isChecked))
                 viewModel.scaleOverlay.isEnabled = item.isChecked
                 mapView.invalidate()
             }
             R.id.action_show_grid -> {
-                item.isChecked = !item.isChecked
+                item.isChecked = item.isChecked.not()
                 dispatchEvent(MapEvent.SwitchGridEvent(item.isChecked))
                 viewModel.gridOverlay.isEnabled = item.isChecked
                 mapView.invalidate()
@@ -321,10 +329,26 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
         viewModel.myLocation.enableMyLocation()
         centerAndZoom()
         mapView.onResume()
+        locationManager.getProviders(true).map {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    ACCESS_FINE_LOCATION
+                ) == PERMISSION_GRANTED
+            ) {
+                locationManager.requestLocationUpdates(it, 1500, 5.0f, this)
+            }
+        }
     }
 
     override fun onPause() {
         super.onPause()
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                ACCESS_FINE_LOCATION
+            ) == PERMISSION_GRANTED
+        ) {
+            locationManager.removeUpdates(this)
+        }
         viewModel.myLocation.disableMyLocation()
         mapView.apply {
             overlays.clear()
@@ -343,9 +367,23 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
                 )
                 false -> placeTitle.text = currentSelection?.title ?: ""
             }
-            place.setHighlighted(!place.highlight)
-            mapView?.invalidate()
+            place.setHighlighted(place.highlight.not())
+            this@MapFragment.mapView.apply {
+                viewModel.isCenterSelectionEnabled()
+                    .ifTrue { controller.animateTo(place.lat.toInt(), place.lon.toInt()) }
+                invalidate()
+            }
             return true
+        }
+    }
+
+    override fun onLocationChanged(location: Location) {
+        GeoPoint(location).apply {
+            //* 3.6 means meters per second to km per hour conversion.
+            val speed = (location.speed).roundToLong()
+            (viewModel.isFollowLocationEnabled() /*&& speed >= 40*/).ifTrue {
+                mapView.controller.animateTo(this, mapView.zoomLevelDouble, 600, -location.bearing)
+            }
         }
     }
 }
