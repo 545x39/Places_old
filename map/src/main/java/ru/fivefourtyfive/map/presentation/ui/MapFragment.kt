@@ -159,8 +159,10 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
                     val (lat, lon) = viewModel.getLastLocation()
                     myLocation.runOnFirstFix {
                         MainScope().launch {
-                            mapView.controller.animateTo(lat.toInt(), lon.toInt())
-                            mapView.controller.setZoom(9.5)
+                            mapView.controller.apply {
+                                animateTo(lat.toInt(), lon.toInt())
+                                setZoom(9.5)
+                            }
                         }
                     }
                 }
@@ -203,12 +205,12 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent> {
                 }
                 folder.items.removeAll(itemsToRemove)
                 itemsToRemove.clear()
-                newPlaces.map {
-                    folder.items.contains(it).ifTrue { itemsToRemove.add(it) }
-                }
+                newPlaces.map { folder.items.contains(it).ifTrue { itemsToRemove.add(it) } }
                 newPlaces.removeAll(itemsToRemove)
-                folder.items.addAll(newPlaces)
-                folder.items.map { (it as PlacePolygon).setOnClickListener(PlaceOnClickListener(it)) }
+                folder.items.apply {
+                    addAll(newPlaces)
+                    map { (it as PlacePolygon).setOnClickListener(PlaceOnClickListener(it)) }
+                }
                 withContext(Main) { mapView.invalidate() }
             }
         }
