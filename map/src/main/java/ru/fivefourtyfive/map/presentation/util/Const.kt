@@ -2,12 +2,16 @@ package ru.fivefourtyfive.map.presentation.util
 
 import org.osmdroid.tileprovider.tilesource.TileSourcePolicy
 
-const val MAP_LISTENER_DELAY = 600L
+
+object MapListenerDelay{
+    const val DEFAULT_DELAY = 600L
+    const val FOLLOWING_LOCATION_DELAY = 2000L
+}
 
 object Zoom {
     /** Smaller min values allows map to zoom out to show more than one map repetition.*/
     const val ZOOM_MIN = 2.0
-    const val ZOOM_MAX = 19.0
+    const val ZOOM_MAX = 18.0
     const val ZOOM_DEFAULT = 10.0
 }
 
@@ -16,11 +20,13 @@ object MapMode {
     const val SATELLITE = 1
 }
 
+/** Maximum zoom level for this source is 17, in case of greater number it sends
+ * gray tiles with "No tile data available" text on them.*/
 object TileSource {
     const val COPYRIGHT = "© OpenStreetMap contributors"
-    const val TILE_PIXELS = 256
+    const val TILE_SIZE_PIXELS = 256
     const val TILE_EXTENSION = ".png"
-    const val ARCGIS_MIN_ZOOM = 1
+    const val ARCGIS_MIN_ZOOM = 2
     const val ARCGIS_MAX_ZOOM = 17
     val POLICY = TileSourcePolicy(
         2,
@@ -36,4 +42,10 @@ object TileSource {
     const val ARCGIS_IMAGERY_LABELS_TILE_SOURCE = "ArcGISImageryLabels"
     const val ARCGIS_IMAGERY_TRANSPORTATION_TILE_SOURCE = "ArcGISImageryTransportation"
     const val WIKIMAPIA_TILE_SOURCE = "Wikimapia"
+}
+
+object Overlay{
+    const val WIKIMAPIA_OVERLAY = "WikimapiaOverlay"
+    const val IMAGERY_LABELS_OVERLAY = "ImageryLabelsOverlay"
+    const val TRANSPORTATION_OVERLAY = "TransportationOverlay"
 }

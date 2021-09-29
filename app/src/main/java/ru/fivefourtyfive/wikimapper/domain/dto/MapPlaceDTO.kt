@@ -16,4 +16,5 @@ class MapPlaceDTO(place: Place) {
     val west                        = place.location?.west ?: 0.0
     val lat                         = place.location?.lat ?: 0.0
     val lon                         = place.location?.lon ?: 0.0
+
 }

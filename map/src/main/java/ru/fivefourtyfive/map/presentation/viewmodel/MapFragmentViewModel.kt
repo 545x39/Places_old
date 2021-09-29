@@ -7,20 +7,25 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import org.osmdroid.api.IGeoPoint
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
-import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.overlay.FolderOverlay
+import org.osmdroid.views.overlay.ScaleBarOverlay
+import org.osmdroid.views.overlay.TilesOverlay
+import org.osmdroid.views.overlay.gestures.RotationGestureOverlay
+import org.osmdroid.views.overlay.gridlines.LatLonGridlineOverlay2
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
+import ru.fivefourtyfive.map.presentation.util.MapListenerDelay.DEFAULT_DELAY
+import ru.fivefourtyfive.map.presentation.util.MapListenerDelay.FOLLOWING_LOCATION_DELAY
 import ru.fivefourtyfive.map.presentation.util.MapMode
 import ru.fivefourtyfive.map.presentation.util.MapSettingsUtil
-import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_LABELS_TILE_SOURCE
+import ru.fivefourtyfive.map.presentation.util.Overlay
 import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_TILE_SOURCE
-import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_TRANSPORTATION_TILE_SOURCE
-import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_STREETS_TILE_SOURCE
-import ru.fivefourtyfive.map.presentation.util.TileSource.WIKIMAPIA_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.WIKIMEDIA_NO_LABELS_TILE_SOURCE
+import ru.fivefourtyfive.map.presentation.util.toPlacePolygon
 import ru.fivefourtyfive.wikimapper.data.repository.implementation.AreaRepository
 import ru.fivefourtyfive.wikimapper.domain.datastate.AreaDataState
-import ru.fivefourtyfive.wikimapper.domain.dto.MapPlaceDTO
 import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.EventHandler
 import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.Reducer
 import javax.inject.Inject
@@ -30,24 +35,32 @@ class MapFragmentViewModel @Inject constructor(
     private val repository: AreaRepository,
     private val settings: MapSettingsUtil,
     @Named(WIKIMEDIA_NO_LABELS_TILE_SOURCE)
-    private val schemeTileSource: OnlineTileSourceBase,
+    val schemeTileSource: OnlineTileSourceBase,
     @Named(ARCGIS_IMAGERY_TILE_SOURCE)
-    private val satelliteTileSource: OnlineTileSourceBase,
-    @Named(ARCGIS_IMAGERY_LABELS_TILE_SOURCE)
-    val labelsTileSource: OnlineTileSourceBase,
-    @Named(ARCGIS_IMAGERY_TRANSPORTATION_TILE_SOURCE)
-    val transportationTileSource: OnlineTileSourceBase,
-    @Named(WIKIMAPIA_TILE_SOURCE)
-    val wikimapiaTileSource: OnlineTileSourceBase
-) :
-    ViewModel(), Reducer<AreaDataState, MapViewState>, EventHandler<MapEvent> {
+    val satelliteTileSource: OnlineTileSourceBase,
+    @Named(Overlay.TRANSPORTATION_OVERLAY)
+    val transportationOverlay: TilesOverlay,
+    @Named(Overlay.IMAGERY_LABELS_OVERLAY)
+    val imageryLabelsOverlay: TilesOverlay,
+    @Named(Overlay.WIKIMAPIA_OVERLAY)
+    val wikimapiaOverlay: TilesOverlay,
+    val myLocation: MyLocationNewOverlay,
+    val rotationOverlay: RotationGestureOverlay,
+    val gridOverlay: LatLonGridlineOverlay2,
+    val scaleOverlay: ScaleBarOverlay,
+    val folder: FolderOverlay,
+    val places: ArrayList<PlacePolygon>,
+    val labels: ArrayList<IGeoPoint>
+) : ViewModel(), Reducer<AreaDataState, MapViewState>, EventHandler<MapEvent> {
 
     private val _liveData = MutableLiveData<MapViewState>(MapViewState.Loading)
 
     val liveData = _liveData as LiveData<MapViewState>
 
+    val mapListenerDelay =
+        if (settings.getFollowLocation()) DEFAULT_DELAY else FOLLOWING_LOCATION_DELAY
+
     //<editor-fold defaultstate="collapsed" desc="PREFERENCES">
-    //TODO Remove it when actions and view state are completed.
     fun getLastLocation(): Pair<Double, Double> = settings.getLastLocation()
 
     fun setLastLocation(x: Double, y: Double): MapFragmentViewModel =
@@ -62,7 +75,7 @@ class MapFragmentViewModel @Inject constructor(
 
     fun setMapMode(mode: Int) = settings.setMapMode(mode)
 
-    fun areWikimapiaOverlayEnabled() = settings.getWikimapiaOverlays()
+    fun wikimapiaOverlaysEnabled() = settings.getWikimapiaOverlays()
 
     fun setWikimapiaOverlays(enabled: Boolean) = settings.setWikimapiaOverlays(enabled)
 
@@ -77,56 +90,26 @@ class MapFragmentViewModel @Inject constructor(
     fun setFollowLocation(enable: Boolean) = settings.setFollowLocation(enable)
     //</editor-fold>
 
-    fun getTileSource() = when (settings.getMapMode()) {
-        MapMode.SATELLITE -> satelliteTileSource
-        else -> schemeTileSource
-    }
+    fun getTileSource() =
+        if (settings.getMapMode() == MapMode.SATELLITE) satelliteTileSource else schemeTileSource
 
     fun getArea(
         latMin: Double,
         lonMin: Double,
         latMax: Double,
         lonMax: Double
-    ): MapFragmentViewModel = this.apply {
-        viewModelScope.launch {
-            repository.getArea(latMin, lonMin, latMax, lonMax).catch {
-                _liveData.postValue(MapViewState.Error())
-            }.collect {
-                when (it) {
-                    is AreaDataState.Success -> {
-                        _liveData.postValue(reduce(it))
-                    }
-                    is AreaDataState.Loading -> _liveData.postValue(reduce(it))
-                    is AreaDataState.Error -> _liveData.postValue(reduce(it))
-                }
-            }
-        }
+    ) = viewModelScope.launch {
+        repository.getArea(latMin, lonMin, latMax, lonMax)
+            .catch { _liveData.postValue(MapViewState.Error()) }
+            .collect { _liveData.postValue(reduce(it)) }
     }
 
-    override fun reduce(dataState: AreaDataState): MapViewState {
-
-        fun MapPlaceDTO.toPlacePolygon() = PlacePolygon(
-            id = id,
-            name = title,
-            url = url,
-            north = north,
-            south = south,
-            east = east,
-            west = west,
-            lat = lat,
-            lon = lon,
-            polygon = arrayListOf<GeoPoint>().apply {
-                polygon.map { add(GeoPoint(it.y, it.x)) }
-            }
-        )
-
-        return when (dataState) {
-            is AreaDataState.Success -> MapViewState.DataLoaded(arrayListOf<PlacePolygon>().apply {
-                dataState.area.places.map { add(it.toPlacePolygon()) }
-            })
-            is AreaDataState.Loading -> MapViewState.Loading
-            is AreaDataState.Error -> MapViewState.Error(dataState.message)
-        }
+    override fun reduce(dataState: AreaDataState) = when (dataState) {
+        is AreaDataState.Success -> MapViewState.DataLoaded(arrayListOf<PlacePolygon>().apply {
+            dataState.area.places.map { add(it.toPlacePolygon()) }
+        })
+        is AreaDataState.Loading -> MapViewState.Loading
+        is AreaDataState.Error -> MapViewState.Error(dataState.message)
     }
 
     override fun handleEvent(event: MapEvent) {
