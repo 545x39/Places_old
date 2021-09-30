@@ -335,7 +335,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
                     ACCESS_FINE_LOCATION
                 ) == PERMISSION_GRANTED
             ) {
-                locationManager.requestLocationUpdates(it, 1500, 5.0f, this)
+                locationManager.requestLocationUpdates(it, 1000, 5.0f, this)
             }
         }
     }
@@ -379,7 +379,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
 
     override fun onLocationChanged(location: Location) {
         GeoPoint(location).apply {
-            //* 3.6 means meters per second to km per hour conversion.
+            //* Multiply speed by 3.6 to convert meters per second to km per hour (3600 seconds / 1000 meters).
             val speed = (location.speed).roundToLong()
             (viewModel.isFollowLocationEnabled() /*&& speed >= 40*/).ifTrue {
                 mapView.controller.animateTo(this, mapView.zoomLevelDouble, 600, -location.bearing)

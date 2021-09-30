@@ -6,6 +6,8 @@
         <entry key="../../../../../../layout/custom_preview.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.18489583333333334" />
         <entry key="map/src/main/res/drawable/ic_location.xml" value="0.15989583333333332" />
+        <entry key="map/src/main/res/drawable/icon_arrow.xml" value="0.35833333333333334" />
+        <entry key="map/src/main/res/drawable/icon_my_location.xml" value="0.35833333333333334" />
         <entry key="map/src/main/res/layout/fragment_map.xml" value="0.19166666666666668" />
         <entry key="map/src/main/res/menu/menu_map.xml" value="0.228125" />
         <entry key="objectdetails/src/main/res/drawable/icon_user.xml" value="0.22552083333333334" />
