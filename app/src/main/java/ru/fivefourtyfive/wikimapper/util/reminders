@@ -16,6 +16,8 @@ http://api.wikimapia.org/?key=example&function=place.getbyid&id=55&format=json&=
 ПОИСК
     http://api.wikimapia.org/?key=example&function=search&q=%D0%BF%D1%83%D1%88%D0%BA%D0%B8%D0%BD&lat=30.416336&lon=59.722139&distance=5000000
     api.wikimapia.org/?key=example&function=search&q=невский&lat=30.416336&lon=59.722139&language=ru&format=json&page=3&count=100
+
+    Поиск по расстоянию (&distance= ) - не работает!
 ------------------
 ОТРИСОВКА ПОЛИГОНОВ:
 https://osmdroid.github.io/osmdroid/Markers,-Lines-and-Polygons.html
