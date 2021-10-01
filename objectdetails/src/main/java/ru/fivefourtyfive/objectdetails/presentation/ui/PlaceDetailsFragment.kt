@@ -1,6 +1,8 @@
 package ru.fivefourtyfive.objectdetails.presentation.ui
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
@@ -69,6 +71,18 @@ class PlaceDetailsFragment : Fragment(), Renderer<PlaceDetailsViewState> {
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         menu.findItem(R.id.action_slide_show).isChecked = binding.viewModel!!.slideshow()
+    }
+
+    @SuppressLint("SourceLockedOrientationActivity")
+    //TODO При добавлении данных об организациях сделать недостающие варианты раскладыки.
+    override fun onResume() {
+        super.onResume()
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    }
+
+    override fun onPause() {
+        super.onPause()
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
