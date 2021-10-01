@@ -63,10 +63,8 @@ class OverlayModule {
         ) as VectorDrawable?)!!.toBitmap()
 
         return MyLocationNewOverlay(provider, mapView).apply {
-//            setPersonIcon(getBitmap(R.drawable.icon_my_location))
             setDirectionArrow(getBitmap(R.drawable.icon_my_location), getBitmap(R.drawable.icon_arrow))
             val scale = mapView.context.resources.displayMetrics.density
-            //mPersonHotspot = new PointF(24.0f * mScale + 0.5f, 39.0f * mScale + 0.5f);
             setPersonHotspot(12.0f * scale - 0.5f, 12.0f * scale - 0.5f)
             enableMyLocation()
         }

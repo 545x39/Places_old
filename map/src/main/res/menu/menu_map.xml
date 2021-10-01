@@ -61,12 +61,6 @@
             </group>
         </menu>
     </item>
-<!--    <item-->
-<!--        android:id="@+id/action_compass"-->
-<!--        android:checkable="true"-->
-<!--        android:orderInCategory="91"-->
-<!--        android:title="@string/title_compass"-->
-<!--        app:showAsAction="never" />-->
     <item
         android:id="@+id/action_follow_location"
         android:checkable="true"
@@ -74,15 +68,21 @@
         android:title="@string/title_follow_location"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_center_selection"
+        android:id="@+id/action_auto_rotate"
         android:checkable="true"
         android:orderInCategory="94"
+        android:title="@string/title_auto_rotate_map"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_center_selection"
+        android:checkable="true"
+        android:orderInCategory="95"
         android:title="@string/title_center_selection"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_keep_screen_on"
         android:checkable="true"
-        android:orderInCategory="95"
+        android:orderInCategory="96"
         android:title="@string/title_keep_screen_on"
         app:showAsAction="never" />
 </menu>

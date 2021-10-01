@@ -48,6 +48,7 @@ object Preferences {
     const val PREFERENCE_SHOW_SCALE             = "preference_show_scale"
     const val PREFERENCE_SHOW_GRID              = "preference_show_grid"
     const val PREFERENCE_KEEP_SCREEN_ON         = "preference_keep_screen_on"
+    const val PREFERENCE_AUTO_ROTATE_MAP        = "preference_auto_rotate_map"
     ////
     const val DEFAULT_LOCATION                  = "59.939039;30.315780"
 }

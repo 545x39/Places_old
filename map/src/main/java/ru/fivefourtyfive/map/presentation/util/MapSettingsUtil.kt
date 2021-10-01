@@ -2,6 +2,7 @@ package ru.fivefourtyfive.map.presentation.util
 
 import android.content.SharedPreferences
 import ru.fivefourtyfive.wikimapper.util.Preferences
+import ru.fivefourtyfive.wikimapper.util.Preferences.PREFERENCE_AUTO_ROTATE_MAP
 import ru.fivefourtyfive.wikimapper.util.Preferences.PREFERENCE_CENTER_SELECTION
 import ru.fivefourtyfive.wikimapper.util.Preferences.PREFERENCE_FOLLOW_LOCATION
 import ru.fivefourtyfive.wikimapper.util.Preferences.PREFERENCE_KEEP_SCREEN_ON
@@ -34,6 +35,8 @@ class MapSettingsUtil @Inject constructor(preferences: SharedPreferences) : Sett
     fun getGrid() = preferences.getBoolean(PREFERENCE_SHOW_GRID, false)
 
     fun getKeepScreenOn() = preferences.getBoolean(PREFERENCE_KEEP_SCREEN_ON, true)
+
+    fun getAutoRotateMap() = preferences.getBoolean(PREFERENCE_AUTO_ROTATE_MAP, false)
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="SETTERS">
@@ -56,5 +59,7 @@ class MapSettingsUtil @Inject constructor(preferences: SharedPreferences) : Sett
     fun setKeepScreenOn(enable: Boolean) = putBoolean(PREFERENCE_KEEP_SCREEN_ON, enable)
 
     fun setTransportationOverlay(enable: Boolean) = putBoolean(PREFERENCE_TRANSPOTRATION_OVERLAY, enable)
+
+    fun setAutoRotateMap(enable: Boolean) = putBoolean(PREFERENCE_AUTO_ROTATE_MAP, enable)
     //</editor-fold>
 }
