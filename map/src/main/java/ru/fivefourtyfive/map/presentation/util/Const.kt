@@ -5,7 +5,7 @@ import org.osmdroid.tileprovider.tilesource.TileSourcePolicy
 
 object MapListenerDelay{
     const val DEFAULT_DELAY = 600L
-    const val FOLLOWING_LOCATION_DELAY = 2000L
+    const val FOLLOWING_LOCATION_DELAY = 1500L
 }
 
 object Zoom {

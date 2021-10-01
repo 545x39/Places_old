@@ -1,17 +1,12 @@
 package ru.fivefourtyfive.map.di.module
 
-import android.content.Context
 import dagger.Module
 import dagger.Provides
-import org.osmdroid.tileprovider.MapTileProviderBasic
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.tileprovider.tilesource.XYTileSource
 import org.osmdroid.util.MapTileIndex
-import org.osmdroid.views.overlay.TilesOverlay
 import ru.fivefourtyfive.map.di.MapFragmentScope
-import ru.fivefourtyfive.map.presentation.util.Overlay.TRANSPORTATION_OVERLAY
-import ru.fivefourtyfive.map.presentation.util.Overlay.WIKIMAPIA_OVERLAY
 import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_LABELS_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_TRANSPORTATION_TILE_SOURCE

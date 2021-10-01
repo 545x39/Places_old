@@ -134,7 +134,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
             override fun onScroll(event: ScrollEvent?) = updatePositionAndGetArea()
 
             override fun onZoom(event: ZoomEvent?) = updatePositionAndGetArea()
-        }, viewModel.mapListenerDelay))
+        }, viewModel.getMapListenerDelay()))
     }
 
     private fun setMap() {
@@ -155,7 +155,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
             switchMode()
             gridOverlay.isEnabled = isGridEnabled()
             scaleOverlay.isEnabled = isScaleEnabled()
-            switchFollowLocation(viewModel.isFollowLocationEnabled())
+            switchFollowLocation(isFollowLocationEnabled())
         }
     }
 
@@ -276,6 +276,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
             item(R.id.action_show_scale).isChecked = isScaleEnabled()
             item(R.id.action_show_grid).isChecked = isGridEnabled()
             item(R.id.action_keep_screen_on).isChecked = isKeepScreenOnEnabled()
+            item(R.id.action_auto_rotate).isChecked = isAutoRotateMapEnabled()
             when (getMapMode()) {
                 MapMode.SCHEME -> item(R.id.action_map_mode_scheme).setChecked(true)
                 MapMode.SATELLITE -> item(R.id.action_map_mode_satellite).setChecked(true)
@@ -327,6 +328,10 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
                 item.isChecked = item.isChecked.not()
                 viewModel.setKeepScreenOn(item.isChecked)
                 switchKeepScreenOn(item.isChecked)
+            }
+            R.id.action_auto_rotate -> {
+                item.isChecked = item.isChecked.not()
+                viewModel.setAutoRotateMap(item.isChecked)
             }
             R.id.action_search -> navigate(appR.id.action_mapFragment_to_settingsFragment)
         }
@@ -382,7 +387,13 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
             //* Multiply speed by 3.6 to convert meters per second to km per hour (3600 seconds / 1000 meters).
             val speed = (location.speed).roundToLong()
             (viewModel.isFollowLocationEnabled() /*&& speed >= 40*/).ifTrue {
-                mapView.controller.animateTo(this, mapView.zoomLevelDouble, 600, -location.bearing)
+                mapView.controller.animateTo(
+                    this, mapView.zoomLevelDouble, 600,
+                    when (viewModel.isAutoRotateMapEnabled()) {
+                        true -> -location.bearing
+                        false -> mapView.mapOrientation
+                    }
+                )
             }
         }
     }

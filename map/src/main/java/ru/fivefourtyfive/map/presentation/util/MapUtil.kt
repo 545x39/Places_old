@@ -63,9 +63,6 @@ object MapUtil {
         val cache =
             File(Environment.getExternalStorageDirectory().absolutePath + File.separator + "osmdroid" + File.separator + "tiles")
         val filenames = cache.list()
-//        for (filename in filenames) {
-//            Timber.e("Cache file $filename")
-//        }
         SqlTileWriter().purgeCache(tileProvider.tileSource.name())
     }
 

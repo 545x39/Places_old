@@ -18,6 +18,7 @@
     <string name="title_center_selection">Центрировать на выбранном</string>
     <string name="title_keep_screen_on">Не выключать экран</string>
     <string name="title_follow_location">Отслеживать местоположение</string>
+    <string name="title_auto_rotate_map">Автоповорот карты</string>
     <string name="title_compass">Компас</string>
     <string name="title_grid">Сетка</string>
     <string name="title_scale">Масштаб</string>

@@ -55,8 +55,7 @@ class MapFragmentViewModel @Inject constructor(
 
     val liveData = _liveData as LiveData<MapViewState>
 
-    val mapListenerDelay
-        get() = if (settings.getFollowLocation()) DEFAULT_DELAY else FOLLOWING_LOCATION_DELAY
+    fun getMapListenerDelay() = if (settings.getFollowLocation()) DEFAULT_DELAY else FOLLOWING_LOCATION_DELAY
 
     //<editor-fold defaultstate="collapsed" desc="PREFERENCES">
     fun getLastLocation(): Pair<Double, Double> = settings.getLastLocation()
@@ -90,6 +89,10 @@ class MapFragmentViewModel @Inject constructor(
     fun isKeepScreenOnEnabled() = settings.getKeepScreenOn()
 
     fun setKeepScreenOn(enable: Boolean) = settings.setKeepScreenOn(enable)
+
+    fun isAutoRotateMapEnabled() = settings.getAutoRotateMap()
+
+    fun setAutoRotateMap(enable: Boolean) = settings.setAutoRotateMap(enable)
     //</editor-fold>
 
     fun getTileSource() =

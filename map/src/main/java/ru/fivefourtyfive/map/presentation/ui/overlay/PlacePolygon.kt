@@ -28,10 +28,7 @@ class PlacePolygon(
         outlinePaint.strokeWidth = 3.5f
         runCatching {
             points = polygon
-        }.onFailure {
-            points = listOf()
-//            Timber.e("POLYGON: $polygon\n$it")
-        }
+        }.onFailure {points = listOf()}
         title = name
     }
 
