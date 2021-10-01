@@ -79,4 +79,10 @@
         android:orderInCategory="94"
         android:title="@string/title_center_selection"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_keep_screen_on"
+        android:checkable="true"
+        android:orderInCategory="95"
+        android:title="@string/title_keep_screen_on"
+        app:showAsAction="never" />
 </menu>

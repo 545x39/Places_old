@@ -28,7 +28,7 @@ import timber.log.Timber
 import java.io.File
 
 @Module
-class MapFragmentModule {
+class MapModule {
 
     @MapFragmentScope
     @Provides
