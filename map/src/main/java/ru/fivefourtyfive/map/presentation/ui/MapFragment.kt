@@ -149,7 +149,6 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
                 add(folder)
                 add(wikimapiaOverlay)
                 add(gridOverlay)
-//                add(ScaleBarOverlay(mapView).apply { setAlignBottom(true) })
                 add(scaleOverlay)
                 add(myLocation)
             }
@@ -172,8 +171,6 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
 
     private fun switchFollowLocation(enable: Boolean) {
         with(viewModel) {
-//            myLocation.enableAutoStop = !enable
-//            rotationOverlay.isEnabled = !enable
             when (enable) {
                 true -> {
                     myLocation.enableFollowLocation()
