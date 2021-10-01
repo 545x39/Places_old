@@ -88,6 +88,10 @@ class MapFragmentViewModel @Inject constructor(
     fun isScaleEnabled() = settings.getScale()
 
     fun setFollowLocation(enable: Boolean) = settings.setFollowLocation(enable)
+
+    fun isKeepScreenOnEnabled() = settings.getKeepScreenOn()
+
+    fun setKeepScreenOn(enable: Boolean) = settings.setKeepScreenOn(enable)
     //</editor-fold>
 
     fun getTileSource() =

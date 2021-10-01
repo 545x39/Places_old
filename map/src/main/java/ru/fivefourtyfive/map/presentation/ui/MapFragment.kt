@@ -111,6 +111,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         setHasOptionsMenu(true)
         locationManager = requireContext().getSystemService(LOCATION_SERVICE) as LocationManager
         viewModel = ViewModelProvider(this, providerFactory).get(MapFragmentViewModel::class.java)
+        switchKeepScreenOn(viewModel.isKeepScreenOnEnabled())
         view.apply {
             mapView.setListener()
             findViewById<FrameLayout>(R.id.map_placeholder).addView(mapView)
@@ -268,6 +269,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
             item(R.id.action_center_selection).isChecked = isCenterSelectionEnabled()
             item(R.id.action_show_scale).isChecked = isScaleEnabled()
             item(R.id.action_show_grid).isChecked = isGridEnabled()
+            item(R.id.action_keep_screen_on).isChecked = isKeepScreenOnEnabled()
             when (getMapMode()) {
                 MapMode.SCHEME -> item(R.id.action_map_mode_scheme).setChecked(true)
                 MapMode.SATELLITE -> item(R.id.action_map_mode_satellite).setChecked(true)
@@ -316,9 +318,23 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
                 viewModel.gridOverlay.isEnabled = item.isChecked
                 mapView.invalidate()
             }
+            R.id.action_keep_screen_on -> {
+                item.isChecked = item.isChecked.not()
+                viewModel.setKeepScreenOn(item.isChecked)
+                switchKeepScreenOn(item.isChecked)
+            }
             R.id.action_search -> navigate(appR.id.action_mapFragment_to_settingsFragment)
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun switchKeepScreenOn(enabled: Boolean) {
+        with(requireActivity().window) {
+            when (enabled) {
+                true -> addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                false -> clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            }
+        }
     }
 
     override fun dispatchEvent(event: MapEvent) = viewModel.handleEvent(event)

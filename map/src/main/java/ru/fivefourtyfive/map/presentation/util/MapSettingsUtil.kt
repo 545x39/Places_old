@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import ru.fivefourtyfive.wikimapper.util.Preferences
 import ru.fivefourtyfive.wikimapper.util.Preferences.PREFERENCE_CENTER_SELECTION
 import ru.fivefourtyfive.wikimapper.util.Preferences.PREFERENCE_FOLLOW_LOCATION
+import ru.fivefourtyfive.wikimapper.util.Preferences.PREFERENCE_KEEP_SCREEN_ON
 import ru.fivefourtyfive.wikimapper.util.Preferences.PREFERENCE_LAST_ZOOM
 import ru.fivefourtyfive.wikimapper.util.Preferences.PREFERENCE_MAP_MODE
 import ru.fivefourtyfive.wikimapper.util.Preferences.PREFERENCE_SHOW_GRID
@@ -31,6 +32,8 @@ class MapSettingsUtil @Inject constructor(preferences: SharedPreferences) : Sett
     fun getScale() = preferences.getBoolean(PREFERENCE_SHOW_SCALE, true)
 
     fun getGrid() = preferences.getBoolean(PREFERENCE_SHOW_GRID, false)
+
+    fun getKeepScreenOn() = preferences.getBoolean(PREFERENCE_KEEP_SCREEN_ON, true)
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="SETTERS">
@@ -49,6 +52,8 @@ class MapSettingsUtil @Inject constructor(preferences: SharedPreferences) : Sett
     fun setScale(enable: Boolean) = putBoolean(PREFERENCE_SHOW_SCALE, enable)
 
     fun setGrid(enable: Boolean) = putBoolean(PREFERENCE_SHOW_GRID, enable)
+
+    fun setKeepScreenOn(enable: Boolean) = putBoolean(PREFERENCE_KEEP_SCREEN_ON, enable)
 
     fun setTransportationOverlay(enable: Boolean) = putBoolean(PREFERENCE_TRANSPOTRATION_OVERLAY, enable)
     //</editor-fold>
