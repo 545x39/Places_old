@@ -28,6 +28,8 @@ import org.osmdroid.events.ZoomEvent
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Polygon
+import org.osmdroid.views.overlay.ScaleBarOverlay
+import org.osmdroid.views.overlay.gestures.RotationGestureOverlay
 import ru.fivefourtyfive.map.R
 import ru.fivefourtyfive.map.di.DaggerMapFragmentComponent
 import ru.fivefourtyfive.map.presentation.ui.overlay.PlaceLabel
@@ -59,6 +61,12 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
 
     @Inject
     lateinit var mapView: MapView
+
+    @Inject
+    lateinit var rotationOverlay: RotationGestureOverlay
+
+    @Inject
+    lateinit var scaleOverlay: ScaleBarOverlay
 
     private lateinit var placeTitle: TextView
 
@@ -141,6 +149,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
                 add(folder)
                 add(wikimapiaOverlay)
                 add(gridOverlay)
+//                add(ScaleBarOverlay(mapView).apply { setAlignBottom(true) })
                 add(scaleOverlay)
                 add(myLocation)
             }
@@ -308,7 +317,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
             R.id.action_show_scale -> {
                 item.isChecked = item.isChecked.not()
                 dispatchEvent(MapEvent.SwitchScaleEvent(item.isChecked))
-                viewModel.scaleOverlay.isEnabled = item.isChecked
+                scaleOverlay.isEnabled = item.isChecked
                 mapView.invalidate()
             }
             R.id.action_show_grid -> {

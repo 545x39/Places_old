@@ -45,9 +45,7 @@ class MapFragmentViewModel @Inject constructor(
     @Named(Overlay.WIKIMAPIA_OVERLAY)
     val wikimapiaOverlay: TilesOverlay,
     val myLocation: MyLocationNewOverlay,
-    val rotationOverlay: RotationGestureOverlay,
     val gridOverlay: LatLonGridlineOverlay2,
-    val scaleOverlay: ScaleBarOverlay,
     val folder: FolderOverlay,
     val places: ArrayList<PlacePolygon>,
     val labels: ArrayList<IGeoPoint>

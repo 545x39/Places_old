@@ -89,7 +89,7 @@ class OverlayModule {
     @Provides
     fun provideGrid() = LatLonGridlineOverlay2()
 
-    @MapFragmentScope
+//    @MapFragmentScope
     @Provides
     fun provideScale(mapView: MapView) = ScaleBarOverlay(mapView).apply { setAlignBottom(true) }
 
