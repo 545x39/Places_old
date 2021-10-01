@@ -304,7 +304,6 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
             R.id.action_center_selection -> {
                 item.isChecked = item.isChecked.not()
                 dispatchEvent(MapEvent.SwitchCenterSelectionEvent(item.isChecked))
-                //TODO implement it!
             }
             R.id.action_show_scale -> {
                 item.isChecked = item.isChecked.not()
@@ -372,6 +371,16 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         }
     }
 
+    override fun onLocationChanged(location: Location) {
+        GeoPoint(location).apply {
+            //* Multiply speed by 3.6 to convert meters per second to km per hour (3600 seconds / 1000 meters).
+            val speed = (location.speed).roundToLong()
+            (viewModel.isFollowLocationEnabled() /*&& speed >= 40*/).ifTrue {
+                mapView.controller.animateTo(this, mapView.zoomLevelDouble, 600, -location.bearing)
+            }
+        }
+    }
+
     inner class PlaceOnClickListener(private val place: PlacePolygon) : Polygon.OnClickListener {
         override fun onClick(polygon: Polygon?, mapView: MapView?, eventPos: GeoPoint?): Boolean {
             currentSelection?.let { if (it != place) currentSelection?.setHighlighted(false) }
@@ -384,22 +393,11 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
                 false -> placeTitle.text = currentSelection?.title ?: ""
             }
             place.setHighlighted(place.highlight.not())
-            this@MapFragment.mapView.apply {
+            mapView?.apply {
                 viewModel.isCenterSelectionEnabled()
-                    .ifTrue { controller.animateTo(place.lat.toInt(), place.lon.toInt()) }
-                invalidate()
+                    .ifTrue { controller.animateTo(GeoPoint(place.lat, place.lon)) }
             }
             return true
-        }
-    }
-
-    override fun onLocationChanged(location: Location) {
-        GeoPoint(location).apply {
-            //* Multiply speed by 3.6 to convert meters per second to km per hour (3600 seconds / 1000 meters).
-            val speed = (location.speed).roundToLong()
-            (viewModel.isFollowLocationEnabled() /*&& speed >= 40*/).ifTrue {
-                mapView.controller.animateTo(this, mapView.zoomLevelDouble, 600, -location.bearing)
-            }
         }
     }
 }
