@@ -47,6 +47,7 @@ import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.EventDispatcher
 import ru.fivefourtyfive.wikimapper.util.ifFalse
 import ru.fivefourtyfive.wikimapper.util.ifTrue
 import ru.fivefourtyfive.wikimapper.util.parallelMap
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.math.roundToLong
 import ru.fivefourtyfive.wikimapper.R as appR
@@ -383,6 +384,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
     }
 
     override fun onLocationChanged(location: Location) {
+        location.bearing.let { it.equals(0.0f).ifFalse { viewModel.latestBearing = it } }
         GeoPoint(location).apply {
             //* Multiply speed by 3.6 to convert meters per second to km per hour (3600 seconds / 1000 meters).
             val speed = (location.speed).roundToLong()
@@ -390,7 +392,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
                 mapView.controller.animateTo(
                     this, mapView.zoomLevelDouble, 600,
                     when (viewModel.isAutoRotateMapEnabled()) {
-                        true -> -location.bearing
+                        true -> -viewModel.latestBearing
                         false -> mapView.mapOrientation
                     }
                 )

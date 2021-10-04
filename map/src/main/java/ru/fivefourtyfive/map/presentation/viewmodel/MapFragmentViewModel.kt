@@ -57,6 +57,8 @@ class MapFragmentViewModel @Inject constructor(
 
     fun getMapListenerDelay() = if (settings.getFollowLocation()) DEFAULT_DELAY else FOLLOWING_LOCATION_DELAY
 
+    var latestBearing = 0.0f
+
     //<editor-fold defaultstate="collapsed" desc="PREFERENCES">
     fun getLastLocation(): Pair<Double, Double> = settings.getLastLocation()
 
