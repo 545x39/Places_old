@@ -101,7 +101,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         setHasOptionsMenu(true)
         locationManager = requireContext().getSystemService(LOCATION_SERVICE) as LocationManager
         viewModel = ViewModelProvider(this, providerFactory).get(MapFragmentViewModel::class.java)
-        switchKeepScreenOn(viewModel.isKeepScreenOnEnabled())
+        (requireActivity() as MainActivity).switchKeepScreenOn(viewModel.isKeepScreenOnEnabled())
         view.apply {
             mapView.setListener()
             findViewById<FrameLayout>(R.id.map_placeholder).addView(mapView)
@@ -207,19 +207,17 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="CENTER BUTTON LISTENERS">
-    private fun onCenterButtonClick() {
-        when (viewModel.isFollowLocationEnabled()) {
-            true -> {
-                when (mapView.zoomLevelDouble < 16) {
-                    true -> mapView.controller.zoomTo(16, 300L)
-                    false -> mapView.controller.zoomTo(14, 300L)
-                }
+    private fun onCenterButtonClick() = when (viewModel.isFollowLocationEnabled()) {
+        true -> {
+            when (mapView.zoomLevelDouble < 16) {
+                true -> mapView.controller.zoomTo(16, 300L)
+                false -> mapView.controller.zoomTo(14, 300L)
             }
-            false -> {
-                viewModel.setFollowLocation(true)
-                switchFollowLocation(true)
-                mapView.controller.zoomTo(16, 300L)
-            }
+        }
+        false -> {
+            viewModel.setFollowLocation(true)
+            switchFollowLocation(true)
+            mapView.controller.zoomTo(16, 300L)
         }
     }
 
@@ -227,7 +225,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         viewModel.apply {
             isFollowLocationEnabled().ifTrue {
                 setFollowLocation(false)
-                (requireActivity() as MainActivity).showSnackBar("Режим слежения за местоположением отключен")
+                (requireActivity() as MainActivity).showSnackBar("Слежения за местоположением отключено")
             }
         }
     }
@@ -298,7 +296,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
             R.id.action_keep_screen_on -> {
                 item.isChecked = item.isChecked.not()
                 viewModel.setKeepScreenOn(item.isChecked)
-                switchKeepScreenOn(item.isChecked)
+                (requireActivity() as MainActivity).switchKeepScreenOn(item.isChecked)
             }
             R.id.action_auto_rotate -> {
                 item.isChecked = item.isChecked.not()
@@ -395,15 +393,6 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         mapView.controller.apply {
             setCenter(GeoPoint(lat, lon))
             setZoom(viewModel.getLastZoom())
-        }
-    }
-
-    private fun switchKeepScreenOn(enabled: Boolean) {
-        with(requireActivity().window) {
-            when (enabled) {
-                true -> addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-                false -> clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            }
         }
     }
 

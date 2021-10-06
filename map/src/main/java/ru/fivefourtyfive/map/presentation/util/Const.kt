@@ -12,7 +12,7 @@ object Zoom {
     /** Smaller min values allows map to zoom out to show more than one map repetition.*/
     const val ZOOM_MIN = 2.0
     const val ZOOM_MAX = 18.0
-    const val ZOOM_DEFAULT = 10.0
+    const val ZOOM_DEFAULT = 13.0
 }
 
 object MapMode {

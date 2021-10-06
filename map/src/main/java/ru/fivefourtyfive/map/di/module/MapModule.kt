@@ -49,15 +49,15 @@ class MapModule {
         setScrollableAreaLimitLongitude(
             MapView.getTileSystem().minLongitude,
             MapView.getTileSystem().maxLongitude,
-            80
+            0
         )
         minZoomLevel = Zoom.ZOOM_MIN
         maxZoomLevel = Zoom.ZOOM_MAX
         isTilesScaledToDpi = true
         zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
         controller.setZoom(Zoom.ZOOM_DEFAULT)
-        isVerticalMapRepetitionEnabled = false
-        isHorizontalMapRepetitionEnabled = false
+        isVerticalMapRepetitionEnabled = true
+        isHorizontalMapRepetitionEnabled = true
     }
 
     @MapFragmentScope

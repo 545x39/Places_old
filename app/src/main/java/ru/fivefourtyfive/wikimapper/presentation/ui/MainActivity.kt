@@ -1,6 +1,7 @@
 package ru.fivefourtyfive.wikimapper.presentation.ui
 
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.material.snackbar.Snackbar
@@ -22,6 +23,15 @@ class MainActivity : AppCompatActivity() {
         if (!PermissionsUtil.arePermissionsGranted(this, PERMISSIONS)) {
             val notGranted: Array<String> = getNotGrantedPermissions(this, PERMISSIONS)
             ActivityCompat.requestPermissions(this, notGranted, 1234)
+        }
+    }
+
+    fun switchKeepScreenOn(enabled: Boolean) {
+        with(window) {
+            when (enabled) {
+                true -> addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                false -> clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            }
         }
     }
 

@@ -38,7 +38,7 @@ class TileSourceModule {
     @Named(WIKIMEDIA_NO_LABELS_TILE_SOURCE)
     fun provideWikimediaNoLabelsTileSource(): OnlineTileSourceBase = XYTileSource(
         WIKIMEDIA_NO_LABELS_TILE_SOURCE,
-        0,
+        2,
         19,
         TILE_SIZE_PIXELS,
         TILE_EXTENSION,
@@ -96,7 +96,7 @@ class TileSourceModule {
     @Named(WIKIMAPIA_TILE_SOURCE)
     fun provideWikimapiaTileSource(): OnlineTileSourceBase = object : TileSource(
         WIKIMAPIA_TILE_SOURCE,
-        0,
+        2,
         19,
         WIKIMAPIA_TILE_SERVERS
     ) {
