@@ -1,8 +1,8 @@
 package ru.fivefourtyfive.map.presentation.ui
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.annotation.SuppressLint
 import android.content.Context.LOCATION_SERVICE
-import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -12,7 +12,6 @@ import android.view.View.GONE
 import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.CoroutineScope
@@ -44,10 +43,10 @@ import ru.fivefourtyfive.wikimapper.di.factory.ViewModelProviderFactory
 import ru.fivefourtyfive.wikimapper.presentation.ui.MainActivity
 import ru.fivefourtyfive.wikimapper.presentation.ui.NavFragment
 import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.EventDispatcher
+import ru.fivefourtyfive.wikimapper.util.PermissionsUtil.isPermissionGranted
 import ru.fivefourtyfive.wikimapper.util.ifFalse
 import ru.fivefourtyfive.wikimapper.util.ifTrue
 import ru.fivefourtyfive.wikimapper.util.parallelMap
-import timber.log.Timber
 import javax.inject.Inject
 import kotlin.math.roundToLong
 import ru.fivefourtyfive.wikimapper.R as appR
@@ -350,6 +349,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
 
     override fun dispatchEvent(event: MapEvent) = viewModel.handleEvent(event)
 
+    @SuppressLint("MissingPermission")
     override fun onResume() {
         super.onResume()
         setMap()
@@ -357,25 +357,15 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         centerAndZoom()
         mapView.onResume()
         locationManager.getProviders(true).map {
-            if (ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    ACCESS_FINE_LOCATION
-                ) == PERMISSION_GRANTED
-            ) {
-                locationManager.requestLocationUpdates(it, 1000, 5.0f, this)
-            }
+            isPermissionGranted(requireContext(), ACCESS_FINE_LOCATION)
+                .ifTrue { locationManager.requestLocationUpdates(it, 1000, 5.0f, this) }
         }
     }
 
     override fun onPause() {
         super.onPause()
-        if (ContextCompat.checkSelfPermission(
-                requireContext(),
-                ACCESS_FINE_LOCATION
-            ) == PERMISSION_GRANTED
-        ) {
-            locationManager.removeUpdates(this)
-        }
+        isPermissionGranted(requireContext(), ACCESS_FINE_LOCATION)
+            .ifTrue { locationManager.removeUpdates(this) }
         viewModel.myLocation.disableMyLocation()
         mapView.apply {
             overlays.clear()
@@ -386,7 +376,6 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
     override fun onLocationChanged(location: Location) {
         location.bearing.let { it.equals(0.0f).ifFalse { viewModel.latestBearing = it } }
         GeoPoint(location).apply {
-            //* Multiply speed by 3.6 to convert meters per second to km per hour (3600 seconds / 1000 meters).
             val speed = (location.speed).roundToLong()
             (viewModel.isFollowLocationEnabled() /*&& speed >= 40*/).ifTrue {
                 mapView.controller.animateTo(

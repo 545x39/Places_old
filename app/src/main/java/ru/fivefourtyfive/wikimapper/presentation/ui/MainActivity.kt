@@ -6,8 +6,8 @@ import androidx.core.app.ActivityCompat
 import com.google.android.material.snackbar.Snackbar
 import ru.fivefourtyfive.wikimapper.R
 import ru.fivefourtyfive.wikimapper.util.Permissions.PERMISSIONS
-import ru.fivefourtyfive.wikimapper.presentation.util.PermissionsUtil
-import ru.fivefourtyfive.wikimapper.presentation.util.PermissionsUtil.getNotGrantedPermissions
+import ru.fivefourtyfive.wikimapper.util.PermissionsUtil
+import ru.fivefourtyfive.wikimapper.util.PermissionsUtil.getNotGrantedPermissions
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun requestPermissions() {
-        if (!PermissionsUtil.isBatchPermissionsGranted(this, PERMISSIONS)) {
+        if (!PermissionsUtil.arePermissionsGranted(this, PERMISSIONS)) {
             val notGranted: Array<String> = getNotGrantedPermissions(this, PERMISSIONS)
             ActivityCompat.requestPermissions(this, notGranted, 1234)
         }
