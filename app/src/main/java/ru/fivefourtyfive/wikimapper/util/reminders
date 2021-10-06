@@ -77,6 +77,9 @@ DEBOUNCING:
 //https://www.hellsoft.se/instant-search-with-kotlin-coroutines/
 
 
+//* Multiply speed by 3.6 to convert meters per second to km per hour (3600 seconds / 1000 meters).
+======================
+
 ИСТОЧНИКИ КАРТ ARCGIS С УРОВНЯМИ ЗУМА:
     BaseMap{
         urlTemplate: tileProtocol + '//{s}.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',

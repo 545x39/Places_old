@@ -1,8 +1,8 @@
 package ru.fivefourtyfive.map.presentation.ui
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.annotation.SuppressLint
 import android.content.Context.LOCATION_SERVICE
-import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -10,9 +10,9 @@ import android.os.Bundle
 import android.view.*
 import android.view.View.GONE
 import android.widget.FrameLayout
+import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.CoroutineScope
@@ -44,6 +44,7 @@ import ru.fivefourtyfive.wikimapper.di.factory.ViewModelProviderFactory
 import ru.fivefourtyfive.wikimapper.presentation.ui.MainActivity
 import ru.fivefourtyfive.wikimapper.presentation.ui.NavFragment
 import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.EventDispatcher
+import ru.fivefourtyfive.wikimapper.util.PermissionsUtil.isPermissionGranted
 import ru.fivefourtyfive.wikimapper.util.ifFalse
 import ru.fivefourtyfive.wikimapper.util.ifTrue
 import ru.fivefourtyfive.wikimapper.util.parallelMap
@@ -53,6 +54,7 @@ import ru.fivefourtyfive.wikimapper.R as appR
 
 class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
 
+    //<editor-fold defaultstate="collapsed" desc="FIELDS">
     @Inject
     lateinit var providerFactory: ViewModelProviderFactory
 
@@ -70,6 +72,8 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
 
     private lateinit var placeTitle: TextView
 
+    private lateinit var centerButton: ImageButton
+
     private lateinit var progress: ProgressBar
 
     private var currentSelection: PlacePolygon? = null
@@ -77,31 +81,9 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
     private var currentMode = MapMode.SCHEME
 
     private lateinit var locationManager: LocationManager
+    //</editor-fold>
 
-    private fun updatePositionAndGetArea(force: Boolean = false): Boolean {
-
-        fun isLocationTheSame() =
-            viewModel.getLastLocation().first != mapView.mapCenter.latitude
-                    || viewModel.getLastLocation().second != mapView.mapCenter.longitude
-
-        with(viewModel) {
-            mapView.let { map ->
-                setLastLocation(map.mapCenter.latitude, map.mapCenter.longitude)
-                setLastZoom(map.zoomLevelDouble)
-                val get = force || (wikimapiaOverlaysEnabled() && !isLocationTheSame())
-                get.ifTrue {
-                    getArea(
-                        map.boundingBox.lonWest,
-                        map.boundingBox.latSouth,
-                        map.boundingBox.lonEast,
-                        map.boundingBox.latNorth
-                    )
-                }
-            }
-        }
-        return true
-    }
-
+    //<editor-fold defaultstate="collapsed" desc="LIFECYCLE METHODS">
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -125,18 +107,41 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
             findViewById<FrameLayout>(R.id.map_placeholder).addView(mapView)
             progress = findViewById(R.id.progress)
             placeTitle = findViewById(R.id.place_title)
+            centerButton = findViewById<ImageButton>(R.id.center_button)
+                .apply {
+                    setOnClickListener { onCenterButtonClick() }
+                    setOnLongClickListener { onCenterButtonLongClick() }
+                }
         }
         subscribeObserver()
     }
 
-    private fun MapView.setListener() {
-        addMapListener(DelayedMapListener(object : MapListener {
-            override fun onScroll(event: ScrollEvent?) = updatePositionAndGetArea()
-
-            override fun onZoom(event: ZoomEvent?) = updatePositionAndGetArea()
-        }, viewModel.getMapListenerDelay()))
+    @SuppressLint("MissingPermission")
+    override fun onResume() {
+        super.onResume()
+        setMap()
+        viewModel.myLocation.enableMyLocation()
+        centerAndZoom()
+        mapView.onResume()
+        locationManager.getProviders(true).map {
+            isPermissionGranted(requireContext(), ACCESS_FINE_LOCATION)
+                .ifTrue { locationManager.requestLocationUpdates(it, 1000, 5.0f, this) }
+        }
     }
 
+    override fun onPause() {
+        super.onPause()
+        isPermissionGranted(requireContext(), ACCESS_FINE_LOCATION)
+            .ifTrue { locationManager.removeUpdates(this) }
+        viewModel.myLocation.disableMyLocation()
+        mapView.apply {
+            overlays.clear()
+            onPause()
+        }
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="SETTERS">
     private fun setMap() {
         with(viewModel) {
             progress.visibility = GONE
@@ -159,42 +164,6 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         }
     }
 
-    private fun switchMode() {
-        viewModel.apply {
-            transportationOverlay.isEnabled = !wikimapiaOverlaysEnabled()
-            imageryLabelsOverlay.isEnabled = !wikimapiaOverlaysEnabled()
-            folder.isEnabled = wikimapiaOverlaysEnabled()
-            wikimapiaOverlay.isEnabled = wikimapiaOverlaysEnabled()
-        }
-        mapView.invalidate()
-    }
-
-    private fun switchFollowLocation(enable: Boolean) {
-        with(viewModel) {
-            when (enable) {
-                true -> {
-                    myLocation.enableFollowLocation()
-                    val (lat, lon) = viewModel.getLastLocation()
-                    myLocation.runOnFirstFix {
-                        MainScope().launch {
-                            mapView.controller.animateTo(lat.toInt(), lon.toInt())
-                        }
-                    }
-                }
-                false -> myLocation.disableFollowLocation()
-            }
-            mapView.invalidate()
-        }
-    }
-
-    private fun centerAndZoom() {
-        val (lat, lon) = viewModel.getLastLocation()
-        mapView.controller.apply {
-            setCenter(GeoPoint(lat, lon))
-            setZoom(viewModel.getLastZoom())
-        }
-    }
-
     private fun subscribeObserver() {
         viewModel.liveData.observe(viewLifecycleOwner, {
             with(it) {
@@ -209,29 +178,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         })
     }
 
-    private fun onSuccess(newPlaces: ArrayList<PlacePolygon>) {
-        CoroutineScope(Default).launch {
-            val itemsToRemove = arrayListOf<PlacePolygon>()
-            with(viewModel) {
-                folder.items.map {
-                    with(it as PlacePolygon) {
-                        newPlaces.contains(this).ifFalse { itemsToRemove.add(this) }
-                    }
-                }
-                folder.items.removeAll(itemsToRemove)
-                itemsToRemove.clear()
-                newPlaces.map { folder.items.contains(it).ifTrue { itemsToRemove.add(it) } }
-                newPlaces.removeAll(itemsToRemove)
-                folder.items.apply {
-                    addAll(newPlaces)
-                    map { (it as PlacePolygon).setOnClickListener(PlaceOnClickListener(it)) }
-                }
-                withContext(Main) { mapView.invalidate() }
-            }
-        }
-    }
-
-    private suspend fun filLabels() {
+    private suspend fun fillLabels() {
         with(viewModel) {
             folder.items.apply {
                 parallelMap { place ->
@@ -250,19 +197,43 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         }
     }
 
-    private fun PlacePolygon.hasToShowLabel(): Boolean {
-        mapView.boundingBox.apply {
-            val widthDiff = (east - west) / (lonEast - lonWest)
-            val heightDiff = (north - south) / (latNorth - latSouth)
-            val isWithinTheBox =
-                (east - west) <= (lonEast - lonWest) && (north - south) <= (latNorth - latSouth)
-            return isWithinTheBox && (widthDiff >= 0.3 || heightDiff >= 0.3)
+    private fun MapView.setListener() {
+        addMapListener(DelayedMapListener(object : MapListener {
+            override fun onScroll(event: ScrollEvent?) = updatePositionAndGetArea()
+
+            override fun onZoom(event: ZoomEvent?) = updatePositionAndGetArea()
+        }, viewModel.getMapListenerDelay()))
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="CENTER BUTTON LISTENERS">
+    private fun onCenterButtonClick() {
+        when (viewModel.isFollowLocationEnabled()) {
+            true -> {
+                when (mapView.zoomLevelDouble < 16) {
+                    true -> mapView.controller.zoomTo(16, 300L)
+                    false -> mapView.controller.zoomTo(14, 300L)
+                }
+            }
+            false -> {
+                viewModel.setFollowLocation(true)
+                switchFollowLocation(true)
+                mapView.controller.zoomTo(16, 300L)
+            }
         }
     }
 
-    private fun onError(message: String?) =
-        (requireActivity() as MainActivity).showSnackBar(message)
+    private fun onCenterButtonLongClick() = true.also {
+        viewModel.apply {
+            isFollowLocationEnabled().ifTrue {
+                setFollowLocation(false)
+                (requireActivity() as MainActivity).showSnackBar("Режим слежения за местоположением отключен")
+            }
+        }
+    }
+    //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="OPTIONS MENU METHODS">
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) =
         inflater.inflate(R.menu.menu_map, menu)
 
@@ -337,6 +308,95 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         }
         return super.onOptionsItemSelected(item)
     }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="ON STATE CHANGE METHODS">
+    private fun onSuccess(newPlaces: ArrayList<PlacePolygon>) {
+        CoroutineScope(Default).launch {
+            val itemsToRemove = arrayListOf<PlacePolygon>()
+            with(viewModel) {
+                folder.items.map {
+                    with(it as PlacePolygon) {
+                        newPlaces.contains(this).ifFalse { itemsToRemove.add(this) }
+                    }
+                }
+                folder.items.removeAll(itemsToRemove)
+                itemsToRemove.clear()
+                newPlaces.map { folder.items.contains(it).ifTrue { itemsToRemove.add(it) } }
+                newPlaces.removeAll(itemsToRemove)
+                folder.items.apply {
+                    addAll(newPlaces)
+                    map { (it as PlacePolygon).setOnClickListener(PlaceOnClickListener(it)) }
+                }
+                withContext(Main) { mapView.invalidate() }
+            }
+        }
+    }
+
+    private fun onError(message: String?) =
+        (requireActivity() as MainActivity).showSnackBar(message)
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="MAP FUNCTIONALITY METHODS">
+    private fun updatePositionAndGetArea(force: Boolean = false): Boolean {
+
+        fun isLocationTheSame() =
+            viewModel.getLastLocation().first != mapView.mapCenter.latitude
+                    || viewModel.getLastLocation().second != mapView.mapCenter.longitude
+
+        with(viewModel) {
+            mapView.let { map ->
+                setLastLocation(map.mapCenter.latitude, map.mapCenter.longitude)
+                setLastZoom(map.zoomLevelDouble)
+                val get = force || (wikimapiaOverlaysEnabled() && !isLocationTheSame())
+                get.ifTrue {
+                    getArea(
+                        map.boundingBox.lonWest,
+                        map.boundingBox.latSouth,
+                        map.boundingBox.lonEast,
+                        map.boundingBox.latNorth
+                    )
+                }
+            }
+        }
+        return true
+    }
+
+    private fun switchMode() {
+        viewModel.apply {
+            transportationOverlay.isEnabled = !wikimapiaOverlaysEnabled()
+            imageryLabelsOverlay.isEnabled = !wikimapiaOverlaysEnabled()
+            folder.isEnabled = wikimapiaOverlaysEnabled()
+            wikimapiaOverlay.isEnabled = wikimapiaOverlaysEnabled()
+        }
+        mapView.invalidate()
+    }
+
+    private fun switchFollowLocation(enable: Boolean) {
+        with(viewModel) {
+            when (enable) {
+                true -> {
+                    myLocation.enableFollowLocation()
+                    val (lat, lon) = viewModel.getLastLocation()
+                    myLocation.runOnFirstFix {
+                        MainScope().launch {
+                            mapView.controller.animateTo(lat.toInt(), lon.toInt())
+                        }
+                    }
+                }
+                false -> myLocation.disableFollowLocation()
+            }
+            mapView.invalidate()
+        }
+    }
+
+    private fun centerAndZoom() {
+        val (lat, lon) = viewModel.getLastLocation()
+        mapView.controller.apply {
+            setCenter(GeoPoint(lat, lon))
+            setZoom(viewModel.getLastZoom())
+        }
+    }
 
     private fun switchKeepScreenOn(enabled: Boolean) {
         with(requireActivity().window) {
@@ -347,57 +407,26 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         }
     }
 
-    override fun dispatchEvent(event: MapEvent) = viewModel.handleEvent(event)
-
-    override fun onResume() {
-        super.onResume()
-        setMap()
-        viewModel.myLocation.enableMyLocation()
-        centerAndZoom()
-        mapView.onResume()
-        locationManager.getProviders(true).map {
-            if (ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    ACCESS_FINE_LOCATION
-                ) == PERMISSION_GRANTED
-            ) {
-                locationManager.requestLocationUpdates(it, 1000, 5.0f, this)
-            }
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        if (ContextCompat.checkSelfPermission(
-                requireContext(),
-                ACCESS_FINE_LOCATION
-            ) == PERMISSION_GRANTED
-        ) {
-            locationManager.removeUpdates(this)
-        }
-        viewModel.myLocation.disableMyLocation()
-        mapView.apply {
-            overlays.clear()
-            onPause()
-        }
-    }
-
     override fun onLocationChanged(location: Location) {
+        location.bearing.let { it.equals(0.0f).ifFalse { viewModel.latestBearing = it } }
         GeoPoint(location).apply {
-            //* Multiply speed by 3.6 to convert meters per second to km per hour (3600 seconds / 1000 meters).
             val speed = (location.speed).roundToLong()
             (viewModel.isFollowLocationEnabled() /*&& speed >= 40*/).ifTrue {
                 mapView.controller.animateTo(
                     this, mapView.zoomLevelDouble, 600,
                     when (viewModel.isAutoRotateMapEnabled()) {
-                        true -> -location.bearing
+                        true -> -viewModel.latestBearing
                         false -> mapView.mapOrientation
                     }
                 )
             }
         }
     }
+    //</editor-fold>
 
+    override fun dispatchEvent(event: MapEvent) = viewModel.handleEvent(event)
+
+    //<editor-fold defaultstate="collapsed" desc="PLACE ON CLICK LISTENER">
     inner class PlaceOnClickListener(private val place: PlacePolygon) : Polygon.OnClickListener {
         override fun onClick(polygon: Polygon?, mapView: MapView?, eventPos: GeoPoint?): Boolean {
             currentSelection?.let { if (it != place) currentSelection?.setHighlighted(false) }
@@ -417,4 +446,5 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
             return true
         }
     }
+    //</editor-fold>
 }

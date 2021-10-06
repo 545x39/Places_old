@@ -127,5 +127,9 @@ dependencies {
     testImplementation("junit:junit:$JUNIT_VERSION")
     androidTestImplementation("androidx.test.ext:junit:$JUNIT_EXT_VERSION")
     androidTestImplementation("androidx.test.espresso:espresso-core:$ESPRESSO_VERSION")
+    /** ROOM */
+    implementation("androidx.room:room-runtime:$ROOM_VERSION")
+    kapt("androidx.room:room-compiler:$ROOM_VERSION")
+    implementation("androidx.room:room-ktx:$ROOM_VERSION")
 }
 //</editor-fold>
