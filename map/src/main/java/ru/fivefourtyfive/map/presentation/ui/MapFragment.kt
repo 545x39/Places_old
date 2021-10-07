@@ -9,18 +9,12 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.view.*
 import android.view.View.GONE
-import android.widget.FrameLayout
-import android.widget.ImageButton
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.view.View.VISIBLE
+import android.widget.*
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.Default
-import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.osmdroid.events.DelayedMapListener
 import org.osmdroid.events.MapListener
 import org.osmdroid.events.ScrollEvent
@@ -32,7 +26,6 @@ import org.osmdroid.views.overlay.ScaleBarOverlay
 import org.osmdroid.views.overlay.gestures.RotationGestureOverlay
 import ru.fivefourtyfive.map.R
 import ru.fivefourtyfive.map.di.DaggerMapFragmentComponent
-import ru.fivefourtyfive.map.presentation.ui.overlay.PlaceLabel
 import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
 import ru.fivefourtyfive.map.presentation.util.MapMode
 import ru.fivefourtyfive.map.presentation.viewmodel.MapEvent
@@ -47,7 +40,6 @@ import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.EventDispatcher
 import ru.fivefourtyfive.wikimapper.util.PermissionsUtil.isPermissionGranted
 import ru.fivefourtyfive.wikimapper.util.ifFalse
 import ru.fivefourtyfive.wikimapper.util.ifTrue
-import ru.fivefourtyfive.wikimapper.util.parallelMap
 import javax.inject.Inject
 import kotlin.math.roundToLong
 import ru.fivefourtyfive.wikimapper.R as appR
@@ -72,11 +64,11 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
 
     private lateinit var placeTitle: TextView
 
+    private lateinit var placeTitleButton : RelativeLayout
+
     private lateinit var centerButton: ImageButton
 
     private lateinit var progress: ProgressBar
-
-    private var currentSelection: PlacePolygon? = null
 
     private var currentMode = MapMode.SCHEME
 
@@ -107,6 +99,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
             findViewById<FrameLayout>(R.id.map_placeholder).addView(mapView)
             progress = findViewById(R.id.progress)
             placeTitle = findViewById(R.id.place_title)
+            placeTitleButton = findViewById(R.id.place_title_button)
             centerButton = findViewById<ImageButton>(R.id.center_button)
                 .apply {
                     setOnClickListener { onCenterButtonClick() }
@@ -123,6 +116,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         viewModel.myLocation.enableMyLocation()
         centerAndZoom()
         mapView.onResume()
+        setPlaceTitle(viewModel.currentSelection)
         locationManager.getProviders(true).map {
             isPermissionGranted(requireContext(), ACCESS_FINE_LOCATION)
                 .ifTrue { locationManager.requestLocationUpdates(it, 1000, 5.0f, this) }
@@ -164,37 +158,35 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         }
     }
 
+    fun setPlaceTitle(place: PlacePolygon?) {
+        when(place){
+            null -> placeTitleButton.visibility = GONE
+            else ->{
+                place.setHighlighted(true)
+                placeTitle.text = place.title
+                placeTitle.setOnClickListener {
+                    navigate(
+                        appR.id.action_mapFragment_to_placeDetailsFragment,
+                        bundleOf(ID to place.id)
+                    )
+                }
+                placeTitleButton.visibility = VISIBLE
+            }
+        }
+    }
+
     private fun subscribeObserver() {
         viewModel.liveData.observe(viewLifecycleOwner, {
             with(it) {
                 progress.visibility = progressVisibility
                 when (this) {
-                    is MapViewState.DataLoaded -> onSuccess(places)
+                    is MapViewState.DataLoaded -> onSuccess()
                     is MapViewState.Error -> onError(message)
                     else -> {
                     }
                 }
             }
         })
-    }
-
-    private suspend fun fillLabels() {
-        with(viewModel) {
-            folder.items.apply {
-                parallelMap { place ->
-                    (place as PlacePolygon).haveToShowLabel(mapView).ifTrue {
-                        labels.add(
-                            PlaceLabel(
-                                place.id,
-                                place.lat,
-                                place.lon,
-                                place.title
-                            )
-                        )
-                    }
-                }
-            }
-        }
     }
 
     private fun MapView.setListener() {
@@ -225,7 +217,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         viewModel.apply {
             isFollowLocationEnabled().ifTrue {
                 setFollowLocation(false)
-                (requireActivity() as MainActivity).showSnackBar("Слежения за местоположением отключено")
+                (requireActivity() as MainActivity).showSnackBar(resources.getString(appR.string.following_location_disabled))
             }
         }
     }
@@ -306,29 +298,16 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         }
         return super.onOptionsItemSelected(item)
     }
+
+    override fun dispatchEvent(event: MapEvent) = viewModel.handleEvent(event)
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="ON STATE CHANGE METHODS">
-    private fun onSuccess(newPlaces: ArrayList<PlacePolygon>) {
-        CoroutineScope(Default).launch {
-            val itemsToRemove = arrayListOf<PlacePolygon>()
-            with(viewModel) {
-                folder.items.map {
-                    with(it as PlacePolygon) {
-                        newPlaces.contains(this).ifFalse { itemsToRemove.add(this) }
-                    }
-                }
-                folder.items.removeAll(itemsToRemove)
-                itemsToRemove.clear()
-                newPlaces.map { folder.items.contains(it).ifTrue { itemsToRemove.add(it) } }
-                newPlaces.removeAll(itemsToRemove)
-                folder.items.apply {
-                    addAll(newPlaces)
-                    map { (it as PlacePolygon).setOnClickListener(PlaceOnClickListener(it)) }
-                }
-                withContext(Main) { mapView.invalidate() }
-            }
+    private fun onSuccess(){
+        viewModel.folder.items.map {
+            (it as PlacePolygon).setOnClickListener(PlaceOnClickListener(it))
         }
+        mapView.invalidate()
     }
 
     private fun onError(message: String?) =
@@ -413,25 +392,34 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
     }
     //</editor-fold>
 
-    override fun dispatchEvent(event: MapEvent) = viewModel.handleEvent(event)
-
     //<editor-fold defaultstate="collapsed" desc="PLACE ON CLICK LISTENER">
     inner class PlaceOnClickListener(private val place: PlacePolygon) : Polygon.OnClickListener {
         override fun onClick(polygon: Polygon?, mapView: MapView?, eventPos: GeoPoint?): Boolean {
-            currentSelection?.let { if (it != place) currentSelection?.setHighlighted(false) }
-            currentSelection = place
-            when (place.highlight) {
-                true -> navigate(
-                    appR.id.action_mapFragment_to_placeDetailsFragment,
-                    bundleOf(ID to place.id)
-                )
-                false -> placeTitle.text = currentSelection?.title ?: ""
+
+            //<editor-fold defaultstate="collapsed" desc="INNER FUNCTIONS">
+            fun onSame() {
+                place.setHighlighted(false)
+                placeTitle.text = ""
+                viewModel.currentSelection = null
+                placeTitleButton.visibility = GONE
             }
-            place.setHighlighted(place.highlight.not())
-            mapView?.apply {
-                viewModel.isCenterSelectionEnabled()
-                    .ifTrue { controller.animateTo(GeoPoint(place.lat, place.lon)) }
+
+            fun onDifferent() {
+                viewModel.currentSelection?.setHighlighted(false)
+                setPlaceTitle(place)
+                viewModel.currentSelection = place
+                mapView?.apply {
+                    viewModel.isCenterSelectionEnabled()
+                        .ifTrue { controller.animateTo(GeoPoint(place.lat, place.lon)) }
+                }
             }
+            //</editor-fold>
+
+            when (place == viewModel.currentSelection) {
+                true -> onSame()
+                false -> onDifferent()
+            }
+            mapView?.invalidate()
             return true
         }
     }

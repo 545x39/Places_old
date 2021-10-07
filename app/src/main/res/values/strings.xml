@@ -27,4 +27,5 @@
     <string name="title_grid">Grid</string>
     <string name="title_scale">Scale</string>
     <string name="comments_count">Comments: %s</string>
+    <string name="following_location_disabled">Following location disabled</string>
 </resources>

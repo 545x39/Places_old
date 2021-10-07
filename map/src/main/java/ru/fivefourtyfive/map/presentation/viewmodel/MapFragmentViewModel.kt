@@ -7,12 +7,9 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.osmdroid.api.IGeoPoint
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 import org.osmdroid.views.overlay.FolderOverlay
-import org.osmdroid.views.overlay.ScaleBarOverlay
 import org.osmdroid.views.overlay.TilesOverlay
-import org.osmdroid.views.overlay.gestures.RotationGestureOverlay
 import org.osmdroid.views.overlay.gridlines.LatLonGridlineOverlay2
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
@@ -28,6 +25,7 @@ import ru.fivefourtyfive.wikimapper.data.repository.implementation.AreaRepositor
 import ru.fivefourtyfive.wikimapper.domain.datastate.AreaDataState
 import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.EventHandler
 import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.Reducer
+import ru.fivefourtyfive.wikimapper.util.ifTrue
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -47,15 +45,18 @@ class MapFragmentViewModel @Inject constructor(
     val myLocation: MyLocationNewOverlay,
     val gridOverlay: LatLonGridlineOverlay2,
     val folder: FolderOverlay,
-    val places: ArrayList<PlacePolygon>,
-    val labels: ArrayList<IGeoPoint>
+//    val places: ArrayList<PlacePolygon>,
+//    val labels: ArrayList<IGeoPoint>
 ) : ViewModel(), Reducer<AreaDataState, MapViewState>, EventHandler<MapEvent> {
 
     private val _liveData = MutableLiveData<MapViewState>(MapViewState.Loading)
 
     val liveData = _liveData as LiveData<MapViewState>
 
-    fun getMapListenerDelay() = if (settings.getFollowLocation()) DEFAULT_DELAY else FOLLOWING_LOCATION_DELAY
+    var currentSelection: PlacePolygon? = null
+
+    fun getMapListenerDelay() =
+        if (settings.getFollowLocation()) DEFAULT_DELAY else FOLLOWING_LOCATION_DELAY
 
     var latestBearing = 0.0f
 
@@ -111,10 +112,20 @@ class MapFragmentViewModel @Inject constructor(
             .collect { _liveData.postValue(reduce(it)) }
     }
 
+
+    private fun onSuccess(dataState: AreaDataState.Success) = MapViewState.DataLoaded().apply {
+        folder.items.apply {
+            clear()
+            dataState.area.places.map {
+                add(
+                    it.toPlacePolygon()
+                        .apply { (this == currentSelection).ifTrue { setHighlighted(true) } })
+            }
+        }
+    }
+
     override fun reduce(dataState: AreaDataState) = when (dataState) {
-        is AreaDataState.Success -> MapViewState.DataLoaded(arrayListOf<PlacePolygon>().apply {
-            dataState.area.places.map { add(it.toPlacePolygon()) }
-        })
+        is AreaDataState.Success -> onSuccess(dataState)
         is AreaDataState.Loading -> MapViewState.Loading
         is AreaDataState.Error -> MapViewState.Error(dataState.message)
     }
@@ -126,7 +137,9 @@ class MapFragmentViewModel @Inject constructor(
             }
             is MapEvent.SwitchMapModeEvent -> settings.setMapMode(event.mode)
             is MapEvent.SwitchWikimapiaOverlayEvent -> settings.setWikimapiaOverlays(event.enable)
-            is MapEvent.SwitchTransportationOverlayEvent -> settings.setTransportationOverlay(event.enable)
+            is MapEvent.SwitchTransportationOverlayEvent -> settings.setTransportationOverlay(
+                event.enable
+            )
             is MapEvent.SwitchFollowLocationEvent -> settings.setFollowLocation(event.enable)
             is MapEvent.SwitchCenterSelectionEvent -> settings.setCenterSelection(event.enable)
             is MapEvent.SwitchScaleEvent -> settings.setScale(event.enable)

@@ -9,17 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <TextView
-        android:id="@+id/place_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_margin="4dp"
-        android:textColor="@color/amber"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
     <ProgressBar
         android:id="@+id/progress"
         android:layout_width="wrap_content"
@@ -37,5 +26,27 @@
         android:background="@drawable/selector_center_button"
         android:src="@drawable/icon_my_location"
         app:tint="@color/amber" />
+
+    <RelativeLayout
+        android:id="@+id/place_title_button"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/center_button"
+        android:layout_marginStart="6dp"
+        android:layout_marginBottom="6dp"
+        android:visibility="gone"
+        android:background="@drawable/selector_center_button">
+
+        <TextView
+            android:id="@+id/place_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="4dp"
+            android:textColor="@color/amber"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
 
 </RelativeLayout>
