@@ -27,6 +27,7 @@ import ru.fivefourtyfive.wikimapper.domain.datastate.AreaDataState
 import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.EventHandler
 import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.Reducer
 import ru.fivefourtyfive.wikimapper.util.ifTrue
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -66,12 +67,14 @@ class MapFragmentViewModel @Inject constructor(
         GeoPoint(settings.getLastLocation().first, settings.getLastLocation().second)
 
     fun setLastLocation(x: Double, y: Double): MapFragmentViewModel =
-        this.apply { settings.setLastLocation(x, y) }
+        this.apply { settings.setLastLocation(x, y)}
 
     fun getLastZoom() = settings.getLastZoom()
 
     fun setLastZoom(zoom: Double): MapFragmentViewModel =
-        this.apply { settings.setLastZoom(zoom) }
+        this.apply { settings.setLastZoom(zoom)
+            Timber.e("=================== ZOOM SET TO: $zoom")
+        }
 
     fun getMapMode(): Int = settings.getMapMode()
 

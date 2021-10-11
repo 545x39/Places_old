@@ -23,8 +23,21 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="6dp"
-        android:background="@drawable/selector_center_button"
+        android:background="@drawable/selector_map_button"
         android:src="@drawable/icon_my_location"
+        app:tint="@color/amber" />
+
+    <ImageButton
+        android:id="@+id/bearing_button"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/center_button"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        android:background="@drawable/selector_map_button"
+        android:src="@drawable/icon_arrow"
         app:tint="@color/amber" />
 
     <RelativeLayout
@@ -34,9 +47,9 @@
         android:layout_centerHorizontal="true"
         android:layout_above="@+id/center_button"
         android:layout_marginStart="6dp"
-        android:layout_marginBottom="6dp"
+        android:layout_marginEnd="6dp"
         android:visibility="gone"
-        android:background="@drawable/selector_center_button">
+        android:background="@drawable/selector_map_button">
 
         <TextView
             android:id="@+id/place_title"

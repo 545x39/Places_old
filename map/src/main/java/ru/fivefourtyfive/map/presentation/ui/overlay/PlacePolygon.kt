@@ -25,7 +25,7 @@ class PlacePolygon(
         //Forces the loop to close, as the first and the last points are the same.
         polygon.add(polygon[0])
         outlinePaint.color = Color.WHITE
-        outlinePaint.strokeWidth = 3.5f
+        outlinePaint.strokeWidth = 4.0f
         runCatching {
             points = polygon
         }.onFailure {points = listOf()}

@@ -42,7 +42,6 @@ import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.EventDispatcher
 import ru.fivefourtyfive.wikimapper.util.PermissionsUtil.isPermissionGranted
 import ru.fivefourtyfive.wikimapper.util.ifFalse
 import ru.fivefourtyfive.wikimapper.util.ifTrue
-import timber.log.Timber
 import javax.inject.Inject
 import kotlin.math.roundToLong
 import ru.fivefourtyfive.wikimapper.R as appR
@@ -68,6 +67,8 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
     private lateinit var placeTitle: TextView
 
     private lateinit var placeTitleButton: RelativeLayout
+
+    private lateinit var bearingButton: ImageButton
 
     private lateinit var centerButton: ImageButton
 
@@ -103,6 +104,8 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
             progress = findViewById(R.id.progress)
             placeTitle = findViewById(R.id.place_title)
             placeTitleButton = findViewById(R.id.place_title_button)
+            bearingButton = findViewById<ImageButton>(R.id.bearing_button)
+                .apply { setOnClickListener { onBearingButtonClick() } }
             centerButton = findViewById<ImageButton>(R.id.center_button)
                 .apply {
                     setOnClickListener { onCenterButtonClick() }
@@ -124,7 +127,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
             isPermissionGranted(requireContext(), ACCESS_FINE_LOCATION)
                 .ifTrue { locationManager.requestLocationUpdates(it, 1000, 5.0f, this) }
         }
-        updatePositionAndGetArea(true)
+        getArea(true)
     }
 
     override fun onPause() {
@@ -195,14 +198,23 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
 
     private fun MapView.setListener() {
         addMapListener(DelayedMapListener(object : MapListener {
-            override fun onScroll(event: ScrollEvent?) = updatePositionAndGetArea()
+            override fun onScroll(event: ScrollEvent?) = true.also {
+                getArea()
+                updateLastLocationAndZoom()
+            }
 
-            override fun onZoom(event: ZoomEvent?) = updatePositionAndGetArea()
+            override fun onZoom(event: ZoomEvent?) = true.also {
+                getArea()
+                updateLastLocationAndZoom()
+            }
         }, viewModel.getMapListenerDelay()))
     }
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="CENTER BUTTON LISTENERS">
+    //<editor-fold defaultstate="collapsed" desc="ON CLICK LISTENERS">
+    private fun onBearingButtonClick() =
+        mapView.controller.animateTo(mapView.mapCenter, mapView.zoomLevelDouble, 600, 0.0f)
+
     private fun onCenterButtonClick() = when (viewModel.isFollowLocationEnabled()) {
         true -> {
             when (mapView.zoomLevelDouble < 16) {
@@ -223,6 +235,37 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
                 setFollowLocation(false)
                 (requireActivity() as MainActivity).showSnackBar(resources.getString(appR.string.following_location_disabled))
             }
+        }
+    }
+
+    inner class PlaceOnClickListener(private val place: PlacePolygon) : Polygon.OnClickListener {
+        override fun onClick(polygon: Polygon?, mapView: MapView?, eventPos: GeoPoint?): Boolean {
+
+            //<editor-fold defaultstate="collapsed" desc="INNER FUNCTIONS">
+            fun onSame() {
+                place.setHighlighted(false)
+                placeTitle.text = ""
+                viewModel.currentSelection = null
+                placeTitleButton.visibility = GONE
+            }
+
+            fun onDifferent() {
+                viewModel.currentSelection?.setHighlighted(false)
+                setPlaceTitle(place)
+                viewModel.currentSelection = place
+                mapView?.apply {
+                    viewModel.isCenterSelectionEnabled()
+                        .ifTrue { controller.animateTo(GeoPoint(place.lat, place.lon)) }
+                }
+            }
+            //</editor-fold>
+
+            when (place == viewModel.currentSelection) {
+                true -> onSame()
+                false -> onDifferent()
+            }
+            mapView?.invalidate()
+            return true
         }
     }
     //</editor-fold>
@@ -266,7 +309,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
                 item.isChecked = item.isChecked.not()
                 dispatchEvent(MapEvent.SwitchWikimapiaOverlayEvent(item.isChecked))
                 switchMode()
-                updatePositionAndGetArea()
+                getArea()
             }
             R.id.action_follow_location -> {
                 item.isChecked = item.isChecked.not()
@@ -319,7 +362,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="MAP FUNCTIONALITY METHODS">
-    private fun updatePositionAndGetArea(force: Boolean = false): Boolean {
+    private fun getArea(force: Boolean = false): Boolean {
 
         fun isFarEnough(point1: IGeoPoint, point2: IGeoPoint) = getDistance(point1, point2) > 5
 
@@ -335,11 +378,18 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
                         it.boundingBox.latNorth
                     )
                 }
-                setLastLocation(it.mapCenter.latitude, it.mapCenter.longitude)
-                setLastZoom(it.zoomLevelDouble)
             }
         }
         return true
+    }
+
+    fun updateLastLocationAndZoom() {
+        with(mapView) {
+            viewModel.apply {
+                setLastLocation(mapCenter.latitude, mapCenter.longitude)
+                setLastZoom(zoomLevelDouble)
+            }
+        }
     }
 
     private fun switchMode() {
@@ -402,39 +452,6 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
                     }
                 )
             }
-        }
-    }
-    //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="PLACE ON CLICK LISTENER">
-    inner class PlaceOnClickListener(private val place: PlacePolygon) : Polygon.OnClickListener {
-        override fun onClick(polygon: Polygon?, mapView: MapView?, eventPos: GeoPoint?): Boolean {
-
-            //<editor-fold defaultstate="collapsed" desc="INNER FUNCTIONS">
-            fun onSame() {
-                place.setHighlighted(false)
-                placeTitle.text = ""
-                viewModel.currentSelection = null
-                placeTitleButton.visibility = GONE
-            }
-
-            fun onDifferent() {
-                viewModel.currentSelection?.setHighlighted(false)
-                setPlaceTitle(place)
-                viewModel.currentSelection = place
-                mapView?.apply {
-                    viewModel.isCenterSelectionEnabled()
-                        .ifTrue { controller.animateTo(GeoPoint(place.lat, place.lon)) }
-                }
-            }
-            //</editor-fold>
-
-            when (place == viewModel.currentSelection) {
-                true -> onSame()
-                false -> onDifferent()
-            }
-            mapView?.invalidate()
-            return true
         }
     }
     //</editor-fold>
