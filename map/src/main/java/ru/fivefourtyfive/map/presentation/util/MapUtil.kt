@@ -3,13 +3,13 @@ package ru.fivefourtyfive.map.presentation.util
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
+import android.location.Location
 import android.os.Environment
 import org.osmdroid.api.IGeoPoint
 import org.osmdroid.events.MapListener
 import org.osmdroid.tileprovider.modules.SqlTileWriter
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.simplefastpoint.LabelledGeoPoint
 import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlay
 import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlayOptions
 import org.osmdroid.views.overlay.simplefastpoint.SimplePointTheme
@@ -58,6 +58,14 @@ object MapUtil {
     }
 
 }
+
+fun getDistance(point1: IGeoPoint, point2: IGeoPoint) = Location("").apply {
+    latitude = point1.latitude
+    longitude = point1.longitude
+}.distanceTo(Location("").apply {
+    latitude = point2.latitude
+    longitude = point2.longitude
+})
 
 fun MapPlaceDTO.toPlacePolygon() = PlacePolygon(
     id = id,

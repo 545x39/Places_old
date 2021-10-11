@@ -15,6 +15,7 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import org.osmdroid.api.IGeoPoint
 import org.osmdroid.events.DelayedMapListener
 import org.osmdroid.events.MapListener
 import org.osmdroid.events.ScrollEvent
@@ -28,6 +29,7 @@ import ru.fivefourtyfive.map.R
 import ru.fivefourtyfive.map.di.DaggerMapFragmentComponent
 import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
 import ru.fivefourtyfive.map.presentation.util.MapMode
+import ru.fivefourtyfive.map.presentation.util.getDistance
 import ru.fivefourtyfive.map.presentation.viewmodel.MapEvent
 import ru.fivefourtyfive.map.presentation.viewmodel.MapFragmentViewModel
 import ru.fivefourtyfive.map.presentation.viewmodel.MapViewState
@@ -40,6 +42,7 @@ import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.EventDispatcher
 import ru.fivefourtyfive.wikimapper.util.PermissionsUtil.isPermissionGranted
 import ru.fivefourtyfive.wikimapper.util.ifFalse
 import ru.fivefourtyfive.wikimapper.util.ifTrue
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.math.roundToLong
 import ru.fivefourtyfive.wikimapper.R as appR
@@ -64,7 +67,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
 
     private lateinit var placeTitle: TextView
 
-    private lateinit var placeTitleButton : RelativeLayout
+    private lateinit var placeTitleButton: RelativeLayout
 
     private lateinit var centerButton: ImageButton
 
@@ -159,9 +162,9 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
     }
 
     fun setPlaceTitle(place: PlacePolygon?) {
-        when(place){
+        when (place) {
             null -> placeTitleButton.visibility = GONE
-            else ->{
+            else -> {
                 place.setHighlighted(true)
                 placeTitle.text = place.title
                 placeTitle.setOnClickListener {
@@ -303,7 +306,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="ON STATE CHANGE METHODS">
-    private fun onSuccess(){
+    private fun onSuccess() {
         viewModel.folder.items.map {
             (it as PlacePolygon).setOnClickListener(PlaceOnClickListener(it))
         }
@@ -317,23 +320,27 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
     //<editor-fold defaultstate="collapsed" desc="MAP FUNCTIONALITY METHODS">
     private fun updatePositionAndGetArea(force: Boolean = false): Boolean {
 
-        fun isLocationTheSame() =
-            viewModel.getLastLocation().first != mapView.mapCenter.latitude
-                    || viewModel.getLastLocation().second != mapView.mapCenter.longitude
+        fun isFarEnough(point1: IGeoPoint, point2: IGeoPoint) = getDistance(point1, point2) > 5
 
         with(viewModel) {
-            mapView.let { map ->
-                setLastLocation(map.mapCenter.latitude, map.mapCenter.longitude)
-                setLastZoom(map.zoomLevelDouble)
-                val get = force || (wikimapiaOverlaysEnabled() && !isLocationTheSame())
-                get.ifTrue {
+            mapView.let {
+                ////TODO check if it works right and then remove it.
+                Timber.e("DISTANCE: ${getDistance(it.mapCenter,
+                    GeoPoint(viewModel.getLastLocation().first, viewModel.getLastLocation().second))}")
+                ////
+                (force || (wikimapiaOverlaysEnabled() && isFarEnough(
+                    it.mapCenter,
+                    GeoPoint(viewModel.getLastLocation().first, viewModel.getLastLocation().second))
+                        )).ifTrue {
                     getArea(
-                        map.boundingBox.lonWest,
-                        map.boundingBox.latSouth,
-                        map.boundingBox.lonEast,
-                        map.boundingBox.latNorth
+                        it.boundingBox.lonWest,
+                        it.boundingBox.latSouth,
+                        it.boundingBox.lonEast,
+                        it.boundingBox.latNorth
                     )
                 }
+                setLastLocation(it.mapCenter.latitude, it.mapCenter.longitude)
+                setLastZoom(it.zoomLevelDouble)
             }
         }
         return true
