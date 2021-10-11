@@ -110,8 +110,6 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
                 }
         }
         subscribeObserver()
-        /** For the first run, if following is enabled and location is the same as before, request has to be forced. */
-        updatePositionAndGetArea(viewModel.isFollowLocationEnabled())
     }
 
     @SuppressLint("MissingPermission")
@@ -126,6 +124,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
             isPermissionGranted(requireContext(), ACCESS_FINE_LOCATION)
                 .ifTrue { locationManager.requestLocationUpdates(it, 1000, 5.0f, this) }
         }
+        updatePositionAndGetArea(true)
     }
 
     override fun onPause() {
@@ -326,9 +325,6 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
 
         with(viewModel) {
             mapView.let {
-                ////TODO check if it works right and then remove it.
-                Timber.e("DISTANCE: ${getDistance(it.mapCenter, getLastLocation())}")
-                ////
                 (force || (wikimapiaOverlaysEnabled() && isFarEnough(
                     it.mapCenter, getLastLocation()
                 ))).ifTrue {
