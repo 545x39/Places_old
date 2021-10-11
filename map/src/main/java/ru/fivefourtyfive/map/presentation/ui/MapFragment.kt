@@ -110,6 +110,8 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
                 }
         }
         subscribeObserver()
+        /** For the first run, if following is enabled and location is the same as before, request has to be forced. */
+        updatePositionAndGetArea(viewModel.isFollowLocationEnabled())
     }
 
     @SuppressLint("MissingPermission")
@@ -325,13 +327,11 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         with(viewModel) {
             mapView.let {
                 ////TODO check if it works right and then remove it.
-                Timber.e("DISTANCE: ${getDistance(it.mapCenter,
-                    GeoPoint(viewModel.getLastLocation().first, viewModel.getLastLocation().second))}")
+                Timber.e("DISTANCE: ${getDistance(it.mapCenter, getLastLocation())}")
                 ////
                 (force || (wikimapiaOverlaysEnabled() && isFarEnough(
-                    it.mapCenter,
-                    GeoPoint(viewModel.getLastLocation().first, viewModel.getLastLocation().second))
-                        )).ifTrue {
+                    it.mapCenter, getLastLocation()
+                ))).ifTrue {
                     getArea(
                         it.boundingBox.lonWest,
                         it.boundingBox.latSouth,
@@ -356,15 +356,27 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         mapView.invalidate()
     }
 
+    @SuppressLint("MissingPermission")
     private fun switchFollowLocation(enable: Boolean) {
         with(viewModel) {
             when (enable) {
                 true -> {
                     myLocation.enableFollowLocation()
-                    val (lat, lon) = viewModel.getLastLocation()
                     myLocation.runOnFirstFix {
                         MainScope().launch {
-                            mapView.controller.animateTo(lat.toInt(), lon.toInt())
+                            LocationManager.GPS_PROVIDER.apply {
+                                (isPermissionGranted(
+                                    requireContext(),
+                                    ACCESS_FINE_LOCATION
+                                ) && locationManager.isProviderEnabled(this)).ifTrue {
+                                    locationManager.getLastKnownLocation(this)?.let {
+                                        mapView.controller.animateTo(
+                                            it.latitude.toInt(),
+                                            it.longitude.toInt()
+                                        )
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -375,9 +387,8 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
     }
 
     private fun centerAndZoom() {
-        val (lat, lon) = viewModel.getLastLocation()
         mapView.controller.apply {
-            setCenter(GeoPoint(lat, lon))
+            setCenter(viewModel.getLastLocation())
             setZoom(viewModel.getLastZoom())
         }
     }

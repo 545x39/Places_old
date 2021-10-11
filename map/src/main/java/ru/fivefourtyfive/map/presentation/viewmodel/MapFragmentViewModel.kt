@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
+import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.TilesOverlay
 import org.osmdroid.views.overlay.gridlines.LatLonGridlineOverlay2
@@ -61,7 +62,8 @@ class MapFragmentViewModel @Inject constructor(
     var latestBearing = 0.0f
 
     //<editor-fold defaultstate="collapsed" desc="PREFERENCES">
-    fun getLastLocation(): Pair<Double, Double> = settings.getLastLocation()
+    fun getLastLocation() =
+        GeoPoint(settings.getLastLocation().first, settings.getLastLocation().second)
 
     fun setLastLocation(x: Double, y: Double): MapFragmentViewModel =
         this.apply { settings.setLastLocation(x, y) }
