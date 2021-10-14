@@ -9,6 +9,7 @@
         <entry key="map/src/main/res/drawable/icon_arrow.xml" value="0.35833333333333334" />
         <entry key="map/src/main/res/drawable/icon_my_location.xml" value="0.35833333333333334" />
         <entry key="map/src/main/res/drawable/selector_center_button.xml" value="0.2234375" />
+        <entry key="map/src/main/res/layout-land/fragment_map.xml" value="0.30070546737213405" />
         <entry key="map/src/main/res/layout/fragment_map.xml" value="0.19166666666666668" />
         <entry key="map/src/main/res/menu/menu_map.xml" value="0.228125" />
         <entry key="objectdetails/src/main/res/drawable/icon_user.xml" value="0.22552083333333334" />
