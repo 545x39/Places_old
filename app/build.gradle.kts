@@ -91,6 +91,15 @@ dependencies {
     implementation("com.google.dagger:dagger:$DAGGER_VERSION")
     kapt("com.google.dagger:dagger-compiler:$DAGGER_VERSION")
     kapt("com.google.dagger:dagger-android-processor:$DAGGER_VERSION")
+    ////
+    kaptTest("com.google.dagger:dagger-compiler:$DAGGER_VERSION")
+    androidTestAnnotationProcessor("com.google.dagger:dagger-compiler:$DAGGER_VERSION")
+//    kaptTest("com.google.dagger:dagger-compiler:2.38.1")
+//    kaptTest("com.google.dagger:dagger-android-processor:2.38.1")
+//    kapt("com.google.dagger:dagger-compiler:2.38.1")
+//    androidTestAnnotationProcessor("com.google.dagger:dagger-android-processor:2.38.1")
+//    testAnnotationProcessor("com.google.dagger:dagger-compiler:2.38.1")
+//    kapt("com.google.dagger:dagger-android-processor:2.38.1")
     /** ROOM */
     implementation("androidx.room:room-runtime:$ROOM_VERSION")
     kapt("androidx.room:room-compiler:$ROOM_VERSION")

@@ -8,18 +8,19 @@ import ru.fivefourtyfive.wikimapper.di.DaggerAppComponent
 import ru.fivefourtyfive.wikimapper.di.module.AppModule
 import timber.log.Timber
 
-class Places : Application() {
+open class Places : Application() {
 
     lateinit var appComponent: AppComponent
 
     override fun onCreate() {
         super.onCreate()
         initTimber()
-        DaggerAppComponent.factory().create(AppModule(this)).apply {
-            appComponent = this
-            inject(this@Places)
-        }
+        initAppComponent()
         setNightMode()
+    }
+
+    protected open fun initAppComponent() {
+        appComponent = DaggerAppComponent.factory().create(AppModule(this)).also { it.inject(this) }
     }
 
     private fun setNightMode() {
