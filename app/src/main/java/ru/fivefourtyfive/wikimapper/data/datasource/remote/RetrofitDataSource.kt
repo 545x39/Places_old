@@ -54,6 +54,26 @@ class RetrofitDataSource @Inject constructor(private val api: Api) : RemoteDataS
         }
     }.flowOn(IO)
 
+    suspend fun getPlace2(id: Int, dataBlocks: String?) = api.getPlace(
+        id = id,
+        dataBlocks = dataBlocks
+    )
+
+    suspend fun getArea2(
+        latMin: Double,
+        lonMin: Double,
+        latMax: Double,
+        lonMax: Double,
+        category: String?,
+        count: Int?,
+        language: String?
+    ) = api.getArea(
+            boundingBox = Parameters.add(latMin, lonMin, latMax, lonMax),
+            category = category,
+            count = count,
+            language = language
+        )
+
     override fun getCategories(name: String?, page: Int?, count: Int?, language: String?) {
         api.getCategories(name = name, page = page, count = count, language = language)
             .enqueue(object : Callback<ResponseBody> {

@@ -92,7 +92,8 @@ dependencies {
     kapt("com.google.dagger:dagger-compiler:$DAGGER_VERSION")
     kapt("com.google.dagger:dagger-android-processor:$DAGGER_VERSION")
     ////
-    kaptTest("com.google.dagger:dagger-compiler:$DAGGER_VERSION")
+//    kaptTest("com.google.dagger:dagger-compiler:$DAGGER_VERSION")
+    kaptAndroidTest("com.google.dagger:dagger-compiler:$DAGGER_VERSION")
     androidTestAnnotationProcessor("com.google.dagger:dagger-compiler:$DAGGER_VERSION")
 //    kaptTest("com.google.dagger:dagger-compiler:2.38.1")
 //    kaptTest("com.google.dagger:dagger-android-processor:2.38.1")

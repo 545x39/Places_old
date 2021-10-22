@@ -1,5 +1,7 @@
 package ru.fivefourtyfive.wikimapper.data.datasource.remote.util
 
+import ru.fivefourtyfive.wikimapper.util.ifTrue
+
 object Parameters {
 
     @Synchronized
@@ -7,7 +9,7 @@ object Parameters {
         with(values.indices) {
             map {
                 append(values[it])
-                if (it < last) append(",")
+                (it < last).ifTrue { append(",") }
             }
         }
     }
@@ -17,7 +19,7 @@ object Parameters {
         with(values.indices) {
             map {
                 append(values[it])
-                if (it < last) append(",")
+                (it < last).ifTrue { append(",") }
             }
         }
     }
