@@ -1,11 +1,11 @@
 package ru.fivefourtyfive.wikimapper.data.repository.implementation
 
-import ru.fivefourtyfive.wikimapper.data.repository.abstraction.RemoteDataSource
+import ru.fivefourtyfive.wikimapper.domain.interactor.GetArea
 import javax.inject.Inject
 
-class AreaRepository @Inject constructor(private val remoteDataSource: RemoteDataSource) {
+class AreaRepository @Inject constructor(private val getArea: GetArea) {
 
     suspend fun getArea(latMin: Double, lonMin: Double, latMax: Double, lonMax: Double) =
-        remoteDataSource.getArea(latMin, lonMin, latMax, lonMax)
+        getArea.execute(latMin, lonMin, latMax, lonMax)
 
 }

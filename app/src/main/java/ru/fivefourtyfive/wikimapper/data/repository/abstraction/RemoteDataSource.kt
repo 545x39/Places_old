@@ -1,11 +1,10 @@
 package ru.fivefourtyfive.wikimapper.data.repository.abstraction
 
-import kotlinx.coroutines.flow.Flow
 import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.DataBlock
 import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Parameters
 import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Value
-import ru.fivefourtyfive.wikimapper.domain.datastate.AreaDataState
-import ru.fivefourtyfive.wikimapper.domain.datastate.PlaceDetailsDataState
+import ru.fivefourtyfive.wikimapper.domain.entity.Area
+import ru.fivefourtyfive.wikimapper.domain.entity.Place
 
 interface RemoteDataSource {
 
@@ -17,7 +16,7 @@ interface RemoteDataSource {
             DataBlock.GEOMETRY,
             DataBlock.LOCATION
         )
-    ): Flow<PlaceDetailsDataState>
+    ): Place
 
     suspend fun getArea(
         latMin: Double,
@@ -27,7 +26,7 @@ interface RemoteDataSource {
         category: String? = null,
         count: Int? = 100,
         language: String? = Value.RU
-    ): Flow<AreaDataState>
+    ): Area
 
     fun getCategories(
         name: String? = null,

@@ -322,3 +322,6 @@ org.wikimapia.android.tiles.base.WMBaseKey
 Класс
 org.wikimapia.android.tiles.WMTileTools
 содержит метод для конвертации кординаты в номер тайла викимапии, а также расчёт соотношения полигона к видимой области карты.
+
+------
+JD-GUI

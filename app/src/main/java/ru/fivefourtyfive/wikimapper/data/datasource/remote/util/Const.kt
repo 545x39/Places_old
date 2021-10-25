@@ -62,7 +62,15 @@ Main block fields:
 object DataBlock {
     const val MAIN              = "main"
     const val GEOMETRY          = "geometry"
+    const val EDIT              = "edit"
     const val LOCATION          = "location"
+    const val ATTACHED          = "attached"
     const val PHOTOS            = "photos"
     const val COMMENTS          = "comments"
+    const val TRANSLATE         = "translate"
+    const val SIMILAR_OBJECTS   = "similar_places"
+    const val NEAREST_OBJECTS   = "nearest_places"
+    const val NEAREST_COMMENTS  = "nearest_comments"
+    const val NEAREST_STREETS   = "nearest_streets"
+    const val NEAREST_HOTELS    = "nearest_hotels"
 }

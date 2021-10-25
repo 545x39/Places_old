@@ -18,18 +18,10 @@ import javax.inject.Inject
 
 class RetrofitDataSource @Inject constructor(private val api: Api) : RemoteDataSource {
 
-    override suspend fun getPlace(id: Int, dataBlocks: String?) = flow {
-        emit(PlaceDetailsDataState.Loading)
-        api.getPlace(
-            id = id,
-            dataBlocks = dataBlocks
-        ).apply {
-            when (debugInfo) {
-                null -> emit(PlaceDetailsDataState.Success(PlaceDescriptionDTO(this)))
-                else -> emit(PlaceDetailsDataState.Error(message = debugInfo?.message ?: ""))
-            }
-        }
-    }.flowOn(IO)
+    override suspend fun getPlace(id: Int, dataBlocks: String?) = api.getPlace(
+        id = id,
+        dataBlocks = dataBlocks
+    )
 
     override suspend fun getArea(
         latMin: Double,
@@ -39,40 +31,12 @@ class RetrofitDataSource @Inject constructor(private val api: Api) : RemoteDataS
         category: String?,
         count: Int?,
         language: String?
-    ) = flow {
-        emit(AreaDataState.Loading)
-        api.getArea(
-            boundingBox = Parameters.add(latMin, lonMin, latMax, lonMax),
-            category = category,
-            count = count,
-            language = language
-        ).apply {
-            when (debugInfo) {
-                null -> emit(AreaDataState.Success(AreaDTO(this)))
-                else -> emit(AreaDataState.Error(message = debugInfo?.message ?: ""))
-            }
-        }
-    }.flowOn(IO)
-
-    suspend fun getPlace2(id: Int, dataBlocks: String?) = api.getPlace(
-        id = id,
-        dataBlocks = dataBlocks
-    )
-
-    suspend fun getArea2(
-        latMin: Double,
-        lonMin: Double,
-        latMax: Double,
-        lonMax: Double,
-        category: String?,
-        count: Int?,
-        language: String?
     ) = api.getArea(
-            boundingBox = Parameters.add(latMin, lonMin, latMax, lonMax),
-            category = category,
-            count = count,
-            language = language
-        )
+        boundingBox = Parameters.add(latMin, lonMin, latMax, lonMax),
+        category = category,
+        count = count,
+        language = language
+    )
 
     override fun getCategories(name: String?, page: Int?, count: Int?, language: String?) {
         api.getCategories(name = name, page = page, count = count, language = language)
