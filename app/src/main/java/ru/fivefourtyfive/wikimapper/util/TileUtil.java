@@ -1,8 +1,5 @@
 package ru.fivefourtyfive.wikimapper.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class TileUtil {
 
     /*
@@ -62,11 +59,12 @@ public class TileUtil {
     }
 
      */
-    public static double limitVal(double paramDouble1, double paramDouble2) {
-        if (paramDouble1 > 0.0D) return Math.min(paramDouble1, paramDouble2);
-        double d = paramDouble1;
-        if (paramDouble1 < -paramDouble2)
-            d = -paramDouble2;
+
+    public static double limitVal(double value1, double value2) {
+        if (value1 > 0.0D) return Math.min(value1, value2);
+        double d = value1;
+        if (value1 < -value2)
+            d = -value2;
         return d;
     }
 
@@ -94,27 +92,27 @@ public class TileUtil {
     }
 
     public static class CGPoint {
-        public double x;
 
+        public double x;
         public double y;
 
-        public CGPoint(double paramDouble1, double paramDouble2) {
-            this.x = paramDouble1;
-            this.y = paramDouble2;
+        public CGPoint(double x, double y) {
+            this.x = x;
+            this.y = y;
         }
     }
 
     public static class CommonDegRad {
-        public static final double kDegToRad = 0.017453292519943295D;
 
-        public static final double kRadToDeg = 57.29577951308232D;
+        public static final double degToRad = 0.017453292519943295D;
+        public static final double radToDeg = 57.29577951308232D;
 
         public static double degToRad(double paramDouble) {
-            return kDegToRad * paramDouble;
+            return degToRad * paramDouble;
         }
 
         public static double radToDeg(double paramDouble) {
-            return kRadToDeg * paramDouble;
+            return radToDeg * paramDouble;
         }
     }
 }
