@@ -5,6 +5,7 @@ import ru.fivefourtyfive.wikimapper.domain.entity.*
 
 object FakeData {
 
+    /** https://api.wikimapia.org/?key=example&function=place.getbyid&id=18307319&format=json&=&language=ru&data_blocks=main,comments,photos,location,geometry */
     fun getFort() = Place(
         id = 18307319,
         languageIso = RU,
@@ -101,9 +102,39 @@ object FakeData {
         parentId = 0,
         x = 293234754, // /10_000_000
         y = 599717006,
-        square = 21222.0
+        square = 21222.0,
+        polygon = listOf(
+            PolyPoint(29.2981339, 59.9720664),
+            PolyPoint(29.3089485, 59.9698758),
+            PolyPoint(29.3146992, 59.9702195),
+            PolyPoint(29.3197632, 59.9656231),
+            PolyPoint(29.3236256, 59.9651075),
+            PolyPoint(29.329977, 59.9648927),
+            PolyPoint(29.3455124, 59.9720664),
+            PolyPoint(29.3488169, 59.9746864),
+            PolyPoint(29.3459845, 59.9754809),
+            PolyPoint(29.3424654, 59.9765975),
+            PolyPoint(29.3416929, 59.9771129),
+            PolyPoint(29.3395472, 59.9775852),
+            PolyPoint(29.3371868, 59.9775208),
+            PolyPoint(29.3361568, 59.9775852),
+            PolyPoint(29.3349552, 59.9780362),
+            PolyPoint(29.3334532, 59.9781435),
+            PolyPoint(29.3318653, 59.9780147),
+            PolyPoint(29.3297625, 59.9778429),
+            PolyPoint(29.3276596, 59.9775208),
+            PolyPoint(29.3253851, 59.9772846),
+            PolyPoint(29.3225098, 59.9768981),
+            PolyPoint(29.3185616, 59.9764472),
+            PolyPoint(29.3123817, 59.9762539),
+            PolyPoint(29.310708, 59.9764687),
+            PolyPoint(29.3078756, 59.977027),
+            PolyPoint(29.3057728, 59.9776711),
+            PolyPoint(29.3037987, 59.9785085)
+        )
     )
 
+    /** https://api.wikimapia.org/?key=example&function=place.getbyid&id=11867376&format=json&=&language=ru&data_blocks=main,comments,photos,location,geometry */
     fun getDefenceLine() = Place(
         id = 11867376,
         objectType = 1,
@@ -197,6 +228,52 @@ object FakeData {
                 moderatorName = null,
                 isDeleted = false
             )
+        ),
+        polygon = listOf(
+            PolyPoint(29.331758, 59.966697),
+            PolyPoint(29.329741, 59.9660204),
+            PolyPoint(29.3267369, 59.96645),
+            PolyPoint(29.3242693, 59.9678354),
+            PolyPoint(29.3238831, 59.9683294),
+            PolyPoint(29.3232608, 59.9689738),
+            PolyPoint(29.3212652, 59.9697255),
+            PolyPoint(29.3192592, 59.9710133),
+            PolyPoint(29.3189373, 59.9715502),
+            PolyPoint(29.3187654, 59.9721577),
+            PolyPoint(29.3178859, 59.9727206),
+            PolyPoint(29.3194631, 59.9733488),
+            PolyPoint(29.3190446, 59.9747231),
+            PolyPoint(29.3190125, 59.9767631),
+            PolyPoint(29.3172314, 59.976645),
+            PolyPoint(29.3162658, 59.9765806),
+            PolyPoint(29.3160084, 59.9752922),
+            PolyPoint(29.3160513, 59.9740896),
+            PolyPoint(29.3169954, 59.9731125),
+            PolyPoint(29.3169096, 59.9726078),
+            PolyPoint(29.3182829, 59.9704817),
+            PolyPoint(29.3182183, 59.9701121),
+            PolyPoint(29.3194628, 59.9691671),
+            PolyPoint(29.320836, 59.9677065),
+            PolyPoint(29.3235182, 59.9658056),
+            PolyPoint(29.3260717, 59.9653653),
+            PolyPoint(29.3314793, 59.965488),
+            PolyPoint(29.3354275, 59.9671956),
+            PolyPoint(29.3402341, 59.969075),
+            PolyPoint(29.343281, 59.9694293),
+            PolyPoint(29.3473795, 59.9702133),
+            PolyPoint(29.3516281, 59.970879),
+            PolyPoint(29.3541815, 59.9714804),
+            PolyPoint(29.3563488, 59.9722212),
+            PolyPoint(29.3567136, 59.9729085),
+            PolyPoint(29.3567564, 59.9730695),
+            PolyPoint(29.3511775, 59.9734132),
+            PolyPoint(29.3501475, 59.973295),
+            PolyPoint(29.3492248, 59.9723179),
+            PolyPoint(29.347358, 59.970922),
+            PolyPoint(29.3430665, 59.9705998),
+            PolyPoint(29.3391612, 59.9702133),
+            PolyPoint(29.3360069, 59.9691823),
+            PolyPoint(29.3337324, 59.9678614)
         )
     )
 
