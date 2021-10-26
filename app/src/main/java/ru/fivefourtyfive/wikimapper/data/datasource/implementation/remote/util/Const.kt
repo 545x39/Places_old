@@ -31,11 +31,12 @@ object Function {
 }
 
 object Value {
-    const val API_KEY           = "F29DE311-79E27525-6803266D-365D72DD-2A145EEB-9C8F7110-26ACA826-139C9859"//"example"
-    const val JSON              = "json"
-    const val RU                = "ru"
-    const val EN                = "en"
-    const val GZIP              = "gzip"
+    const val API_KEY               = "F29DE311-79E27525-6803266D-365D72DD-2A145EEB-9C8F7110-26ACA826-139C9859"//"example"
+    const val JSON                  = "json"
+    const val RU                    = "ru"
+    const val MAX_PLACES_PER_PAGE   = 100
+    const val EN                    = "en"
+    const val GZIP                  = "gzip"
     ////
     const val DEFAULT_BOX       = "35.2886,13.9666,C35.5152,14.1093"//"37.437981, 55.634283"
 }

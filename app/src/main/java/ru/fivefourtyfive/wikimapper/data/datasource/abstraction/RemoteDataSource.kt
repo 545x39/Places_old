@@ -24,14 +24,14 @@ interface RemoteDataSource {
         latMax: Double,
         lonMax: Double,
         category: String? = null,
-        count: Int? = 100,
+        count: Int? = Value.MAX_PLACES_PER_PAGE,
         language: String? = Value.RU
     ): Area
 
     fun getCategories(
         name: String? = null,
         page: Int? = 1,
-        count: Int? = 100,
+        count: Int? = Value.MAX_PLACES_PER_PAGE,
         language: String? = Value.RU,
     )
 
