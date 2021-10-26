@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 data class Comment(
     @SerializedName("place_id")
     @Expose
-    val placeId: String,
+    val placeId: Int,
     @SerializedName("num")
     @Expose
     val num: Int,

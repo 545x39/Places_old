@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.wikimapper.data.datasource.remote.util;
+package ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util;
 
 public class PolyPoint {
         private double x;

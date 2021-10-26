@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.wikimapper.data.repository.implementation
+package ru.fivefourtyfive.wikimapper.data.repository
 
 import ru.fivefourtyfive.wikimapper.domain.interactor.GetArea
 import javax.inject.Inject

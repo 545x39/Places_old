@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import dagger.Component
 import ru.fivefourtyfive.wikimapper.Places
-import ru.fivefourtyfive.wikimapper.data.repository.implementation.AreaRepository
-import ru.fivefourtyfive.wikimapper.data.repository.implementation.PlaceRepository
+import ru.fivefourtyfive.wikimapper.data.repository.AreaRepository
+import ru.fivefourtyfive.wikimapper.data.repository.PlaceRepository
 import ru.fivefourtyfive.wikimapper.di.module.AppModule
 import ru.fivefourtyfive.wikimapper.di.module.DataSourceModule
 import ru.fivefourtyfive.wikimapper.di.module.NetworkModule

@@ -2,12 +2,8 @@ package ru.fivefourtyfive.objectdetails.presentation.viewmodel
 
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Value.RU
 import ru.fivefourtyfive.wikimapper.domain.dto.CommentDTO
 import ru.fivefourtyfive.wikimapper.domain.dto.PhotoDTO
-import ru.fivefourtyfive.wikimapper.domain.entity.Comment
-import ru.fivefourtyfive.wikimapper.domain.entity.Photo
-import ru.fivefourtyfive.wikimapper.domain.entity.Tag
 import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.ViewState
 
 sealed class PlaceDetailsViewState : ViewState {

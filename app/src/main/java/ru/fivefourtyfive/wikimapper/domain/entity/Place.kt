@@ -74,9 +74,10 @@ data class Place(
     @SerializedName("y")
     @Expose
     val y: Int? = null,
+    /** Площадь объекта */
     @SerializedName("pl")
     @Expose
-    val pl: Double? = null,
+    val square: Double? = null,
     @SerializedName("is_protected")
     @Expose(deserialize = false)
     val isProtected: Boolean? = null,

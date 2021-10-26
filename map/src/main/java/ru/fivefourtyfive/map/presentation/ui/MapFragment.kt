@@ -34,7 +34,7 @@ import ru.fivefourtyfive.map.presentation.viewmodel.MapEvent
 import ru.fivefourtyfive.map.presentation.viewmodel.MapFragmentViewModel
 import ru.fivefourtyfive.map.presentation.viewmodel.MapViewState
 import ru.fivefourtyfive.wikimapper.Places
-import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Parameter.ID
+import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Parameter.ID
 import ru.fivefourtyfive.wikimapper.di.factory.ViewModelProviderFactory
 import ru.fivefourtyfive.wikimapper.presentation.ui.MainActivity
 import ru.fivefourtyfive.wikimapper.presentation.ui.NavFragment

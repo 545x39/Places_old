@@ -5,8 +5,29 @@ http://www.jsonschema2pojo.org/
 Пример запроса:
 http://api.wikimapia.org/?key=example&function=box&coordsby=bbox&bbox=35.2886%2C13.9666%2C35.5152%2C14.1093&category=203&count=100&format=json
 Так - НЕ РАБОТАЕТ, возвращает пустой объект
+
+-------------------
+Запрос объекта:
 http://api.wikimapia.org/?key=example&function=place.getbyid&id=55&format=json&=&language=ru&data_blocks=main,comments,photos,location
 
+У объекта есть поля "x" и "y". Это координаты ЦЕНТРА объекта, они приходят с сервера в Int, потому что для хранения координат в SQLite
+реальные значения координат умножаются на 10_000_000.
+Следовательно, чтобы получить реальные значения, их нужно разделить на 10_000_000:
+-------
+Хранение координат в базе в виде Int-ов сэкономит место и улучшит производительность при поиске.
+-------
+        x = 293234754, // /10_000_000 -> 29.3234754
+        y = 599717006, // /10_000_000 -> 59.9717006
+        pl = 21222.0
+    )
+//29.3234754,59.9717006
+-------
+pl - вероятно, площадь в метрах (???).
+Для подстановки в карту координаты должны быть не x,y, а y,x. Пример для гугла:
+https://www.google.com/maps/@59.9717006,29.3234754,14z/data=!5m1!1e1?hl=ru-RU
+В OSM, вероятнее всего, аналогично.
+
+-------------------
 ОБЪЕКТЫ
     http://api.wikimapia.org/?key=example&function=box&coordsby=bbox&bbox=35.2886%2C13.9666%2C35.5152%2C14.1093&category=203&count=100&format=json
 
@@ -323,5 +344,16 @@ org.wikimapia.android.tiles.base.WMBaseKey
 org.wikimapia.android.tiles.WMTileTools
 содержит метод для конвертации кординаты в номер тайла викимапии, а также расчёт соотношения полигона к видимой области карты.
 
-------
+-------
 JD-GUI
+
+-------
+IP-адрес в виде Int конвертируется:
+https://mkyong.com/java/java-convert-ip-address-to-decimal-number/
+-----
+И есть возможность получать месторасположение по IP. Есть API, не требующий ключа.
+https://api.iplocation.net/
+
+-------
+Обработка ошибок сети в retrofit:
+https://stackoverflow.com/questions/58523119/exception-handling-of-network-errors-retrofit

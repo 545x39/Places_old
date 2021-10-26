@@ -1,18 +1,11 @@
-package ru.fivefourtyfive.wikimapper.data.datasource.remote
+package ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote
 
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Parameters
-import ru.fivefourtyfive.wikimapper.data.repository.abstraction.RemoteDataSource
-import ru.fivefourtyfive.wikimapper.domain.datastate.AreaDataState
-import ru.fivefourtyfive.wikimapper.domain.datastate.PlaceDetailsDataState
-import ru.fivefourtyfive.wikimapper.domain.dto.AreaDTO
-import ru.fivefourtyfive.wikimapper.domain.dto.PlaceDescriptionDTO
+import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Parameters
+import ru.fivefourtyfive.wikimapper.data.datasource.abstraction.RemoteDataSource
 import timber.log.Timber
 import javax.inject.Inject
 

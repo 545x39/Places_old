@@ -1,8 +1,8 @@
-package ru.fivefourtyfive.wikimapper.data.repository.abstraction
+package ru.fivefourtyfive.wikimapper.data.datasource.abstraction
 
-import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.DataBlock
-import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Parameters
-import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Value
+import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.DataBlock
+import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Parameters
+import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Value
 import ru.fivefourtyfive.wikimapper.domain.entity.Area
 import ru.fivefourtyfive.wikimapper.domain.entity.Place
 

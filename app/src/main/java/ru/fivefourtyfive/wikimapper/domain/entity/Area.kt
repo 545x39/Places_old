@@ -2,6 +2,7 @@ package ru.fivefourtyfive.wikimapper.domain.entity
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Value.RU
 
 data class Area(
     @SerializedName("debug")
@@ -9,20 +10,20 @@ data class Area(
     var debugInfo: DebugInfo? = null,
     @SerializedName("version")
     @Expose
-    val version: Int,
+    val version: Int? = 0,
     @SerializedName("language")
     @Expose
-    val language: String,
+    val language: String? = RU,
     @SerializedName("folder")
     @Expose
-    val places: List<Place>,
+    val places: List<Place>? = listOf(),
     @SerializedName("page")
     @Expose
-    val page: Int,
+    val page: Int? = 0,
     @SerializedName("count")
     @Expose
-    val count: Int,
+    val count: Int? = 0,
     @SerializedName("found")
     @Expose
-    val found: Int
+    val found: Int? = 0
 )

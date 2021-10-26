@@ -12,3 +12,8 @@ fun <T> Boolean.ifTrue(block: () -> T): T? = when (this) {
 }
 
 fun <T> Boolean.ifFalse(block: () -> T): T? = this.not().ifTrue(block)
+
+fun decimalIpToString(decimal: Long) = ((decimal shr 24 and 0xFF).toString() + "."
+        + (decimal shr 16 and 0xFF) + "."
+        + (decimal shr 8 and 0xFF) + "."
+        + (decimal and 0xFF))

@@ -1,14 +1,10 @@
-package ru.fivefourtyfive.wikimapper.data.datasource.remote.util;
-
-import androidx.annotation.Nullable;
+package ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
 public class Parser {
 

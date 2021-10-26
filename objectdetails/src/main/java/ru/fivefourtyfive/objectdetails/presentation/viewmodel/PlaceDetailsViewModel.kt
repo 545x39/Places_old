@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import ru.fivefourtyfive.wikimapper.data.repository.implementation.PlaceRepository
+import ru.fivefourtyfive.wikimapper.data.repository.PlaceRepository
 import ru.fivefourtyfive.wikimapper.domain.datastate.PlaceDetailsDataState
 import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.EventHandler
 import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.Reducer

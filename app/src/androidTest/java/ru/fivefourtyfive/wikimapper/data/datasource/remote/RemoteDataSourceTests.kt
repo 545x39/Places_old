@@ -1,11 +1,11 @@
 package ru.fivefourtyfive.wikimapper.data.datasource.remote
 
-import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import junit.framework.TestCase.assertTrue
 import org.junit.Before
 import org.junit.runner.RunWith
 import ru.fivefourtyfive.wikimapper.BaseTest
+import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.Api
 import ru.fivefourtyfive.wikimapper.di.TestAppComponent
 import javax.inject.Inject
 
