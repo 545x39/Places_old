@@ -138,8 +138,15 @@ class PlaceDetailsFragment : Fragment(), Renderer<PlaceDetailsViewState> {
             R.id.action_share_coordinates -> shareCoordinates()
             R.id.action_show_on_website -> showOnWebsite()
             R.id.action_slide_show -> switchSlideShow()
+            //TODO remove
+            R.id.action_show_on_map -> test()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    //TODO remove
+    private fun test(){
+
     }
 
     override fun render(viewState: PlaceDetailsViewState) {

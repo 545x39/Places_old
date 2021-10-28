@@ -35,6 +35,7 @@ import ru.fivefourtyfive.map.presentation.viewmodel.MapFragmentViewModel
 import ru.fivefourtyfive.map.presentation.viewmodel.MapViewState
 import ru.fivefourtyfive.wikimapper.Places
 import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Parameter.ID
+import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.tiles.TileUtil
 import ru.fivefourtyfive.wikimapper.di.factory.ViewModelProviderFactory
 import ru.fivefourtyfive.wikimapper.presentation.ui.MainActivity
 import ru.fivefourtyfive.wikimapper.presentation.ui.NavFragment
@@ -42,6 +43,7 @@ import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.EventDispatcher
 import ru.fivefourtyfive.wikimapper.util.PermissionsUtil.isPermissionGranted
 import ru.fivefourtyfive.wikimapper.util.ifFalse
 import ru.fivefourtyfive.wikimapper.util.ifTrue
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.math.roundToLong
 import ru.fivefourtyfive.wikimapper.R as appR
@@ -365,18 +367,29 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
     private fun getArea(force: Boolean = false): Boolean {
 
         fun isFarEnough(point1: IGeoPoint, point2: IGeoPoint) = getDistance(point1, point2) > 5
+        //TODO remove it:
+        mapView.let {
+            val list = TileUtil.wikimapiaTileCodesExtended(
+                it.boundingBox.latSouth,
 
+                it.boundingBox.lonEast,
+                //
+                it.boundingBox.latNorth,
+                it.boundingBox.lonWest,
+                mapView.zoomLevel
+            )
+            Timber.e("TILE LIST: $list")
+        }
         with(viewModel) {
             mapView.let {
                 (force || (wikimapiaOverlaysEnabled() && isFarEnough(
                     it.mapCenter, getLastLocation()
                 ))).ifTrue {
-                    getArea(
+                    dispatchEvent(MapEvent.GetAreaEvent(
                         it.boundingBox.lonWest,
                         it.boundingBox.latSouth,
                         it.boundingBox.lonEast,
-                        it.boundingBox.latNorth
-                    )
+                        it.boundingBox.latNorth))
                 }
             }
         }

@@ -67,12 +67,13 @@ class MapFragmentViewModel @Inject constructor(
         GeoPoint(settings.getLastLocation().first, settings.getLastLocation().second)
 
     fun setLastLocation(x: Double, y: Double): MapFragmentViewModel =
-        this.apply { settings.setLastLocation(x, y)}
+        this.apply { settings.setLastLocation(x, y) }
 
     fun getLastZoom() = settings.getLastZoom()
 
     fun setLastZoom(zoom: Double): MapFragmentViewModel =
-        this.apply { settings.setLastZoom(zoom)
+        this.apply {
+            settings.setLastZoom(zoom)
             Timber.e("=================== ZOOM SET TO: $zoom")
         }
 
@@ -106,7 +107,7 @@ class MapFragmentViewModel @Inject constructor(
     fun getTileSource() =
         if (settings.getMapMode() == MapMode.SATELLITE) satelliteTileSource else schemeTileSource
 
-    fun getArea(
+    private fun getArea(
         latMin: Double,
         lonMin: Double,
         latMax: Double,
@@ -137,9 +138,7 @@ class MapFragmentViewModel @Inject constructor(
 
     override fun handleEvent(event: MapEvent) {
         when (event) {
-            is MapEvent.GetAreaEvent -> {
-                event.apply { getArea(latMin, lonMin, latMax, lonMax) }
-            }
+            is MapEvent.GetAreaEvent -> event.apply { getArea(latMin, lonMin, latMax, lonMax) }
             is MapEvent.SwitchMapModeEvent -> settings.setMapMode(event.mode)
             is MapEvent.SwitchWikimapiaOverlayEvent -> settings.setWikimapiaOverlays(event.enable)
             is MapEvent.SwitchTransportationOverlayEvent -> settings.setTransportationOverlay(

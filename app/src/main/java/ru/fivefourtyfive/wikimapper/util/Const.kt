@@ -7,6 +7,8 @@ import android.Manifest.permission.*
 object Network {
     const val ROOT_URL                      = "https://wikimapia.org"
     const val API_URL                       = "http://api.wikimapia.org/"
+    const val WIKIMAPIA_POLYGON_PATH        = "/z1/itiles/"
+
     val WIKIMEDIA_TILE_SERVERS              = arrayOf(
                                                "https://a.tiles.wmflabs.org/osm-no-labels/",
                                                "https://b.tiles.wmflabs.org/osm-no-labels/",
@@ -23,6 +25,7 @@ object Network {
                                                 "http://server.arcgisonline.com/",
                                                 "http://services.arcgisonline.com/"
                                             )
+
     const val CONNECT_TIMEOUT               = 120L
     const val READ_TIMEOUT                  = 120L
 }

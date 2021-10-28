@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ru.fivefourtyfive.wikimapper.domain.entity.PolygonPoint;
+
 public class Parser {
 
     public static final String DELIMETR_POLYGONS = "|";
@@ -14,8 +16,8 @@ public class Parser {
 
 //    private static final Logger logger = LoggerFactory.getLogger(Parser.class);
 
-    public static List<PolyPoint> newDecodedBinaryPolygon(String paramString) {
-        ArrayList<PolyPoint> arrayList = new ArrayList();
+    public static List<PolygonPoint> newDecodedBinaryPolygon(String paramString) {
+        ArrayList<PolygonPoint> arrayList = new ArrayList();
         int j = paramString.length();
         int i = 0;
         byte[] arrayOfByte = paramString.getBytes(Charset.forName("US-ASCII"));
@@ -67,7 +69,7 @@ public class Parser {
                     } else {
                         d1 = 1000000.0D;
                     }
-                    arrayList.add(new PolyPoint(d / d1, d2 / d1));
+                    arrayList.add(new PolygonPoint(d / d1, d2 / d1));
                     d1 = d;
                     continue label35;
                 }

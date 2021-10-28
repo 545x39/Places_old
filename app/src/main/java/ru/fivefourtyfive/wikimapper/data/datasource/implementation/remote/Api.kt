@@ -6,6 +6,7 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Headers
+import retrofit2.http.Path
 import retrofit2.http.Query
 import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Function.CATEGORY_GET_ALL
 import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Function.OBJECT_GET_BY_BOX
@@ -34,6 +35,7 @@ import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.V
 import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Value.RU
 import ru.fivefourtyfive.wikimapper.domain.entity.Area
 import ru.fivefourtyfive.wikimapper.domain.entity.Place
+import ru.fivefourtyfive.wikimapper.util.Network.WIKIMAPIA_POLYGON_PATH
 
 interface Api {
 
@@ -56,7 +58,6 @@ interface Api {
     @GET(".")
     @Headers(
         "Content-Type: Application/Raw",
-        "Content-Type: Application/Raw",
         "Accept: application/json;charset=utf-8",
         "Cache-Control: max-age=640000"
     )
@@ -75,7 +76,6 @@ interface Api {
     @GET(".")
     @Headers(
         "Content-Type: Application/Raw",
-        "Content-Type: Application/Raw",
         "Accept: application/json;charset=utf-8",
         "Cache-Control: max-age=640000"
     )
@@ -93,7 +93,6 @@ interface Api {
     @GET(".")
     @Headers(
         "Content-Type: Application/Raw",
-        "Content-Type: Application/Raw",
         "Accept: application/json;charset=utf-8",
         "Cache-Control: max-age=640000"
     )
@@ -108,5 +107,14 @@ interface Api {
         @Query(value = LANGUAGE) language: String? = RU,
         @Query(value = PACK) pack: String? = GZIP,
         @Query(value = FORMAT) format: String = JSON
+    ): Call<ResponseBody>
+
+    @GET("$WIKIMAPIA_POLYGON_PATH{codes}.xy")
+    @Headers(
+        "Content-Type: Application/Raw",
+        "Cache-Control: max-age=640000"
+    )
+    fun getArea(
+        @Path("codes") codes: String
     ): Call<ResponseBody>
 }
