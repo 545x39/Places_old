@@ -33,8 +33,9 @@ import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.V
 import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Value.GZIP
 import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Value.JSON
 import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Value.RU
-import ru.fivefourtyfive.wikimapper.domain.entity.Area
+import ru.fivefourtyfive.wikimapper.domain.entity.Places
 import ru.fivefourtyfive.wikimapper.domain.entity.Place
+import ru.fivefourtyfive.wikimapper.util.Network.ROOT_URL
 import ru.fivefourtyfive.wikimapper.util.Network.WIKIMAPIA_POLYGON_PATH
 
 interface Api {
@@ -72,7 +73,7 @@ interface Api {
         @Query(value = LANGUAGE) language: String? = RU,
         @Query(value = PACK) pack: String? = GZIP,
         @Query(value = FORMAT) format: String = JSON,
-    ): Area
+    ): Places
 
     @GET(".")
     @Headers(
@@ -103,14 +104,15 @@ interface Api {
         @Query(value = QUERY) query: String,
         @Query(value = LATITUDE) latitude: Float,
         @Query(value = LONGITUDE) longitude: Float,
+        @Query(value = CATEGORY) category: String? = null,
         @Query(value = PAGE) page: Int? = 1,
         @Query(value = COUNT) count: Int? = 100,
         @Query(value = LANGUAGE) language: String? = RU,
         @Query(value = PACK) pack: String? = GZIP,
         @Query(value = FORMAT) format: String = JSON
-    ): Call<ResponseBody>
+    ): Places
 
-    @GET("$WIKIMAPIA_POLYGON_PATH{codes}.xy")
+    @GET("$ROOT_URL$WIKIMAPIA_POLYGON_PATH{codes}")
     @Headers(
         "Content-Type: Application/Raw",
         "Cache-Control: max-age=640000"

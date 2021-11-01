@@ -96,4 +96,8 @@ data class Place(
 //    @SerializedName("edit_info")
 //    @Expose
 //    val editInfo: EditInfo,
+    /** Приходит только в поиске. */
+    @SerializedName("distance")
+    @Expose
+    val distance: Int? = null,
 )

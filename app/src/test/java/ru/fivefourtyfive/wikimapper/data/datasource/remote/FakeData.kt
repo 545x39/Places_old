@@ -277,9 +277,25 @@ object FakeData {
         )
     )
 
-    fun getArea() = Area(places = listOf(getFort(), getDefenceLine()))
+    fun getArea(
+        lonMin: Double = 0.0,
+        latMin: Double = 0.0,
+        lonMax: Double = 0.0,
+        latMax: Double = 0.0,
+        category: String? = "",
+        page: Int? = 1,
+        count: Int? = 100,
+        language: String? = RU
+    ) = Places(
+        places = listOf(getFort(), getDefenceLine()),
+        version = "1.0",
+        language = RU,
+        page = 1,
+        count = 2,
+        found = 2
+    )
 
     fun getPlaceError() = Place(debugInfo = DebugInfo(0, "ERROR: Place not found!"))
 
-    fun getAreaError() = Area(debugInfo = DebugInfo(0, "TEST AREA ERROR"))
+    fun onAreaError() = Places(debugInfo = DebugInfo(0, "ERROR: wrong request"))
 }

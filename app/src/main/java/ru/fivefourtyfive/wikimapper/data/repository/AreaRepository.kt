@@ -19,5 +19,4 @@ class AreaRepository @Inject constructor(private val getArea: GetArea) {
             latMax = latMax,
             page = page
         )
-
 }

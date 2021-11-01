@@ -46,9 +46,7 @@ class MapFragmentViewModel @Inject constructor(
     val wikimapiaOverlay: TilesOverlay,
     val myLocation: MyLocationNewOverlay,
     val gridOverlay: LatLonGridlineOverlay2,
-    val folder: FolderOverlay,
-//    val places: ArrayList<PlacePolygon>,
-//    val labels: ArrayList<IGeoPoint>
+    val folder: FolderOverlay
 ) : ViewModel(), Reducer<AreaDataState, MapViewState>, EventHandler<MapEvent> {
 
     private val _liveData = MutableLiveData<MapViewState>(MapViewState.Loading)

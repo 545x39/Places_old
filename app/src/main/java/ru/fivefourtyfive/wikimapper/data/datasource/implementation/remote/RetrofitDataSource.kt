@@ -49,19 +49,21 @@ class RetrofitDataSource @Inject constructor(private val api: Api) : RemoteDataS
             })
     }
 
-    override fun search(query: String, latitude: Float, longitude: Float) {
-        api.search(query = query, latitude = latitude, longitude = longitude)
-            .enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(
-                    call: Call<ResponseBody>,
-                    response: Response<ResponseBody>
-                ) {
-                    Timber.e("RESPONSE OK!!!")
-                }
-
-                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    Timber.e("RESPONSE FAILED!!!")
-                }
-            })
-    }
+    override fun search(
+        query: String,
+        latitude: Float,
+        longitude: Float,
+        category: String?,
+        page: Int?,
+        count: Int?,
+        language: String?
+    ) = api.search(
+        query = query,
+        latitude = latitude,
+        longitude = longitude,
+        category = category,
+        page = page,
+        count = count,
+        language = language
+    )
 }

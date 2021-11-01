@@ -3,7 +3,7 @@ package ru.fivefourtyfive.wikimapper.data.datasource.abstraction
 import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.DataBlock
 import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Parameters
 import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Value
-import ru.fivefourtyfive.wikimapper.domain.entity.Area
+import ru.fivefourtyfive.wikimapper.domain.entity.Places
 import ru.fivefourtyfive.wikimapper.domain.entity.Place
 
 interface RemoteDataSource {
@@ -27,7 +27,7 @@ interface RemoteDataSource {
         page: Int? = 1,
         count: Int? = Value.MAX_OBJECTS_PER_PAGE,
         language: String? = Value.RU
-    ): Area
+    ): Places
 
     fun getCategories(
         name: String? = null,
@@ -36,5 +36,11 @@ interface RemoteDataSource {
         language: String? = Value.RU,
     )
 
-    fun search(query: String, latitude: Float, longitude: Float)
+    fun search(query: String,
+               latitude: Float,
+               longitude: Float,
+               category: String? = null,
+               page: Int? = 1,
+               count: Int? = Value.MAX_OBJECTS_PER_PAGE,
+               language: String? = Value.RU): Places
 }

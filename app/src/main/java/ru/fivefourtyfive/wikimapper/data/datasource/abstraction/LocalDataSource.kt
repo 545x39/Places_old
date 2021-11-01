@@ -1,6 +1,6 @@
 package ru.fivefourtyfive.wikimapper.data.datasource.abstraction
 
-import ru.fivefourtyfive.wikimapper.domain.entity.Area
+import ru.fivefourtyfive.wikimapper.domain.entity.Places
 import ru.fivefourtyfive.wikimapper.domain.entity.Place
 
 interface LocalDataSource {
@@ -15,5 +15,5 @@ interface LocalDataSource {
                 lonMax: Double,
                 category: String?,
                 count: Int?,
-                language: String?): Area
+                language: String?): Places
 }

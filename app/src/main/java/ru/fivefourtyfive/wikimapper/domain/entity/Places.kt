@@ -4,13 +4,13 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Value.RU
 
-data class Area(
+data class Places(
     @SerializedName("debug")
     @Expose
     var debugInfo: DebugInfo? = null,
     @SerializedName("version")
     @Expose
-    val version: Int? = 0,
+    val version: String? = "",
     @SerializedName("language")
     @Expose
     val language: String? = RU,
@@ -19,7 +19,7 @@ data class Area(
     val places: List<Place>? = listOf(),
     @SerializedName("page")
     @Expose
-    val page: Int? = 0,
+    val page: Int? = 1,
     @SerializedName("count")
     @Expose
     val count: Int? = 0,
