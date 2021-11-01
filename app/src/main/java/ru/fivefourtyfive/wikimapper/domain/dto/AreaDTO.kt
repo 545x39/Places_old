@@ -12,6 +12,8 @@ class AreaDTO(area: Area) {
 
     val places: List<MapPlaceDTO> = getPlaces(area.places)
 
+    val found: Int = area.found ?: 0
+
     private fun getPlaces(places: List<Place>?): List<MapPlaceDTO> {
         return arrayListOf<MapPlaceDTO>().apply { places?.map { add(MapPlaceDTO(it)) } }
     }

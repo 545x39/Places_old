@@ -45,6 +45,7 @@ import ru.fivefourtyfive.wikimapper.util.ifFalse
 import ru.fivefourtyfive.wikimapper.util.ifTrue
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.math.roundToInt
 import kotlin.math.roundToLong
 import ru.fivefourtyfive.wikimapper.R as appR
 
@@ -371,9 +372,10 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         fun getWMTileDescription() {
             mapView.apply {
                 val list = TileUtils.wikimapiaTileCodes(
-                    boundingBox,
+//                    boundingBox,
+                    mapCenter,
 //                    kotlin.math.max(0.0, (zoomLevelDouble - 1.0)).toInt()
-                    zoomLevelDouble.toInt()
+                    zoomLevelDouble.roundToInt()
                 )
                 list.map { code ->
                     Timber

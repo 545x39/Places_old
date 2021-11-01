@@ -24,6 +24,7 @@ interface RemoteDataSource {
         latMax: Double,
         lonMax: Double,
         category: String? = null,
+        page: Int? = 1,
         count: Int? = Value.MAX_OBJECTS_PER_PAGE,
         language: String? = Value.RU
     ): Area

@@ -67,6 +67,7 @@ interface Api {
         @Query(value = COORDS_BY) coordsBy: String = BBOX,
         @Query(value = BBOX) boundingBox: String = DEFAULT_BOX,
         @Query(value = CATEGORY) category: String? = null,
+        @Query(value = PAGE) page: Int? = 1,
         @Query(value = COUNT) count: Int? = 100,
         @Query(value = LANGUAGE) language: String? = RU,
         @Query(value = PACK) pack: String? = GZIP,

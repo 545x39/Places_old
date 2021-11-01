@@ -17,11 +17,12 @@ class GetArea @Inject constructor(private val remoteDataSource: RemoteDataSource
         latMax: Double,
         lonMax: Double,
         category: String? = null,
+        page: Int? = 1,
         count: Int? = Value.MAX_OBJECTS_PER_PAGE,
         language: String? = Value.RU
     ) = flow {
         emit(AreaDataState.Loading)
-        remoteDataSource.getArea(latMin, lonMin, latMax, lonMax, category, count, language)
+        remoteDataSource.getArea(latMin, lonMin, latMax, lonMax, category, page, count, language)
             .apply {
                 when (debugInfo) {
                     null -> emit(AreaDataState.Success(AreaDTO(this)))

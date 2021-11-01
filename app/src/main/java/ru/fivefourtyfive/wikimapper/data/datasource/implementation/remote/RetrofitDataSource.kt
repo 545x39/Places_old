@@ -4,8 +4,8 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Parameters
 import ru.fivefourtyfive.wikimapper.data.datasource.abstraction.RemoteDataSource
+import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Parameters
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -22,11 +22,13 @@ class RetrofitDataSource @Inject constructor(private val api: Api) : RemoteDataS
         latMax: Double,
         lonMax: Double,
         category: String?,
+        page: Int?,
         count: Int?,
         language: String?
     ) = api.getArea(
         boundingBox = Parameters.add(latMin, lonMin, latMax, lonMax),
         category = category,
+        page = page,
         count = count,
         language = language
     )

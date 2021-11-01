@@ -3,6 +3,7 @@ package ru.fivefourtyfive.map.presentation.util;
 import static ru.fivefourtyfive.wikimapper.util.Network.ROOT_URL;
 import static ru.fivefourtyfive.wikimapper.util.Network.WIKIMAPIA_POLYGON_PATH;
 
+import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 
@@ -27,6 +28,14 @@ public class TileUtils {
             i++;
         }
         return url;
+    }
+
+    public static String wikimapiaTileCodeByCoordinate(IGeoPoint point, int zoom) {
+        return wikimapiaTileCodes(new BoundingBox(point.getLatitude(),point.getLongitude(), point.getLatitude(), point.getLongitude()), zoom).get(0);
+    }
+
+    public static List<String> wikimapiaTileCodes(IGeoPoint point, int zoom) {
+        return wikimapiaTileCodes(new BoundingBox(point.getLatitude(),point.getLongitude(), point.getLatitude(), point.getLongitude()), zoom);
     }
 
     public static List<String> wikimapiaTileCodes(BoundingBox boundingBox, int paramInt) {
