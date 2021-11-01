@@ -12,6 +12,8 @@ class AreaDTO(area: Area) {
 
     val places: List<MapPlaceDTO> = getPlaces(area.places)
 
+    val count: Int = area.count?: 0
+
     val found: Int = area.found ?: 0
 
     private fun getPlaces(places: List<Place>?): List<MapPlaceDTO> {

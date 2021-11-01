@@ -115,7 +115,7 @@ class MapFragmentViewModel @Inject constructor(
     ) = viewModelScope.launch {
         repository.getArea(latMin, lonMin, latMax, lonMax)
             .catch { _liveData.postValue(MapViewState.Error()) }
-            .collect { _liveData.postValue(reduce(it)) }
+            .collect { _liveData.postValue(reduce(it))}
     }
 
 
