@@ -4,10 +4,10 @@ import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.Event
 
 sealed class MapEvent : Event {
     class GetAreaEvent(
-        val latMin: Double,
-        val lonMin: Double,
-        val latMax: Double,
-        val lonMax: Double
+        val lonM: Double,
+        val latM: Double,
+        val lonMx: Double,
+        val latMx: Double
     ) : MapEvent()
     class SwitchMapModeEvent(val mode: Int): MapEvent()
     class SwitchWikimapiaOverlayEvent(val enable: Boolean): MapEvent()

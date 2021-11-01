@@ -17,16 +17,16 @@ class RetrofitDataSource @Inject constructor(private val api: Api) : RemoteDataS
     )
 
     override suspend fun getArea(
-        latMin: Double,
         lonMin: Double,
-        latMax: Double,
+        latMin: Double,
         lonMax: Double,
+        latMax: Double,
         category: String?,
         page: Int?,
         count: Int?,
         language: String?
     ) = api.getArea(
-        boundingBox = Parameters.add(latMin, lonMin, latMax, lonMax),
+        boundingBox = Parameters.add(lonMin, latMin, lonMax, latMax),
         category = category,
         page = page,
         count = count,

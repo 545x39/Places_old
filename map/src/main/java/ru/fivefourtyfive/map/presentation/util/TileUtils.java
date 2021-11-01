@@ -38,21 +38,21 @@ public class TileUtils {
         return wikimapiaTileCodes(new BoundingBox(point.getLatitude(),point.getLongitude(), point.getLatitude(), point.getLongitude()), zoom);
     }
 
-    public static List<String> wikimapiaTileCodes(BoundingBox boundingBox, int paramInt) {
-        int zoomParam = paramInt - 2;
+    public static List<String> wikimapiaTileCodes(BoundingBox box, int zoom) {
+        int zoomParam = zoom - 2;
         ArrayList<String> arrayList = new ArrayList();
-        CGPoint cGPoint2 = decimalToMercator(boundsMinPoint(boundingBox), zoomParam);
-        CGPoint cGPoint1 = decimalToMercator(boundsMaxPoint(boundingBox), zoomParam);
+        CGPoint cGPoint2 = decimalToMercator(boundsMinPoint(box), zoomParam);
+        CGPoint cGPoint1 = decimalToMercator(boundsMaxPoint(box), zoomParam);
         int k = (int) Math.pow(2.0D, zoomParam);
-        paramInt = (int) (cGPoint2.x / 256.0D);
+        zoom = (int) (cGPoint2.x / 256.0D);
         int m = (int) (cGPoint1.x / 256.0D);
         int i = (int) (cGPoint2.y / 256.0D);
         int n = (int) (cGPoint1.y / 256.0D);
-        while (paramInt <= m) {
+        while (zoom <= m) {
             for (int i1 = i; i1 >= n; i1--) {
-                arrayList.add(XYToCode(paramInt, k - i1 - 1, zoomParam, true));
+                arrayList.add(XYToCode(zoom, k - i1 - 1, zoomParam, true));
             }
-            paramInt++;
+            zoom++;
         }
         return arrayList;
     }

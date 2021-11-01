@@ -6,17 +6,17 @@ import javax.inject.Inject
 class AreaRepository @Inject constructor(private val getArea: GetArea) {
 
     suspend fun getArea(
-        latMin: Double,
         lonMin: Double,
-        latMax: Double,
+        latMin: Double,
         lonMax: Double,
+        latMax: Double,
         page: Int? = 1
     ) =
         getArea.execute(
-            latMin = latMin,
             lonMin = lonMin,
-            latMax = latMax,
+            latMin = latMin,
             lonMax = lonMax,
+            latMax = latMax,
             page = page
         )
 

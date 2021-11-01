@@ -12,17 +12,17 @@ import javax.inject.Inject
 class GetArea @Inject constructor(private val remoteDataSource: RemoteDataSource) {
 
     suspend fun execute(
-        latMin: Double,
         lonMin: Double,
-        latMax: Double,
+        latMin: Double,
         lonMax: Double,
+        latMax: Double,
         category: String? = null,
         page: Int? = 1,
         count: Int? = Value.MAX_OBJECTS_PER_PAGE,
         language: String? = Value.RU
     ) = flow {
         emit(AreaDataState.Loading)
-        remoteDataSource.getArea(latMin, lonMin, latMax, lonMax, category, page, count, language)
+        remoteDataSource.getArea(lonMin, latMin, lonMax, latMax, category, page, count, language)
             .apply {
                 when (debugInfo) {
                     null -> emit(AreaDataState.Success(AreaDTO(this)))

@@ -108,14 +108,14 @@ class MapFragmentViewModel @Inject constructor(
         if (settings.getMapMode() == MapMode.SATELLITE) satelliteTileSource else schemeTileSource
 
     private fun getArea(
-        latMin: Double,
         lonMin: Double,
-        latMax: Double,
-        lonMax: Double
+        latMin: Double,
+        lonMax: Double,
+        latMax: Double
     ) = viewModelScope.launch {
-        repository.getArea(latMin, lonMin, latMax, lonMax)
+        repository.getArea(lonMin, latMin, lonMax, latMax)
             .catch { _liveData.postValue(MapViewState.Error()) }
-            .collect { _liveData.postValue(reduce(it))}
+            .collect { _liveData.postValue(reduce(it)) }
     }
 
 
@@ -124,8 +124,9 @@ class MapFragmentViewModel @Inject constructor(
             clear()
             dataState.area.places.map {
                 add(
-                    it.toPlacePolygon()
-                        .apply { (this == currentSelection).ifTrue { setHighlighted(true) } })
+                    it.toPlacePolygon().apply {
+                        (this == currentSelection).ifTrue { setHighlighted(true) }
+                    })
             }
         }
     }
@@ -138,7 +139,7 @@ class MapFragmentViewModel @Inject constructor(
 
     override fun handleEvent(event: MapEvent) {
         when (event) {
-            is MapEvent.GetAreaEvent -> event.apply { getArea(latMin, lonMin, latMax, lonMax) }
+            is MapEvent.GetAreaEvent -> event.apply { getArea(lonM, latM, lonMx, latMx) }
             is MapEvent.SwitchMapModeEvent -> settings.setMapMode(event.mode)
             is MapEvent.SwitchWikimapiaOverlayEvent -> settings.setWikimapiaOverlays(event.enable)
             is MapEvent.SwitchTransportationOverlayEvent -> settings.setTransportationOverlay(

@@ -19,10 +19,10 @@ interface RemoteDataSource {
     ): Place
 
     suspend fun getArea(
-        latMin: Double,
         lonMin: Double,
-        latMax: Double,
+        latMin: Double,
         lonMax: Double,
+        latMax: Double,
         category: String? = null,
         page: Int? = 1,
         count: Int? = Value.MAX_OBJECTS_PER_PAGE,
