@@ -11,6 +11,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 public class TileUtils {
 
     public static String getUrl(String code) {
@@ -35,22 +37,24 @@ public class TileUtils {
     }
 
     public static List<String> wikimapiaTileCodes(IGeoPoint point, int zoom) {
-        return wikimapiaTileCodes(new BoundingBox(point.getLatitude(),point.getLongitude(), point.getLatitude(), point.getLongitude()), zoom);
+        return wikimapiaTileCodes(new BoundingBox(point.getLatitude(), point.getLongitude(), point.getLatitude(), point.getLongitude()), zoom);
     }
 
     public static List<String> wikimapiaTileCodes(BoundingBox box, int zoom) {
         int zoomParam = zoom - 2;
         ArrayList<String> arrayList = new ArrayList();
-        CGPoint cGPoint2 = decimalToMercator(boundsMinPoint(box), zoomParam);
-        CGPoint cGPoint1 = decimalToMercator(boundsMaxPoint(box), zoomParam);
+        CGPoint minPoint = decimalToMercator(boundsMinPoint(box), zoomParam);
+        CGPoint maxPoint = decimalToMercator(boundsMaxPoint(box), zoomParam);
+        Timber.e("MERCATOR min: " + minPoint.x + "," + minPoint.y);
+        Timber.e("MERCATOR max: " + minPoint.x + "," + minPoint.y);
         int k = (int) Math.pow(2.0D, zoomParam);
-        zoom = (int) (cGPoint2.x / 256.0D);
-        int m = (int) (cGPoint1.x / 256.0D);
-        int i = (int) (cGPoint2.y / 256.0D);
-        int n = (int) (cGPoint1.y / 256.0D);
+        zoom = (int) (minPoint.x / 256.0D);
+        int m = (int) (maxPoint.x / 256.0D);
+        int i = (int) (minPoint.y / 256.0D);
+        int n = (int) (maxPoint.y / 256.0D);
         while (zoom <= m) {
             for (int i1 = i; i1 >= n; i1--) {
-                arrayList.add(XYToCode(zoom, k - i1 - 1, zoomParam, true));
+                arrayList.add(XYToCode(zoom, k - i1 - 1, zoomParam));
             }
             zoom++;
         }
@@ -59,32 +63,17 @@ public class TileUtils {
 
 
     public static GeoPoint boundsMaxPoint(BoundingBox box) {
-        double maxLongitude = Math.max(
-                limit(box.getLonEast())//box.northeast.longitude
-                ,
-                limit(box.getLonWest())//box.southwest.longitude
-        );
-        return new GeoPoint(Math.max(
-                limit(box.getLatNorth()),limit(box.getLatSouth())), maxLongitude);
+        double maxLongitude = Math.max(box.getLonEast(),box.getLonWest());
+        return new GeoPoint(Math.max(box.getLatNorth(),box.getLatSouth()), maxLongitude);
     }
 
     public static GeoPoint boundsMinPoint(BoundingBox box) {
-        double minLongitude = Math.min(limit(box.getLonEast()),limit(box.getLonWest()));
-        return new GeoPoint(Math.min(limit(box.getLatNorth()),limit(box.getLatSouth())), minLongitude);
+        double minLongitude = Math.min(box.getLonEast(),box.getLonWest());
+        return new GeoPoint(Math.min(box.getLatNorth(),box.getLatSouth()), minLongitude);
     }
 
-
-    private static Double limit(Double value) {
-//        DecimalFormat numberFormat = new DecimalFormat("#.00");
-//        return Double.parseDouble(numberFormat.format(value));
-        return value;
-    }
-
-
-    public static String XYToCode(int paramInt1, int paramInt2, int paramInt3, boolean paramBoolean) {
-        String str = "";
-        if (paramBoolean)
-            str = "0";
+    public static String XYToCode(int paramInt1, int paramInt2, int paramInt3) {
+        String str = "0";
         while (--paramInt3 >= 0) {
             byte b;
             int i = (int) Math.pow(2.0D, paramInt3);

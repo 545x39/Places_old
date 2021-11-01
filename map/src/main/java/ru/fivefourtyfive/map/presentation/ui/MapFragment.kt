@@ -372,8 +372,8 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         fun getWMTileDescription() {
             mapView.apply {
                 val list = TileUtils.wikimapiaTileCodes(
-                    boundingBox,
-//                    mapCenter,
+//                    boundingBox,
+                    mapCenter,
 //                    kotlin.math.max(0.0, (zoomLevelDouble - 1.0)).toInt()
                     zoomLevelDouble.roundToInt()
                 )
