@@ -2,12 +2,15 @@
 
 package ru.fivefourtyfive.wikimapper.domain.entity.util
 
-    const val _ID                       = "_id"
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
+
+const val _ID                       = "_id"
 
 @Suppress("SpellCheckingInspection")
 object PlaceFields{
     const val DEBUG_INFO                = "debug"
-    const val ID                         = "id"
+    const val ID                        = "id"
     const val OBJECT_TYPE               = "object_type"
     const val LANGUAGE_ID               = "language_id"
     const val LANGUAGE_ISO              = "language_iso"
@@ -37,4 +40,21 @@ object PlaceFields{
     const val NEAREST_PLACES            = "nearestPlaces"
     const val NEARST_HOTELS             = "nearestHotels"
     const val DISTANCE                  = "distance"
+}
+
+object LocationFields{
+    const val PLACE_ID                  = "place_id"
+    const val LON                       = "lon"
+    const val LAT                       = "lat"
+    const val NORTH                     = "north"
+    const val SOUTH                     = "south"
+    const val EAST                      = "east"
+    const val WEST                      = "west"
+    const val COUNTRY                   = "country"
+    const val STATE                     = "state"
+    const val PLACE                     = "place"
+    const val COUNTRY_ADM_ID            = "country_adm_id"
+    const val CITY_ID                   = "city_id"
+    const val CITY                      = "city"
+    const val ZOOM                      = "zoom"
 }
