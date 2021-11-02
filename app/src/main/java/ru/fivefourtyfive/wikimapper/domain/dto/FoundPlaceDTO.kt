@@ -4,5 +4,5 @@ import ru.fivefourtyfive.wikimapper.domain.entity.Place
 
 class FoundPlaceDTO(place: Place) : PlaceDTO(place) {
 
-    val distance: Int? = place.distance
+    val distance = place.distance
 }

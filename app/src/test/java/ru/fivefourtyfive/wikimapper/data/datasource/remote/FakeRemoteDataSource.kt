@@ -30,11 +30,28 @@ class FakeRemoteDataSource : RemoteDataSource {
         language
     )
 
-    override fun getCategories(name: String?, page: Int?, count: Int?, language: String?) {
-        //TODO
-    }
+    override suspend fun getCategory(id: Int, language: String?) = FakeData.getCategory()
 
-    override fun search(query: String, latitude: Float, longitude: Float) {
-        //TODO
-    }
+    override suspend fun getCategories(name: String?, page: Int?, count: Int?, language: String?) =
+        FakeData.getCategories()
+
+    override suspend fun search(
+        query: String,
+        latitude: Float,
+        longitude: Float,
+        category: String?,
+        page: Int?,
+        count: Int?,
+        language: String?
+    ) = FakeData.getArea(
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        category,
+        page,
+        count,
+        language
+    )
+
 }

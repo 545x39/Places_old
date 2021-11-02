@@ -1,19 +1,27 @@
 package ru.fivefourtyfive.wikimapper.data.datasource.abstraction
 
+import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Value
 import ru.fivefourtyfive.wikimapper.domain.entity.Places
 import ru.fivefourtyfive.wikimapper.domain.entity.Place
 
 interface LocalDataSource {
 
-    fun persistPlace(place: Place): Boolean
+    suspend fun persistPlace(place: Place): Boolean
 
-    fun getPlace(id: Int): Place
+    suspend fun getPlace(id: Int): Place
 
-    fun getArea(latMin: Double,
+    suspend fun getArea(latMin: Double,
                 lonMin: Double,
                 latMax: Double,
                 lonMax: Double,
                 category: String?,
                 count: Int?,
                 language: String?): Places
+
+    suspend fun persistSearchResults(places: Places)
+
+    suspend fun search(query: String,
+                       category: String? = null,
+                       count: Int? = Value.MAX_OBJECTS_PER_PAGE,
+                       language: String? = Value.RU): Places
 }

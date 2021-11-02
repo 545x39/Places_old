@@ -131,7 +131,8 @@ object FakeData {
             PolygonPoint(29.3078756, 59.977027),
             PolygonPoint(29.3057728, 59.9776711),
             PolygonPoint(29.3037987, 59.9785085)
-        )
+        ),
+        distance = 5000
     )
 
     /** https://api.wikimapia.org/?key=example&function=place.getbyid&id=11867376&format=json&=&language=ru&data_blocks=main,comments,photos,location,geometry */
@@ -274,7 +275,8 @@ object FakeData {
             PolygonPoint(29.3391612, 59.9702133),
             PolygonPoint(29.3360069, 59.9691823),
             PolygonPoint(29.3337324, 59.9678614)
-        )
+        ),
+        distance = 5200
     )
 
     fun getArea(
@@ -295,7 +297,76 @@ object FakeData {
         found = 2
     )
 
-    fun getPlaceError() = Place(debugInfo = DebugInfo(0, "ERROR: Place not found!"))
+    fun getSearchResults() = Places(
+        places = listOf(getFort(), getDefenceLine()),
+        version = "1.0",
+        language = RU,
+        page = 1,
+        count = 2,
+        found = 2
+    )
 
-    fun onAreaError() = Places(debugInfo = DebugInfo(0, "ERROR: wrong request"))
+    fun getCategories() = Categories(
+        categories = listOf(
+            Category(
+                id = 516,
+                amount = 221912,
+                icon = "http://wikimapia.org/mapico/00/00/00/00/88.png",
+                name = "военный объект"
+            ),
+            Category(
+                id = 46085,
+                amount = 32714,
+                icon = "http://wikimapia.org/mapico/00/00/00/00/00.png",
+                name = "военный памятник / мемориал"
+            ),
+            Category(
+                id = 45239,
+                amount = 7840,
+                icon = "http://wikimapia.org/mapico/00/00/00/00/00.png",
+                name = "исчезнувший военный объект"
+            ),
+            Category(
+                id = 32,
+                amount = 2922,
+                icon = "http://wikimapia.org/mapico/00/00/00/00/00.png",
+                name = "авиабаза/военный аэродром"
+            ),
+            Category(
+                id = 9400,
+                amount = 2581,
+                icon = "http://wikimapia.org/mapico/00/00/00/00/00.png",
+                name = "военный корабль"
+            ),
+            Category(
+                id = 65440,
+                amount = 2148,
+                icon = "http://wikimapia.org/mapico/00/00/00/00/00.png",
+                name = "военный радар"
+            )
+        ),
+        page = 1,
+        count = 2,
+        found = 2
+    )
+
+    fun getCategory() = Category(
+        id = 516,
+        amount = 221912,
+        icon = "http://wikimapia.org/mapico/00/00/00/00/88.png",
+        name = "военный объект",
+        description = "Вооружённые си́лы (ВС) — главная вооружённая организация государства или группы государств, предназначенная для обеспечения военной безопасности, защиты государственных интересов при агрессии и ведении войны, недопущения или ликвидации угрозы миру между государствами и безопасности. Кроме выполнения основных функций возложенных на вооружённые силы, они также могут привлекаться к поддержанию порядка в государстве при чрезвычайных ситуациях, ликвидации последствий природных и техногенных катастроф, а также для решения некоторых других государственных и международных задач.\nhttp://ru.wikipedia.org/wiki/%D0%92%D0%BE%D0%BE%D1%80%D1%83%D0%B6%D1%91%D0%BD%D0%BD%D1%8B%D0%B5_%D1%81%D0%B8%D0%BB%D1%8B",
+        synonyms = listOf(Category(id = 102826, name = "вооружённые силы"))
+    )
+
+    fun getPlaceError() = Place(debugInfo = DebugInfo(1, "ERROR: Place not found!"))
+
+    fun onAreaError() = Places(debugInfo = DebugInfo(2, "ERROR: wrong area request"))
+
+    fun onSearchError() = Places(debugInfo = DebugInfo(3, "ERROR: wrong search request"))
+
+    fun onCategoryError() = Category(debugInfo = DebugInfo(4, "ERROR: wrong category request"))
+
+    fun onCategoriesError() =
+        Categories(debugInfo = DebugInfo(5, "ERROR: wrong categories request"))
 }

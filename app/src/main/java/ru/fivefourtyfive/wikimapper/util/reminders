@@ -34,6 +34,32 @@ https://www.google.com/maps/@59.9717006,29.3234754,14z/data=!5m1!1e1?hl=ru-RU
 КАТЕГОРИИ
     http://api.wikimapia.org/?key=example&function=category.getall&format=json&pack=&language=en&name=&page=1&count=50
 
+    http://api.wikimapia.org/?key=example&function=category.getall&format=json&pack=gzip&language=ru&name=%D0%B2%D0%BE%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9&page=1&count=100
+    -------
+    {"categories":[
+        {"id":516,
+            "amount":221912,
+            "icon":"http:\/\/wikimapia.org\/mapico\/00\/00\/00\/00\/88.png",
+            "name":"\u0432\u043e\u0435\u043d\u043d\u044b\u0439 \u043e\u0431\u044a\u0435\u043a\u0442"},
+        {"id":46085,
+            "amount":32714,
+            "icon":"http:\/\/wikimapia.org\/mapico\/00\/00\/00\/00\/00.png",
+            "name":"\u0432\u043e\u0435\u043d\u043d\u044b\u0439 \u043f\u0430\u043c\u044f\u0442\u043d\u0438\u043a \/ \u043c\u0435\u043c\u043e\u0440\u0438\u0430\u043b"}
+        ],"found":12,"page":1,"count":100}
+    -------
+    http://api.wikimapia.org/?key=example&function=category.getbyid&id=203&format=json&pack=gzip&language=ru
+
+    -----
+    id	516
+    amount	220579
+    icon	"http://wikimapia.org/mapico/00/00/00/00/88.png"
+    name	"военный объект"
+    description	"Вооружённые си́лы (ВС) — главная вооружённая организация государства или группы государств, предназначенная для обеспечения военной безопасности, защиты государственных интересов при агрессии и ведении войны, недопущения или ликвидации угрозы миру между государствами и безопасности. Кроме выполнения основных функций возложенных на вооружённые силы, они также могут привлекаться к поддержанию порядка в государстве при чрезвычайных ситуациях, ликвидации последствий природных и техногенных катастроф, а также для решения некоторых других государственных и международных задач.\nhttp://ru.wikipedia.org/wiki/%D0%92%D0%BE%D0%BE%D1%80%D1%83%D0%B6%D1%91%D0%BD%D0%BD%D1%8B%D0%B5_%D1%81%D0%B8%D0%BB%D1%8B"
+    synonyms
+    [0:
+    id	102826
+    name	"вооружённые силы"]
+
 ПОИСК
     http://api.wikimapia.org/?key=example&function=search&q=%D0%BF%D1%83%D1%88%D0%BA%D0%B8%D0%BD&lat=30.416336&lon=59.722139&distance=5000000
     api.wikimapia.org/?key=example&function=search&q=невский&lat=30.416336&lon=59.722139&language=ru&format=json&page=3&count=100
