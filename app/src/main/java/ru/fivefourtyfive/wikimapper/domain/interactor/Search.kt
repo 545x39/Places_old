@@ -5,8 +5,8 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import ru.fivefourtyfive.wikimapper.data.datasource.abstraction.RemoteDataSource
 import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Value
-import ru.fivefourtyfive.wikimapper.domain.datastate.AreaDataState
-import ru.fivefourtyfive.wikimapper.domain.dto.AreaDTO
+import ru.fivefourtyfive.wikimapper.domain.datastate.SearchResultDataState
+import ru.fivefourtyfive.wikimapper.domain.dto.SearchResultsDTO
 import javax.inject.Inject
 
 class Search @Inject constructor(private val remoteDataSource: RemoteDataSource) {
@@ -20,14 +20,13 @@ class Search @Inject constructor(private val remoteDataSource: RemoteDataSource)
         count: Int? = Value.MAX_OBJECTS_PER_PAGE,
         language: String? = Value.RU
     ) = flow {
-        emit(AreaDataState.Loading)
+        emit(SearchResultDataState.Loading)
         remoteDataSource.search(query, latitude, longitude, category, page, count, language)
             .apply {
-                //TODO Сделать DataState, закончить с этим кодом.
-//                when (debugInfo) {
-//                    null -> emit(AreaDataState.Success(AreaDTO(this)))
-//                    else -> emit(AreaDataState.Error(message = debugInfo?.message ?: ""))
-//                }
+                when (debugInfo) {
+                    null -> emit(SearchResultDataState.Success(SearchResultsDTO(this)))
+                    else -> emit(SearchResultDataState.Error(message = debugInfo?.message ?: ""))
+                }
             }
     }.flowOn(Dispatchers.IO)
 }
