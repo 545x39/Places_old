@@ -1,86 +1,126 @@
 package ru.fivefourtyfive.wikimapper.domain.entity
 
+import androidx.room.*
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import ru.fivefourtyfive.wikimapper.data.datasource.implementation.local.util.TableName.TABLE_PLACES
+import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.COMMENTS
+import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.DEBUG_INFO
+import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.DESCRIPTION
+import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.DISTANCE
+import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.ID
+import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.IS_BUILDING
+import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.IS_DELETED
+import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.IS_PROTECTED
+import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.IS_REGION
+import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.LANGUAGE_ID
+import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.LANGUAGE_ISO
+import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.LANGUAGE_NAME
+import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.LOCATION
+import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.NAME
+import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.OBJECT_TYPE
+import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.PARENT_ID
+import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.PHOTOS
+import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.PL
+import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.POLYGON
+import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.SQUARE
+import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.TAGS
+import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.TITLE
+import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.URL
+import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.URL_HTML
+import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.WIKIPEDIA
+import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.X
+import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.Y
+import ru.fivefourtyfive.wikimapper.domain.entity.util._ID
 
+@Entity(
+    tableName = TABLE_PLACES, /*primaryKeys = [ID, PLACE_ID],*/
+    indices = [Index(value = [_ID, ID]/*,unique = true*/)]
+)
 data class Place(
-    @SerializedName("debug")
+    @ColumnInfo(name = ID)
+    @SerializedName(ID)
     @Expose
-    var debugInfo: DebugInfo? = null,
-    @SerializedName("id")
-    @Expose
-    val id: Int = 0,
-    @SerializedName("object_type")
+//    @PrimaryKey(autoGenerate = false)
+    val id: Int,
+    @ColumnInfo(name = OBJECT_TYPE)
+    @SerializedName(OBJECT_TYPE)
     @Expose
     val objectType: Int = 0,
-    @SerializedName("language_id")
+    @ColumnInfo(name = LANGUAGE_ID)
+    @SerializedName(LANGUAGE_ID)
     @Expose
     val languageId: Int = 0,
-    @SerializedName("language_iso")
+    @ColumnInfo(name = LANGUAGE_ISO)
+    @SerializedName(LANGUAGE_ISO)
     @Expose
     val languageIso: String? = null,
-    @SerializedName("language_name")
+    @ColumnInfo(name = LANGUAGE_NAME)
+    @SerializedName(LANGUAGE_NAME)
     @Expose
     val languageName: String? = null,
-    @SerializedName("url")
+    @ColumnInfo(name = URL)
+    @SerializedName(URL)
     @Expose
     val url: String? = null,
-    @Suppress("SpellCheckingInspection")
-    @SerializedName("urlhtml")
+    @ColumnInfo(name = URL_HTML)
+    @SerializedName(URL_HTML)
     @Expose
     val urlHtml: String? = null,
-    @SerializedName("title")
+    @ColumnInfo(name = TITLE)
+    @SerializedName(TITLE)
     @Expose
     val title: String? = null,
-    @SerializedName("name")
+    @ColumnInfo(name = NAME)
+    @SerializedName(NAME)
     @Expose
     val name: String? = null,
-    @SerializedName("description")
+    @ColumnInfo(name = DESCRIPTION)
+    @SerializedName(DESCRIPTION)
     @Expose
     val description: String? = null,
-    @SerializedName("wikipedia")
+    @ColumnInfo(name = WIKIPEDIA)
+    @SerializedName(WIKIPEDIA)
     @Expose
     val wikipedia: String? = null,
-    @SerializedName("tags")
-    @Expose
-    val tags: List<Tag>? = null,
-    @SerializedName("parent_id")
+    @ColumnInfo(name = PARENT_ID)
+    @SerializedName(PARENT_ID)
     @Expose
     val parentId: Int? = null,
-    @SerializedName("polygon")
-    @Expose
-    val polygon: List<PolygonPoint>? = null,
-    @SerializedName("photos")
-    @Expose
-    val photos: List<Photo>? = null,
-    @SerializedName("comments")
-    @Expose
-    val comments: List<Comment>? = null,
-    @SerializedName("location")
-    @Expose
-    val location: Location? = null,
-    @SerializedName("is_building")
+    @ColumnInfo(name = IS_BUILDING)
+    @SerializedName(IS_BUILDING)
     @Expose
     val isBuilding: Boolean = false,
-    @SerializedName("is_region")
+    @ColumnInfo(name = IS_REGION)
+    @SerializedName(IS_REGION)
     @Expose
     val isRegion: Boolean = false,
-    @SerializedName("is_deleted")
+    @ColumnInfo(name = IS_DELETED)
+    @SerializedName(IS_DELETED)
     @Expose
     val isDeleted: Boolean = false,
-    @SerializedName("x")
+    @ColumnInfo(name = X)
+    @SerializedName(X)
     @Expose
     val x: Int? = null,
-    @SerializedName("y")
+    @ColumnInfo(name = Y)
+    @SerializedName(Y)
     @Expose
     val y: Int? = null,
     /** Площадь объекта */
-    @SerializedName("pl")
+    @ColumnInfo(name = SQUARE)
+    @SerializedName(PL)
     @Expose
     val square: Double? = null,
-    @SerializedName("is_protected")
+    @ColumnInfo(name = IS_PROTECTED)
+    @SerializedName(IS_PROTECTED)
     @Expose(deserialize = false)
     val isProtected: Boolean? = null,
+    /** Приходит только в поиске. */
+    @ColumnInfo(name = DISTANCE)
+    @SerializedName(DISTANCE)
+    @Expose
+    val distance: Int? = null,
 //    @SerializedName("availableLanguages")
 //    @Expose
 //    val availableLanguages: AvailableLanguages? = null,
@@ -96,8 +136,37 @@ data class Place(
 //    @SerializedName("edit_info")
 //    @Expose
 //    val editInfo: EditInfo,
-    /** Приходит только в поиске. */
-    @SerializedName("distance")
+    @ColumnInfo(name = _ID)
+    @PrimaryKey(autoGenerate = true)
+    var id_: Int,
+) {
+    @SerializedName(DEBUG_INFO)
     @Expose
-    val distance: Int? = null,
-)
+    @Ignore
+    var debugInfo: DebugInfo? = null
+
+    @SerializedName(TAGS)
+    @Expose
+    @Ignore
+    var tags: List<Tag>? = null
+
+    @SerializedName(POLYGON)
+    @Expose
+    @Ignore
+    var polygon: List<PolygonPoint>? = null
+
+    @SerializedName(PHOTOS)
+    @Expose
+    @Ignore
+    var photos: List<Photo>? = null
+
+    @SerializedName(COMMENTS)
+    @Expose
+    @Ignore
+    var comments: List<Comment>? = null
+
+    @SerializedName(LOCATION)
+    @Expose
+    @Ignore
+    var location: Location? = null
+}

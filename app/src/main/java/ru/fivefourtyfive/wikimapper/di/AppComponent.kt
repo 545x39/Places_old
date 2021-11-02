@@ -6,10 +6,7 @@ import dagger.Component
 import ru.fivefourtyfive.wikimapper.Places
 import ru.fivefourtyfive.wikimapper.data.repository.AreaRepository
 import ru.fivefourtyfive.wikimapper.data.repository.PlaceRepository
-import ru.fivefourtyfive.wikimapper.di.module.AppModule
-import ru.fivefourtyfive.wikimapper.di.module.DataSourceModule
-import ru.fivefourtyfive.wikimapper.di.module.NetworkModule
-import ru.fivefourtyfive.wikimapper.di.module.ViewModelProviderFactoryModule
+import ru.fivefourtyfive.wikimapper.di.module.*
 import javax.inject.Singleton
 
 @Singleton
@@ -17,6 +14,7 @@ import javax.inject.Singleton
     modules = [
         AppModule::class,
         NetworkModule::class,
+        DatabaseModule::class,
         DataSourceModule::class,
         ViewModelProviderFactoryModule::class
     ]
