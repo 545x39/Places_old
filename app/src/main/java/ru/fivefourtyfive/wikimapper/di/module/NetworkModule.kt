@@ -8,8 +8,8 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.fivefourtyfive.wikimapper.BuildConfig
-import ru.fivefourtyfive.wikimapper.data.datasource.remote.Api
-import ru.fivefourtyfive.wikimapper.util.Network.BASE_URL
+import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.Api
+import ru.fivefourtyfive.wikimapper.util.Network.API_URL
 import ru.fivefourtyfive.wikimapper.util.Network.CONNECT_TIMEOUT
 import ru.fivefourtyfive.wikimapper.util.Network.READ_TIMEOUT
 import java.util.concurrent.TimeUnit
@@ -48,7 +48,7 @@ class NetworkModule {
         // </editor-fold>
 
         return Retrofit.Builder().apply {
-            baseUrl(BASE_URL)
+            baseUrl(API_URL)
             client(okHttp())
             addConverterFactory(gsonConverter())
         }.build()

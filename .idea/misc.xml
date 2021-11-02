@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="11" project-jdk-type="JavaSDK">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="../../../../../../layout/custom_preview.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.18489583333333334" />
+        <entry key="map/src/main/res/drawable/ic_location.xml" value="0.15989583333333332" />
+        <entry key="map/src/main/res/drawable/icon_arrow.xml" value="0.35833333333333334" />
+        <entry key="map/src/main/res/drawable/icon_my_location.xml" value="0.35833333333333334" />
+        <entry key="map/src/main/res/drawable/selector_center_button.xml" value="0.2234375" />
+        <entry key="map/src/main/res/layout-land/fragment_map.xml" value="0.30070546737213405" />
+        <entry key="map/src/main/res/layout/fragment_map.xml" value="0.19166666666666668" />
+        <entry key="map/src/main/res/menu/menu_map.xml" value="0.228125" />
+        <entry key="objectdetails/src/main/res/drawable/icon_user.xml" value="0.22552083333333334" />
+        <entry key="objectdetails/src/main/res/layout/carousel_fragment.xml" value="0.228125" />
+        <entry key="objectdetails/src/main/res/layout/fragment_object_detail.xml" value="0.18697916666666667" />
+        <entry key="objectdetails/src/main/res/layout/fragment_place_details.xml" value="0.228125" />
+        <entry key="objectdetails/src/main/res/menu/menu_place_details.xml" value="0.228125" />
+      </map>
+    </option>
+  </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>

@@ -2,17 +2,97 @@
 http://www.jsonschema2pojo.org/
 
 ОБЪЕКТ
-    http://api.wikimapia.org/?key=example&function=place.getbyid&id=55&format=json&=&language=ru&data_blocks=main,comments,photos,location
+Пример запроса:
+http://api.wikimapia.org/?key=example&function=box&coordsby=bbox&bbox=35.2886%2C13.9666%2C35.5152%2C14.1093&category=203&count=100&format=json
+Так - НЕ РАБОТАЕТ, возвращает пустой объект
 
+-------------------
+Запрос объекта:
+http://api.wikimapia.org/?key=example&function=place.getbyid&id=55&format=json&=&language=ru&data_blocks=main,comments,photos,location
+
+У объекта есть поля "x" и "y". Это координаты ЦЕНТРА объекта, они приходят с сервера в Int, потому что для хранения координат в SQLite
+реальные значения координат умножаются на 10_000_000.
+Следовательно, чтобы получить реальные значения, их нужно разделить на 10_000_000:
+-------
+Хранение координат в базе в виде Int-ов сэкономит место и улучшит производительность при поиске.
+-------
+        x = 293234754, // /10_000_000 -> 29.3234754
+        y = 599717006, // /10_000_000 -> 59.9717006
+        pl = 21222.0
+    )
+//29.3234754,59.9717006
+-------
+pl - вероятно, площадь в метрах (???).
+Для подстановки в карту координаты должны быть не x,y, а y,x. Пример для гугла:
+https://www.google.com/maps/@59.9717006,29.3234754,14z/data=!5m1!1e1?hl=ru-RU
+В OSM, вероятнее всего, аналогично.
+
+-------------------
 ОБЪЕКТЫ
     http://api.wikimapia.org/?key=example&function=box&coordsby=bbox&bbox=35.2886%2C13.9666%2C35.5152%2C14.1093&category=203&count=100&format=json
 
 КАТЕГОРИИ
     http://api.wikimapia.org/?key=example&function=category.getall&format=json&pack=&language=en&name=&page=1&count=50
 
+    http://api.wikimapia.org/?key=example&function=category.getall&format=json&pack=gzip&language=ru&name=%D0%B2%D0%BE%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9&page=1&count=100
+    -------
+    {"categories":[
+        {"id":516,
+            "amount":221912,
+            "icon":"http:\/\/wikimapia.org\/mapico\/00\/00\/00\/00\/88.png",
+            "name":"\u0432\u043e\u0435\u043d\u043d\u044b\u0439 \u043e\u0431\u044a\u0435\u043a\u0442"},
+        {"id":46085,
+            "amount":32714,
+            "icon":"http:\/\/wikimapia.org\/mapico\/00\/00\/00\/00\/00.png",
+            "name":"\u0432\u043e\u0435\u043d\u043d\u044b\u0439 \u043f\u0430\u043c\u044f\u0442\u043d\u0438\u043a \/ \u043c\u0435\u043c\u043e\u0440\u0438\u0430\u043b"}
+        ],"found":12,"page":1,"count":100}
+    -------
+    http://api.wikimapia.org/?key=example&function=category.getbyid&id=203&format=json&pack=gzip&language=ru
+
+    -----
+    id	516
+    amount	220579
+    icon	"http://wikimapia.org/mapico/00/00/00/00/88.png"
+    name	"военный объект"
+    description	"Вооружённые си́лы (ВС) — главная вооружённая организация государства или группы государств, предназначенная для обеспечения военной безопасности, защиты государственных интересов при агрессии и ведении войны, недопущения или ликвидации угрозы миру между государствами и безопасности. Кроме выполнения основных функций возложенных на вооружённые силы, они также могут привлекаться к поддержанию порядка в государстве при чрезвычайных ситуациях, ликвидации последствий природных и техногенных катастроф, а также для решения некоторых других государственных и международных задач.\nhttp://ru.wikipedia.org/wiki/%D0%92%D0%BE%D0%BE%D1%80%D1%83%D0%B6%D1%91%D0%BD%D0%BD%D1%8B%D0%B5_%D1%81%D0%B8%D0%BB%D1%8B"
+    synonyms
+    [0:
+    id	102826
+    name	"вооружённые силы"]
+
 ПОИСК
     http://api.wikimapia.org/?key=example&function=search&q=%D0%BF%D1%83%D1%88%D0%BA%D0%B8%D0%BD&lat=30.416336&lon=59.722139&distance=5000000
     api.wikimapia.org/?key=example&function=search&q=невский&lat=30.416336&lon=59.722139&language=ru&format=json&page=3&count=100
+
+    Поиск по расстоянию (&distance= ) - не работает!
+------------------
+ОТРИСОВКА ПОЛИГОНОВ:
+https://osmdroid.github.io/osmdroid/Markers,-Lines-and-Polygons.html
+------------------
+OSM NAVIGATOR:
+https://github.com/MKergall/osmbonuspack/blob/98ced25977494a7623c1533e3b30335f73f37928/OSMNavigator/src/main/java/com/osmnavigator/MapActivity.java#L581
+
+------------------
+ОРИГИНАЛЬНЫЙ ЗАПРОС ТАЙЛОВ:
+Тип можно не присылать, дефолтный, по-видимому, простая карта, а не гибрид:
+http://88.99.95.183/?x=4760&y=2381&zoom=13&lng=1
+Можно указать тип гибрид:
+88.99.95.183/?x=5&y=3&zoom=3&type=hybrid&lng=1
+88.99.77.85
+88.99.77.89
+88.99.95.183
+88.99.95.187
+------------------
+Примеры запроса (GET) тайла карт Генштаба:
+http://88.99.52.155/cgi-bin/tapp/tilecache.py/1.0.0/topomapper_v2/12/2381/1181
+88.99.52.155/cgi-bin/tapp/tilecache.py/1.0.0/topomapper_v2/10/594/293
+http://88.99.52.155/cgi-bin/tapp/tilecache.py/1.0.0/topomapper_v2/11/1189/590
+Само приложение запрашивает только /10/, /11/, /12/ и /13/.
+------------------
+
+Примеры запросов (GET) тайлов ArcGIS:
+http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/17/38053/76359
+
 
 РАЗНОЕ
         https://blog.cartong.org/2014/10/30/tutorial-using-wikimapia-data-in-qgis/
@@ -25,3 +105,287 @@ http://www.jsonschema2pojo.org/
         http://api.wikimapia.org/?key=example&function=box&coordsby=bbox&bbox=35.2886%2C13.9666%2C35.5152%2C14.1093&category=203&count=100&format=json
         http://api.wikimapia.org/?key=example&function=box&coordsby=bbox&bbox=29.071884%2C59.894104%2C30.382004%2C60.215603&category=203&count=100&format=json
         http://api.wikimapia.org/?key=example&function=box&coordsby=bbox&bbox=29.071884%2C59.894104%2C30.382004%2C60.215603&count=500&format=json&language=ru
+
+GLIDE SLIDER:
+https://android-arsenal.com/details/1/5820
+https://github.com/firdausmaulan/GlideSlider-Example/blob/master/app/src/main/java/com/glide/slider/example/MainActivity.java
+
+Intent "поделиться ссылкой":
+https://stackoverflow.com/questions/38322233/how-to-share-a-text-link-via-text-intent
+
+Map listener:
+https://stackoverflow.com/questions/39306301/osmdroid-load-marker-after-scroll
+
+DEBOUNCING:
+//https://www.hellsoft.se/instant-search-with-kotlin-coroutines/
+
+
+//* Multiply speed by 3.6 to convert meters per second to km per hour (3600 seconds / 1000 meters).
+======================
+
+Пример с текстовыми ярлыками со стилем, минимальным уровнем зума для показа, onClickListener-ами и т.д.:
+https://github.com/osmdroid/osmdroid/blob/master/OpenStreetMapViewer/src/main/java/org/osmdroid/samplefragments/data/SampleSimpleFastPointOverlay.java
+
+======================
+ИСТОЧНИКИ КАРТ ARCGIS С УРОВНЯМИ ЗУМА:
+    BaseMap{
+        urlTemplate: tileProtocol + '//{s}.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
+        options: {
+          minZoom: 1,
+          maxZoom: 19,
+          subdomains: ['server', 'services'],
+          attribution: 'USGS, NOAA',
+          attributionUrl: 'https://static.arcgis.com/attribution/World_Street_Map'
+        }
+      },
+
+      Topographic: {
+        urlTemplate: tileProtocol + '//{s}.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
+        options: {
+          minZoom: 1,
+          maxZoom: 19,
+          subdomains: ['server', 'services'],
+          attribution: 'USGS, NOAA',
+          attributionUrl: 'https://static.arcgis.com/attribution/World_Topo_Map'
+        }
+      },
+
+      Oceans: {
+        urlTemplate: tileProtocol + '//{s}.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}',
+        options: {
+          minZoom: 1,
+          maxZoom: 16,
+          subdomains: ['server', 'services'],
+          attribution: 'USGS, NOAA',
+          attributionUrl: 'https://static.arcgis.com/attribution/Ocean_Basemap'
+        }
+      },
+
+      OceansLabels: {
+        urlTemplate: tileProtocol + '//{s}.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Reference/MapServer/tile/{z}/{y}/{x}',
+        options: {
+          minZoom: 1,
+          maxZoom: 16,
+          subdomains: ['server', 'services'],
+          pane: (pointerEvents) ? 'esri-labels' : 'tilePane',
+          attribution: ''
+        }
+      },
+
+      NationalGeographic: {
+        urlTemplate: tileProtocol + '//{s}.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}',
+        options: {
+          minZoom: 1,
+          maxZoom: 16,
+          subdomains: ['server', 'services'],
+          attribution: 'National Geographic, DeLorme, HERE, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, increment P Corp.'
+        }
+      },
+
+      DarkGray: {
+        urlTemplate: tileProtocol + '//{s}.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+        options: {
+          minZoom: 1,
+          maxZoom: 16,
+          subdomains: ['server', 'services'],
+          attribution: 'HERE, DeLorme, MapmyIndia, &copy; OpenStreetMap contributors'
+        }
+      },
+
+      DarkGrayLabels: {
+        urlTemplate: tileProtocol + '//{s}.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}',
+        options: {
+          minZoom: 1,
+          maxZoom: 16,
+          subdomains: ['server', 'services'],
+          pane: (pointerEvents) ? 'esri-labels' : 'tilePane',
+          attribution: ''
+
+        }
+      },
+
+      Gray: {
+        urlTemplate: tileProtocol + '//{s}.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+        options: {
+          minZoom: 1,
+          maxZoom: 16,
+          subdomains: ['server', 'services'],
+          attribution: 'HERE, DeLorme, MapmyIndia, &copy; OpenStreetMap contributors'
+        }
+      },
+
+      GrayLabels: {
+        urlTemplate: tileProtocol + '//{s}.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}',
+        options: {
+          minZoom: 1,
+          maxZoom: 16,
+          subdomains: ['server', 'services'],
+          pane: (pointerEvents) ? 'esri-labels' : 'tilePane',
+          attribution: ''
+        }
+      },
+
+      Imagery: {
+        urlTemplate: tileProtocol + '//{s}.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        options: {
+          minZoom: 1,
+          maxZoom: 19,
+          subdomains: ['server', 'services'],
+          attribution: 'DigitalGlobe, GeoEye, i-cubed, USDA, USGS, AEX, Getmapping, Aerogrid, IGN, IGP, swisstopo, and the GIS User Community',
+          attributionUrl: 'https://static.arcgis.com/attribution/World_Imagery'
+        }
+      },
+
+      ImageryLabels: {
+        urlTemplate: tileProtocol + '//{s}.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',
+        options: {
+          minZoom: 1,
+          maxZoom: 19,
+          subdomains: ['server', 'services'],
+          pane: (pointerEvents) ? 'esri-labels' : 'tilePane',
+          attribution: ''
+        }
+      },
+
+      ImageryTransportation: {
+        urlTemplate: tileProtocol + '//{s}.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}',
+        options: {
+          minZoom: 1,
+          maxZoom: 19,
+          subdomains: ['server', 'services'],
+          pane: (pointerEvents) ? 'esri-labels' : 'tilePane',
+          attribution: ''
+        }
+      },
+
+      ShadedRelief: {
+        urlTemplate: tileProtocol + '//{s}.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}',
+        options: {
+          minZoom: 1,
+          maxZoom: 13,
+          subdomains: ['server', 'services'],
+          attribution: 'USGS'
+        }
+      },
+
+      ShadedReliefLabels: {
+        urlTemplate: tileProtocol + '//{s}.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places_Alternate/MapServer/tile/{z}/{y}/{x}',
+        options: {
+          minZoom: 1,
+          maxZoom: 12,
+          subdomains: ['server', 'services'],
+          pane: (pointerEvents) ? 'esri-labels' : 'tilePane',
+          attribution: ''
+        }
+      },
+
+      Terrain: {
+        urlTemplate: tileProtocol + '//{s}.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer/tile/{z}/{y}/{x}',
+        options: {
+          minZoom: 1,
+          maxZoom: 13,
+          subdomains: ['server', 'services'],
+          attribution: 'USGS, NOAA'
+        }
+      },
+
+      TerrainLabels: {
+        urlTemplate: tileProtocol + '//{s}.arcgisonline.com/ArcGIS/rest/services/Reference/World_Reference_Overlay/MapServer/tile/{z}/{y}/{x}',
+        options: {
+          minZoom: 1,
+          maxZoom: 13,
+          subdomains: ['server', 'services'],
+          pane: (pointerEvents) ? 'esri-labels' : 'tilePane',
+          attribution: ''
+        }
+      },
+
+      USATopo: {
+        urlTemplate: tileProtocol + '//{s}.arcgisonline.com/ArcGIS/rest/services/USA_Topo_Maps/MapServer/tile/{z}/{y}/{x}',
+        options: {
+          minZoom: 1,
+          maxZoom: 15,
+          subdomains: ['server', 'services'],
+          attribution: 'USGS, National Geographic Society, i-cubed'
+        }
+      },
+
+      ImageryClarity: {
+        urlTemplate: tileProtocol + '//clarity.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        options: {
+          minZoom: 1,
+          maxZoom: 19,
+          attribution: 'Esri, DigitalGlobe, GeoEye, Earthstar Geographics, CNES/Airbus DS, USDA, USGS, AeroGRID, IGN, and the GIS User Community'
+        }
+      },
+
+      Physical: {
+        urlTemplate: tileProtocol + '//{s}.arcgisonline.com/arcgis/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}',
+        options: {
+          minZoom: 1,
+          maxZoom: 8,
+          subdomains: ['server', 'services'],
+          attribution: 'U.S. National Park Service'
+        }
+      },
+
+
+      ImageryFirefly: {
+        urlTemplate: tileProtocol + '//fly.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Firefly/MapServer/tile/{z}/{y}/{x}',
+        options: {
+          minZoom: 1,
+          maxZoom: 19,
+          attribution: 'Esri, DigitalGlobe, GeoEye, Earthstar Geographics, CNES/Airbus DS, USDA, USGS, AeroGRID, IGN, and the GIS User Community',
+          attributionUrl: 'https://static.arcgis.com/attribution/World_Imagery'
+        }
+      }
+
+
+=====================================================
+
+------------------
+ОРИГИНАЛЬНЫЙ ЗАПРОС ОБЪЕКТОВ С ПОЛИГОНАМИ:
+https://wikimapia.org/z1/itiles/03.xy
+------------------
+В org.wikimapia.android.Constants:
+  public static interface Urls {
+    public static final String WIKIMAP_TILES_DESCRIPTION_URL = "http://wikimapia.org/z1/itiles/%s.xy";
+
+    public static final String WIKIMAP_TILES_FORMAT_URL = "http://i%d.wikimapia.org/?x=%d&y=%d&zoom=%d&type=hybrid&lng=%d";
+  }
+-----
+Это не используется.
+
+Аналогично, этот URL есть в
+org.wikimapia.android.tiles.base.WMInteractiveKey:
+
+private static final String KWM_INTERACTIVE_BASE_URL = "http://wikimapia.org/z1/itiles/"
+
+------
+Класс:
+org.wikimapia.android.tiles.base.WMBaseKey
+Судя по всему, формирует строку запроса данных для видимой области.
+------
+Класс
+org.wikimapia.android.tiles.WMTileTools
+содержит метод для конвертации кординаты в номер тайла викимапии, а также расчёт соотношения полигона к видимой области карты.
+
+-------
+!!!!
+Класс WMBaseTile - это то, во что парсится ответ с полигонами и прочим.
+У него есть
+org.wikimapia.android.tiles.base.WMInteractiveTileObject, который, в числе прочего принимает на вход строку с бинарником полигона и парсит его в ArrayList<PolyPoint>.
+
+-------
+JD-GUI
+
+-------
+IP-адрес в виде Int конвертируется:
+https://mkyong.com/java/java-convert-ip-address-to-decimal-number/
+-----
+И есть возможность получать месторасположение по IP. Есть API, не требующий ключа.
+https://api.iplocation.net/
+
+-------
+Обработка ошибок сети в retrofit:
+https://stackoverflow.com/questions/58523119/exception-handling-of-network-errors-retrofit

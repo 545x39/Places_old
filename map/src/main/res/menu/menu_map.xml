@@ -4,30 +4,85 @@
     tools:context="ru.fivefourtyfive.wikimapper.presentation.ui.MainActivity">
     <item
         android:id="@+id/action_search"
-        android:orderInCategory="1"
         android:icon="@drawable/icon_lens"
+        android:orderInCategory="1"
         android:title="@string/search"
         app:showAsAction="always" />
-<!--    <item-->
-<!--        android:id="@+id/action_search"-->
-<!--        android:orderInCategory="1"-->
-<!--        android:title="@string/search"-->
-<!--        app:actionViewClass="androidx.appcompat.widget.SearchView"-->
-<!--        android:icon="@drawable/icon_lens"-->
-<!--        app:showAsAction="always" />-->
+    <!--    <item-->
+    <!--        android:id="@+id/action_search"-->
+    <!--        android:orderInCategory="1"-->
+    <!--        android:title="@string/search"-->
+    <!--        app:actionViewClass="androidx.appcompat.widget.SearchView"-->
+    <!--        android:icon="@drawable/icon_lens"-->
+    <!--        app:showAsAction="always" />-->
     <!--    app:actionViewClass="androidx.appcompat.widget.SearchView$SearchAutoComplete"-->
 
-    <!--    TODO Remove it when necessary-->
     <item
         android:id="@+id/action_object_details"
-        android:orderInCategory="99"
-        android:icon="@drawable/icon_hammer"
+        android:icon="@drawable/icon_overlays"
+        android:iconTint="@color/white"
+        android:orderInCategory="86"
         android:title="@string/title_objectdetails"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always">
+        <menu>
+            <group
+                android:id="@+id/group_map_mode"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/action_map_mode_scheme"
+                    android:orderInCategory="87"
+                    android:title="@string/map_mode_scheme"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_map_mode_satellite"
+                    android:orderInCategory="88"
+                    android:title="@string/map_mode_satellite"
+                    app:showAsAction="never" />
+            </group>
+            <group>
+                <item
+                    android:id="@+id/action_wikimapia_overlays"
+                    android:checkable="true"
+                    android:orderInCategory="90"
+                    android:title="@string/map_mode_wikimapia_overlay"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_show_scale"
+                    android:checkable="true"
+                    android:orderInCategory="91"
+                    android:title="@string/title_scale"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_show_grid"
+                    android:checkable="true"
+                    android:orderInCategory="92"
+                    android:title="@string/title_grid"
+                    app:showAsAction="never" />
+            </group>
+        </menu>
+    </item>
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:icon="@drawable/icon_gear"
-        android:title="@string/settings"
-        app:showAsAction="ifRoom" />
+        android:id="@+id/action_follow_location"
+        android:checkable="true"
+        android:orderInCategory="93"
+        android:title="@string/title_follow_location"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_auto_rotate"
+        android:checkable="true"
+        android:orderInCategory="94"
+        android:title="@string/title_auto_rotate_map"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_center_selection"
+        android:checkable="true"
+        android:orderInCategory="95"
+        android:title="@string/title_center_selection"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_keep_screen_on"
+        android:checkable="true"
+        android:orderInCategory="96"
+        android:title="@string/title_keep_screen_on"
+        app:showAsAction="never" />
 </menu>

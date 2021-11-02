@@ -1,10 +1,31 @@
 <resources>
-    <string name="app_name" translatable="false">Wikimapper</string>
+    <string name="app_name" translatable="false">Places</string>
     <string name="settings">Settings</string>
     <string name="search">Search</string>
+    <string name="show_on_map">Show on map</string>
+    <string name="add_to_favorites">Add to favorites</string>
+    <string name="delete_from_favorites">Delete from favorites</string>
+    <string name="share">Share</string>
+    <string name="show_on_website">Show on website</string>
+    <string name="share_link">Share link</string>
+    <string name="share_coordinates">Share coordinates</string>
+    <string name="slide_show">Slide show</string>
+    <string name="map_mode_scheme">Scheme</string>
+    <string name="map_mode_satellite">Satellite</string>
+    <string name="map_mode_wikimapia_overlay">Wikimapia layer</string>
     <string name="title_map" translatable="false">Map</string>
     <string name="title_object" translatable="false">Object</string>
     <string name="title_search" translatable="false">Search</string>
     <string name="title_settings" translatable="false">Settings</string>
-    <string name="title_objectdetails">Info</string>
+    <string name="title_objectdetails">Object</string>
+    <string name="title_overlays">Map mode</string>
+    <string name="title_center_selection">Center selection</string>
+    <string name="title_keep_screen_on">Keep screen on</string>
+    <string name="title_follow_location">Follow location</string>
+    <string name="title_auto_rotate_map">Auto rotate map</string>
+    <string name="title_compass">Compass</string>
+    <string name="title_grid">Grid</string>
+    <string name="title_scale">Scale</string>
+    <string name="comments_count">Comments: %s</string>
+    <string name="following_location_disabled">Following location disabled</string>
 </resources>

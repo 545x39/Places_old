@@ -7,11 +7,9 @@ import ru.fivefourtyfive.wikimapper.di.factory.ViewModelProviderFactory
 import javax.inject.Singleton
 
 @Module
-abstract class ViewModelProviderFactoryModule {
+interface ViewModelProviderFactoryModule {
 
     @Singleton
     @Binds
-    /** Возвращать нужно именно родительский тип, иначе будет "found dependency cycle."*/
-    abstract fun bindViewModelFactory(viewModelProviderFactory: ViewModelProviderFactory): ViewModelProvider.Factory
-
+    fun bindViewModelFactory(viewModelProviderFactory: ViewModelProviderFactory): ViewModelProvider.Factory
 }

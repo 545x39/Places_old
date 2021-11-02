@@ -23,7 +23,7 @@
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
         <action
-            android:id="@+id/action_mapFragment_to_objectDetailsFragment"
+            android:id="@+id/action_mapFragment_to_placeDetailsFragment"
             app:destination="@id/objectDetailsFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"
@@ -42,8 +42,8 @@
         android:label="SettingsFragment" />
     <fragment
         android:id="@+id/objectDetailsFragment"
-        android:name="ru.fivefourtyfive.objectdetails.presentation.ui.ObjectDetailsFragment"
+        android:name="ru.fivefourtyfive.objectdetails.presentation.ui.PlaceDetailsFragment"
         app:moduleName="objectdetails"
-        android:label="ObjectDetailsFragment" />
+        android:label="PlaceDetailsFragment" />
 <!--    app:moduleName="Wikimapper.objectdetails"-->
 </navigation>

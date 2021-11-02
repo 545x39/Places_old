@@ -2,5 +2,26 @@
 <resources>
     <string name="settings">Настройки</string>
     <string name="search">Поиск</string>
-    <string name="title_objectdetails">Инфо</string>
+    <string name="show_on_map">Показать на карте</string>
+    <string name="add_to_favorites">Добавить в избранные</string>
+    <string name="delete_from_favorites">Удалить из избранных</string>
+    <string name="share">Поделиться</string>
+    <string name="show_on_website">Показать на сайте</string>
+    <string name="share_link">Отправить ссылку</string>
+    <string name="share_coordinates">Отправить координаты</string>
+    <string name="slide_show">Слайд-шоу</string>
+    <string name="map_mode_scheme">Схема</string>
+    <string name="map_mode_satellite">Спутник</string>
+    <string name="map_mode_wikimapia_overlay">Слой Wikimapia</string>
+    <string name="title_objectdetails">Объект</string>
+    <string name="title_overlays">Режим карты</string>
+    <string name="title_center_selection">Центрировать на выбранном</string>
+    <string name="title_keep_screen_on">Не выключать экран</string>
+    <string name="title_follow_location">Отслеживать местоположение</string>
+    <string name="title_auto_rotate_map">Автоповорот карты</string>
+    <string name="title_compass">Компас</string>
+    <string name="title_grid">Сетка</string>
+    <string name="title_scale">Масштаб</string>
+    <string name="comments_count">Комментариев: %s</string>
+    <string name="following_location_disabled">Следование за местоположением отключено</string>
 </resources>
