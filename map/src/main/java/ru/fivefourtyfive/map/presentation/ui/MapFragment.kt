@@ -29,7 +29,6 @@ import ru.fivefourtyfive.map.R
 import ru.fivefourtyfive.map.di.DaggerMapFragmentComponent
 import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
 import ru.fivefourtyfive.map.presentation.util.MapMode
-import ru.fivefourtyfive.map.presentation.util.TileUtils
 import ru.fivefourtyfive.map.presentation.util.getDistance
 import ru.fivefourtyfive.map.presentation.viewmodel.MapEvent
 import ru.fivefourtyfive.map.presentation.viewmodel.MapFragmentViewModel
@@ -369,21 +368,6 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
 
         fun isFarEnough(point1: IGeoPoint, point2: IGeoPoint) = getDistance(point1, point2) > 5
 
-        fun getWMTileDescription() {
-            mapView.apply {
-                val list = TileUtils.wikimapiaTileCodes(
-//                    boundingBox,
-                    mapCenter,
-//                    kotlin.math.max(0.0, (zoomLevelDouble - 1.0)).toInt()
-                    zoomLevelDouble.roundToInt()
-                )
-                list.map { code ->
-                    Timber
-                        .e("TILE: ${TileUtils.getUrl(code)}")
-                }
-            }
-        }
-
         with(viewModel) {
             mapView.let {
                 Timber.e("BOUNDING BOX: ${it.boundingBox}")
@@ -399,7 +383,6 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
                             it.boundingBox.latNorth
                         )
                     )
-                    getWMTileDescription()
                 }
             }
         }

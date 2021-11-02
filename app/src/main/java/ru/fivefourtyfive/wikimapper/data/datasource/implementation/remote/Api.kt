@@ -2,11 +2,8 @@
 
 package ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote
 
-import okhttp3.ResponseBody
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Headers
-import retrofit2.http.Path
 import retrofit2.http.Query
 import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Function.CATEGORY_GET_ALL
 import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Function.CATEGORY_GET_BY_ID
@@ -40,8 +37,6 @@ import ru.fivefourtyfive.wikimapper.domain.entity.Categories
 import ru.fivefourtyfive.wikimapper.domain.entity.Category
 import ru.fivefourtyfive.wikimapper.domain.entity.Place
 import ru.fivefourtyfive.wikimapper.domain.entity.Places
-import ru.fivefourtyfive.wikimapper.util.Network.ROOT_URL
-import ru.fivefourtyfive.wikimapper.util.Network.WIKIMAPIA_POLYGON_PATH
 
 interface Api {
 
@@ -132,12 +127,4 @@ interface Api {
         @Query(value = FORMAT)      format:         String  = JSON
     ): Places
 
-    @GET("$ROOT_URL$WIKIMAPIA_POLYGON_PATH{codes}")
-    @Headers(
-        "Content-Type: Application/Raw",
-        "Cache-Control: max-age=640000"
-    )
-    fun getArea(
-        @Path("codes") codes: String
-    ): Call<ResponseBody>
 }
