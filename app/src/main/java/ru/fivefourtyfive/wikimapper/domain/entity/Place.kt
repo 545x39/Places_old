@@ -3,12 +3,13 @@ package ru.fivefourtyfive.wikimapper.domain.entity
 import androidx.room.*
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import ru.fivefourtyfive.wikimapper.data.datasource.implementation.local.util.TableName.TABLE_PLACES
+import ru.fivefourtyfive.wikimapper.data.datasource.implementation.local.database.typeconverter.PolygonConverter
+import ru.fivefourtyfive.wikimapper.data.datasource.implementation.local.database.util.TableName.TABLE_PLACES
+import ru.fivefourtyfive.wikimapper.domain.entity.util.ID
 import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.COMMENTS
 import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.DEBUG_INFO
 import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.DESCRIPTION
 import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.DISTANCE
-import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.ID
 import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.IS_BUILDING
 import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.IS_DELETED
 import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.IS_PROTECTED
@@ -31,17 +32,17 @@ import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.URL_HTML
 import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.WIKIPEDIA
 import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.X
 import ru.fivefourtyfive.wikimapper.domain.entity.util.PlaceFields.Y
-import ru.fivefourtyfive.wikimapper.domain.entity.util._ID
 
 @Entity(
-    tableName = TABLE_PLACES, /*primaryKeys = [ID, PLACE_ID],*/
-    indices = [Index(value = [_ID, ID]/*,unique = true*/)]
+    tableName = TABLE_PLACES,
+    indices = [Index(value = [ID], unique = true), Index(value = [POLYGON])]
 )
+@TypeConverters(PolygonConverter::class)
 data class Place(
     @ColumnInfo(name = ID)
     @SerializedName(ID)
     @Expose
-//    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey(autoGenerate = false)
     val id: Int,
     @ColumnInfo(name = OBJECT_TYPE)
     @SerializedName(OBJECT_TYPE)
@@ -83,6 +84,9 @@ data class Place(
     @SerializedName(WIKIPEDIA)
     @Expose
     val wikipedia: String? = null,
+    @SerializedName(POLYGON)
+    @Expose
+    val polygon: List<PolygonPoint>? = null,
     @ColumnInfo(name = PARENT_ID)
     @SerializedName(PARENT_ID)
     @Expose
@@ -136,24 +140,21 @@ data class Place(
 //    @SerializedName("edit_info")
 //    @Expose
 //    val editInfo: EditInfo,
-    @ColumnInfo(name = _ID)
-    @PrimaryKey(autoGenerate = true)
-    var id_: Int,
 ) {
     @SerializedName(DEBUG_INFO)
     @Expose
     @Ignore
     var debugInfo: DebugInfo? = null
 
+    @SerializedName(LOCATION)
+    @Expose
+    @Ignore
+    var location: Location? = null
+
     @SerializedName(TAGS)
     @Expose
     @Ignore
     var tags: List<Tag>? = null
-
-    @SerializedName(POLYGON)
-    @Expose
-    @Ignore
-    var polygon: List<PolygonPoint>? = null
 
     @SerializedName(PHOTOS)
     @Expose
@@ -164,9 +165,4 @@ data class Place(
     @Expose
     @Ignore
     var comments: List<Comment>? = null
-
-    @SerializedName(LOCATION)
-    @Expose
-    @Ignore
-    var location: Location? = null
 }

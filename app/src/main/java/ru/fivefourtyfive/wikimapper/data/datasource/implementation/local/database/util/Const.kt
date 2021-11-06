@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.wikimapper.data.datasource.implementation.local.util
+package ru.fivefourtyfive.wikimapper.data.datasource.implementation.local.database.util
 
 object Path {
     const val DB_DIR                   = "db"

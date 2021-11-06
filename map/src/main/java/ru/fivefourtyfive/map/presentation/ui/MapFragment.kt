@@ -44,8 +44,6 @@ import ru.fivefourtyfive.wikimapper.util.ifFalse
 import ru.fivefourtyfive.wikimapper.util.ifTrue
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.math.roundToInt
-import kotlin.math.roundToLong
 import ru.fivefourtyfive.wikimapper.R as appR
 
 class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
@@ -448,7 +446,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
     override fun onLocationChanged(location: Location) {
         location.bearing.let { it.equals(0.0f).ifFalse { viewModel.latestBearing = it } }
         GeoPoint(location).apply {
-            val speed = (location.speed).roundToLong()
+//            val speed = (location.speed).roundToLong()
             (viewModel.isFollowLocationEnabled() /*&& speed >= 40*/).ifTrue {
                 mapView.controller.animateTo(
                     this, mapView.zoomLevelDouble, 600,
