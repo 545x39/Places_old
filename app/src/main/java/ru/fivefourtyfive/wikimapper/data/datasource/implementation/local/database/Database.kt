@@ -3,12 +3,13 @@ package ru.fivefourtyfive.wikimapper.data.datasource.implementation.local.databa
 import androidx.room.RoomDatabase
 import ru.fivefourtyfive.wikimapper.data.datasource.implementation.local.database.dao.LocationDAO
 import ru.fivefourtyfive.wikimapper.data.datasource.implementation.local.database.dao.PlaceDAO
+import ru.fivefourtyfive.wikimapper.data.datasource.implementation.local.database.util.Version.DB_VERSION
 import ru.fivefourtyfive.wikimapper.domain.entity.Location
 import ru.fivefourtyfive.wikimapper.domain.entity.Place
 
 @androidx.room.Database(
     entities = [Place::class, Location::class],
-    version = 1,
+    version = DB_VERSION,
     exportSchema = false
 )
 abstract class Database : RoomDatabase() {

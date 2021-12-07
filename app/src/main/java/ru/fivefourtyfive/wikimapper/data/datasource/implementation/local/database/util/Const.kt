@@ -1,5 +1,9 @@
 package ru.fivefourtyfive.wikimapper.data.datasource.implementation.local.database.util
 
+object Version{
+    const val DB_VERSION = 2
+}
+
 object Path {
     const val DB_DIR                   = "db"
     const val DB_FILENAME              = "places.db"
