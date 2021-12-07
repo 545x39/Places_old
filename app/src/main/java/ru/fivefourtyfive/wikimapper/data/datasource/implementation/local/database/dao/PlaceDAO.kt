@@ -38,6 +38,6 @@ abstract class PlaceDAO {
         east: Double,
         south: Double,
         west: Double,
-        limiter: Int = 10
+        limiter: Int = 25s
     ): List<Place>
 }

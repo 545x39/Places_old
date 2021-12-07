@@ -22,23 +22,22 @@ class RoomDataSource @Inject constructor(private val database: Database) : Local
         }
     }
 
+    override suspend fun getArea(
+        latMin: Double,
+        lonMin: Double,
+        latMax: Double,
+        lonMax: Double,
+        category: String?,
+        count: Int?,
+        language: String?
+    ) = database.placeDAO().getPlaces(latMin, lonMin, latMax, lonMax).let { Places(places = it, count = it.size)}
+
     override suspend fun getPlacesCount() = database.placeDAO().getPlacesCount()
 
 //    override suspend fun getPlace(id: Int): Place {
 //        //TODO
 //    }
 //
-//    override suspend fun getArea(
-//        latMin: Double,
-//        lonMin: Double,
-//        latMax: Double,
-//        lonMax: Double,
-//        category: String?,
-//        count: Int?,
-//        language: String?
-//    ): Places {
-//        //TODO
-//    }
 //
 //    override suspend fun persistSearchResults(places: Places) {
 //        //TODO
