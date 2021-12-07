@@ -30,6 +30,7 @@ abstract class PlaceDAO {
     @Query("SELECT COUNT(1) FROM places")
     abstract suspend fun getPlacesCount(): Int
 
+    //(north - south) * (east - west) >= ((60.04390944606621 - 59.9752860293248)*(29.768305507565344 - 29.69188190732538))/1000
     @RewriteQueriesToDropUnusedColumns
     @Query("SELECT * FROM places p LEFT JOIN locations l ON p.id = l.place_id WHERE ((north >= :south AND east >= :west AND north <= :north and east <= :east) OR ((south >= :south AND west >= :west AND south <= :north and west <= :east))) AND (north - south >= (:north - :south)/:limiter AND east - west >=(:east - :west) /:limiter);")
     abstract suspend fun getPlaces(
@@ -39,5 +40,4 @@ abstract class PlaceDAO {
         west: Double,
         limiter: Int = 10
     ): List<Place>
-
 }
