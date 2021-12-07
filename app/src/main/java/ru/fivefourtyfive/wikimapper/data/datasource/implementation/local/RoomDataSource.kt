@@ -30,7 +30,8 @@ class RoomDataSource @Inject constructor(private val database: Database) : Local
         category: String?,
         count: Int?,
         language: String?
-    ) = database.placeDAO().getPlaces(latMin, lonMin, latMax, lonMax).let { Places(places = it, count = it.size)}
+    ) = database.placeDAO().getPlaces(latMin, lonMin, latMax, lonMax)
+        .let { Places(places = it, count = it.size, found = it.size) }
 
     override suspend fun getPlacesCount() = database.placeDAO().getPlacesCount()
 
