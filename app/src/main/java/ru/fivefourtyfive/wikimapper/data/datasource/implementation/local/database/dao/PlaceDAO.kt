@@ -17,10 +17,9 @@ abstract class PlaceDAO {
             }
         }
     }
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insertAll(places: List<Place>)
-
-    //    suspend fun insertAll(places: List<Place>) = places.map { insert(it) }
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insertPlace(place: Place)
@@ -30,5 +29,15 @@ abstract class PlaceDAO {
 
     @Query("SELECT COUNT(1) FROM places")
     abstract suspend fun getPlacesCount(): Int
+
+    @RewriteQueriesToDropUnusedColumns
+    @Query("SELECT * FROM places p LEFT JOIN locations l ON p.id = l.place_id WHERE ((north >= :south AND east >= :west AND north <= :north and east <= :east) OR ((south >= :south AND west >= :west AND south <= :north and west <= :east))) AND (north - south >= (:north - :south)/:limiter AND east - west >=(:east - :west) /:limiter);")
+    abstract suspend fun getPlaces(
+        north: Double,
+        east: Double,
+        south: Double,
+        west: Double,
+        limiter: Int = 10
+    ): List<Place>
 
 }
