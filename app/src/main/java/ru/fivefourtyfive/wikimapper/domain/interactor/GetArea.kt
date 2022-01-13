@@ -3,13 +3,18 @@ package ru.fivefourtyfive.wikimapper.domain.interactor
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
+import ru.fivefourtyfive.wikimapper.data.datasource.abstraction.LocalDataSource
 import ru.fivefourtyfive.wikimapper.data.datasource.abstraction.RemoteDataSource
 import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Value
 import ru.fivefourtyfive.wikimapper.domain.datastate.AreaDataState
 import ru.fivefourtyfive.wikimapper.domain.dto.AreaDTO
 import javax.inject.Inject
 
-class GetArea @Inject constructor(private val remoteDataSource: RemoteDataSource) {
+class GetArea @Inject constructor(
+    private val remoteDataSource: RemoteDataSource,
+    private val localDataSource: LocalDataSource
+) {
 
     suspend fun execute(
         lonMin: Double,
@@ -26,6 +31,7 @@ class GetArea @Inject constructor(private val remoteDataSource: RemoteDataSource
             .apply {
                 when (debugInfo) {
                     null -> emit(AreaDataState.Success(AreaDTO(this)))
+                        .also { withContext(IO){localDataSource.persistArea(this@apply)} }
                     else -> emit(AreaDataState.Error(message = debugInfo?.message ?: ""))
                 }
             }

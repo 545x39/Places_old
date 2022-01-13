@@ -1,52 +1,101 @@
 package ru.fivefourtyfive.wikimapper.domain.entity
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import ru.fivefourtyfive.wikimapper.data.datasource.implementation.local.database.util.TableName.TABLE_LOCATIONS
+import ru.fivefourtyfive.wikimapper.domain.entity.util.ID
+import ru.fivefourtyfive.wikimapper.domain.entity.util.LocationFields.CITY
+import ru.fivefourtyfive.wikimapper.domain.entity.util.LocationFields.CITY_GUIDE_DOMAIN
+import ru.fivefourtyfive.wikimapper.domain.entity.util.LocationFields.CITY_ID
+import ru.fivefourtyfive.wikimapper.domain.entity.util.LocationFields.COUNTRY
+import ru.fivefourtyfive.wikimapper.domain.entity.util.LocationFields.COUNTRY_ADM_ID
+import ru.fivefourtyfive.wikimapper.domain.entity.util.LocationFields.EAST
+import ru.fivefourtyfive.wikimapper.domain.entity.util.LocationFields.LAT
+import ru.fivefourtyfive.wikimapper.domain.entity.util.LocationFields.LON
+import ru.fivefourtyfive.wikimapper.domain.entity.util.LocationFields.NORTH
+import ru.fivefourtyfive.wikimapper.domain.entity.util.LocationFields.PLACE
+import ru.fivefourtyfive.wikimapper.domain.entity.util.LocationFields.PLACE_ID
+import ru.fivefourtyfive.wikimapper.domain.entity.util.LocationFields.SOUTH
+import ru.fivefourtyfive.wikimapper.domain.entity.util.LocationFields.STATE
+import ru.fivefourtyfive.wikimapper.domain.entity.util.LocationFields.WEST
 
+@Entity(
+    tableName = TABLE_LOCATIONS,
+    foreignKeys = [ForeignKey(
+        entity = Place::class,
+        parentColumns = [ID],
+        childColumns = [PLACE_ID],
+        onUpdate = ForeignKey.CASCADE,
+        onDelete = ForeignKey.CASCADE
+    )])
 data class Location(
-    @SerializedName("lon")
+    @ColumnInfo(name = ID)
+    @Expose(serialize = false, deserialize = false)
+    @PrimaryKey(autoGenerate = true)
+    val id: Int,
+    @ColumnInfo(name = LON)
+    @SerializedName(LON)
     @Expose
     val lon: Double,
-    @SerializedName("lat")
+    @ColumnInfo(name = LAT)
+    @SerializedName(LAT)
     @Expose
     val lat: Double,
-    @SerializedName("north")
+    @ColumnInfo(name = NORTH)
+    @SerializedName(NORTH)
     @Expose
     val north: Double,
-    @SerializedName("south")
+    @ColumnInfo(name = SOUTH)
+    @SerializedName(SOUTH)
     @Expose
     val south: Double,
-    @SerializedName("east")
+    @ColumnInfo(name = EAST)
+    @SerializedName(EAST)
     @Expose
     val east: Double,
-    @SerializedName("west")
+    @ColumnInfo(name = WEST)
+    @SerializedName(WEST)
     @Expose
     val west: Double,
-    @SerializedName("country")
+    @ColumnInfo(name = COUNTRY)
+    @SerializedName(COUNTRY)
     @Expose
     val country: String? = null,
-    @SerializedName("state")
+    @ColumnInfo(name = STATE)
+    @SerializedName(STATE)
     @Expose
     val state: String? = null,
-    @SerializedName("place")
-    @Expose(deserialize = false)
+    @ColumnInfo(name = PLACE)
+    @SerializedName(PLACE)
+    @Expose
     val place: String? = null,
-    @SerializedName("country_adm_id")
-    @Expose(deserialize = false)
+    @ColumnInfo(name = COUNTRY_ADM_ID)
+    @SerializedName(COUNTRY_ADM_ID)
+    @Expose
     val countryAdmId: Int? = null,
 //    @SerializedName("gadm")
 //    @Expose
 //    val gadm: List<Gadm>? = null,
-    @SerializedName("city_id")
-    @Expose(deserialize = false)
+    @ColumnInfo(name = CITY_ID)
+    @SerializedName(CITY_ID)
+    @Expose
     val cityId: Int? = 0,
-    @SerializedName("city")
-    @Expose(deserialize = false)
+    @ColumnInfo(name = CITY)
+    @SerializedName(CITY)
+    @Expose
     val city: String? = null,
-    @SerializedName("cityguideDomain")
-    @Expose(deserialize = false)
-    val cityGuideDomain: Any? = null,
+//    @ColumnInfo(name = CITY_GUIDE_DOMAIN)
+//    @SerializedName(CITY_GUIDE_DOMAIN)
+//    @Expose
+//    val cityGuideDomain: Any? = null,
     @SerializedName("zoom")
-    @Expose(deserialize = false)
+    @Expose
     val zoom: Double? = null
-)
+){
+    @ColumnInfo(name = PLACE_ID)
+    var placeId: Int? = null
+}

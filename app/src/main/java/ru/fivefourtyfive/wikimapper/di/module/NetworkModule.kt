@@ -54,6 +54,7 @@ class NetworkModule {
         }.build()
     }
 
+    @Singleton
     @Provides
     fun provideBaseApi(retrofit: Retrofit): Api = retrofit.create(Api::class.java)
 }
