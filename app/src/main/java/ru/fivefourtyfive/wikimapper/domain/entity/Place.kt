@@ -121,7 +121,8 @@ data class Place(
     @Expose(deserialize = false)
     val isProtected: Boolean? = null,
     /** Приходит только в поиске. */
-    @Ignore //@ColumnInfo(name = DISTANCE)
+//    @Ignore
+    //@ColumnInfo(name = DISTANCE)
     @SerializedName(DISTANCE)
     @Expose
     val distance: Int? = null,
