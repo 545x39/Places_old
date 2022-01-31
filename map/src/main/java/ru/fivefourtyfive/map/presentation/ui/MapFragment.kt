@@ -103,30 +103,15 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         viewModel = ViewModelProvider(this, providerFactory)[MapFragmentViewModel::class.java]
         (requireActivity() as MainActivity).switchKeepScreenOn(viewModel.isKeepScreenOnEnabled())
         view.apply {
-            mapView.setListener()
+            mapView.setMapListener()
             findViewById<FrameLayout>(R.id.map_placeholder).addView(mapView)
             progress = findViewById(R.id.progress)
             placeTitle = findViewById(R.id.place_title)
             placeTitleButton = findViewById(R.id.place_title_button)
-            bearingButton = findViewById<ImageButton>(R.id.bearing_button)
-                .apply {
-                    clicks()
-                        .throttleFirst(200)
-                        .map { onBearingButtonClick() }
-                        .launchIn(lifecycleScope)
-                }
-            centerButton = findViewById<ImageButton>(R.id.center_button)
-                .apply {
-                    clicks()
-                        .throttleFirst(200)
-                        .map { onCenterButtonLongClick() }
-                        .launchIn(lifecycleScope)
-                    longClicks()
-                        .map { onCenterButtonLongClick() }
-                        .launchIn(lifecycleScope)
-                }
+            bearingButton = findViewById(R.id.bearing_button)
+            centerButton = findViewById(R.id.center_button)
         }
-        subscribeObserver()
+        subscribeObservers()
     }
 
     @SuppressLint("MissingPermission")
@@ -156,7 +141,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
     }
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="SETTERS">
+    //<editor-fold defaultstate="collapsed" desc="SETUP">
     private fun setMap() {
         with(viewModel) {
             progress.visibility = GONE
@@ -196,7 +181,8 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         }
     }
 
-    private fun subscribeObserver() {
+    @ExperimentalCoroutinesApi
+    private fun subscribeObservers() {
         viewModel.liveData.observe(viewLifecycleOwner, {
             with(it) {
                 progress.visibility = progressVisibility
@@ -208,9 +194,27 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
                 }
             }
         })
+        subscribeToButtonClicks()
     }
 
-    private fun MapView.setListener() {
+    @ExperimentalCoroutinesApi
+    private fun subscribeToButtonClicks() {
+        bearingButton.clicks()
+            .throttleFirst(200)
+            .map { onBearingButtonClick() }
+            .launchIn(lifecycleScope)
+        centerButton.apply {
+            clicks()
+                .throttleFirst(200)
+                .map { onCenterButtonLongClick() }
+                .launchIn(lifecycleScope)
+            longClicks()
+                .map { onCenterButtonLongClick() }
+                .launchIn(lifecycleScope)
+        }
+    }
+
+    private fun MapView.setMapListener() {
         addMapListener(DelayedMapListener(object : MapListener {
             override fun onScroll(event: ScrollEvent?) = true.also {
                 getArea()
