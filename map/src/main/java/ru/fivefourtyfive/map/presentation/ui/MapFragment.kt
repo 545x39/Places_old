@@ -203,13 +203,15 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
             .throttleFirst(200)
             .map { onBearingButtonClick() }
             .launchIn(lifecycleScope)
-        centerButton.clicks()
+        centerButton.apply {
+            clicks()
                 .throttleFirst(200)
-                .map {onCenterButtonClick() }
+                .map { onCenterButtonClick() }
                 .launchIn(lifecycleScope)
-        centerButton.longClicks()
-            .map { onCenterButtonLongClick() }
-            .launchIn(lifecycleScope)
+            longClicks()
+                .map { onCenterButtonLongClick() }
+                .launchIn(lifecycleScope)
+        }
     }
 
     private fun MapView.setMapListener() {
