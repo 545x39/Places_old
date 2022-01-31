@@ -111,6 +111,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
             bearingButton = findViewById(R.id.bearing_button)
             centerButton = findViewById(R.id.center_button)
         }
+        subscribeToButtonClicks()
         subscribeObservers()
     }
 
@@ -212,6 +213,21 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
                 .map { onCenterButtonLongClick() }
                 .launchIn(lifecycleScope)
         }
+    }
+
+    @ExperimentalCoroutinesApi
+    private fun subscribeToButtonClicks() {
+        bearingButton.clicks()
+            .throttleFirst(200)
+            .map { onBearingButtonClick() }
+            .launchIn(lifecycleScope)
+        centerButton.clicks()
+                .throttleFirst(200)
+                .map {onCenterButtonClick() }
+                .launchIn(lifecycleScope)
+        centerButton.longClicks()
+            .map { onCenterButtonLongClick() }
+            .launchIn(lifecycleScope)
     }
 
     private fun MapView.setMapListener() {
