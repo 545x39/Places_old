@@ -13,7 +13,11 @@ import android.view.View.VISIBLE
 import android.widget.*
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.osmdroid.api.IGeoPoint
 import org.osmdroid.events.DelayedMapListener
@@ -39,9 +43,8 @@ import ru.fivefourtyfive.wikimapper.di.factory.ViewModelProviderFactory
 import ru.fivefourtyfive.wikimapper.presentation.ui.MainActivity
 import ru.fivefourtyfive.wikimapper.presentation.ui.NavFragment
 import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.EventDispatcher
+import ru.fivefourtyfive.wikimapper.util.*
 import ru.fivefourtyfive.wikimapper.util.PermissionsUtil.isPermissionGranted
-import ru.fivefourtyfive.wikimapper.util.ifFalse
-import ru.fivefourtyfive.wikimapper.util.ifTrue
 import timber.log.Timber
 import javax.inject.Inject
 import ru.fivefourtyfive.wikimapper.R as appR
@@ -91,12 +94,13 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         return inflater.inflate(R.layout.fragment_map, container, false)
     }
 
+    @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().setTitle(appR.string.app_name)
         setHasOptionsMenu(true)
         locationManager = requireContext().getSystemService(LOCATION_SERVICE) as LocationManager
-        viewModel = ViewModelProvider(this, providerFactory).get(MapFragmentViewModel::class.java)
+        viewModel = ViewModelProvider(this, providerFactory)[MapFragmentViewModel::class.java]
         (requireActivity() as MainActivity).switchKeepScreenOn(viewModel.isKeepScreenOnEnabled())
         view.apply {
             mapView.setListener()
@@ -105,11 +109,21 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
             placeTitle = findViewById(R.id.place_title)
             placeTitleButton = findViewById(R.id.place_title_button)
             bearingButton = findViewById<ImageButton>(R.id.bearing_button)
-                .apply { setOnClickListener { onBearingButtonClick() } }
+                .apply {
+                    clicks()
+                        .throttleFirst(200)
+                        .map { onBearingButtonClick() }
+                        .launchIn(lifecycleScope)
+                }
             centerButton = findViewById<ImageButton>(R.id.center_button)
                 .apply {
-                    setOnClickListener { onCenterButtonClick() }
-                    setOnLongClickListener { onCenterButtonLongClick() }
+                    clicks()
+                        .throttleFirst(200)
+                        .map { onCenterButtonLongClick() }
+                        .launchIn(lifecycleScope)
+                    longClicks()
+                        .map { onCenterButtonLongClick() }
+                        .launchIn(lifecycleScope)
                 }
         }
         subscribeObserver()
@@ -207,11 +221,11 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
                 getArea()
                 updateLastLocationAndZoom()
             }
-        }, viewModel.getMapListenerDelay()))
+        }, viewModel.mapListenerDelay))
     }
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="ON CLICK LISTENERS">
+    //<editor-fold defaultstate="collapsed" desc="ON CLICK FUNCTIONS">
     private fun onBearingButtonClick() =
         mapView.controller.animateTo(mapView.mapCenter, mapView.zoomLevelDouble, 600, 0.0f)
 

@@ -8,7 +8,7 @@ object Versions {
     const val NAVIGATION_VERSION = "2.3.5"
     const val DAGGER_VERSION = "2.38.1"
     const val COROUTINES_VERSION = "1.5.2-native-mt"
-    const val LIFECYCLE_EXT_VERSION = "2.3.1"
+    const val LIFECYCLE_EXT_VERSION = "2.4.0"
     const val WORK_MANAGER_VERSION = "2.7.0-beta01"
     const val PREFERENCE_VERSION = "1.1.1"
     const val ROOM_VERSION = "2.3.0"

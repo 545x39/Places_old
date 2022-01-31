@@ -55,8 +55,10 @@ class MapFragmentViewModel @Inject constructor(
 
     var currentSelection: PlacePolygon? = null
 
-    fun getMapListenerDelay() =
-        if (settings.getFollowLocation()) DEFAULT_DELAY else FOLLOWING_LOCATION_DELAY
+    var mapListenerDelay = when (settings.getFollowLocation()) {
+        true -> FOLLOWING_LOCATION_DELAY
+        false -> DEFAULT_DELAY
+    }
 
     var latestBearing = 0.0f
 
