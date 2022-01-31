@@ -1,6 +1,6 @@
 package ru.fivefourtyfive.wikimapper.data.datasource.remote
 
-import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.IRemoteDataSource
+import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.datasource.IRemoteDataSource
 
 class FakeRemoteDataSource : IRemoteDataSource {
 

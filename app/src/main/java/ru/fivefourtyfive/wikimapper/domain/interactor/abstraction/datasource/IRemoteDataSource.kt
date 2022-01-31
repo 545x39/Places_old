@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.wikimapper.domain.interactor.abstraction
+package ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.datasource
 
 import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.DataBlock
 import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Parameters

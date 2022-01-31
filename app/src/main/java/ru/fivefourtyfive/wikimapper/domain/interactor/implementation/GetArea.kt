@@ -4,8 +4,8 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
-import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.ILocalDataSource
-import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.IRemoteDataSource
+import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.datasource.ILocalDataSource
+import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.datasource.IRemoteDataSource
 import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Value
 import ru.fivefourtyfive.wikimapper.domain.datastate.AreaDataState
 import ru.fivefourtyfive.wikimapper.domain.dto.AreaDTO

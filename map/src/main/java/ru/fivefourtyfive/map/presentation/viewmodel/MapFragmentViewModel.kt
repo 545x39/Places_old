@@ -118,7 +118,6 @@ class MapFragmentViewModel @Inject constructor(
             .collect { _liveData.postValue(reduce(it)) }
     }
 
-
     private fun onSuccess(dataState: AreaDataState.Success) = MapViewState.DataLoaded().apply {
         folder.items.apply {
             clear()

@@ -2,8 +2,8 @@ package ru.fivefourtyfive.wikimapper.domain.interactor.implementation
 
 import ru.fivefourtyfive.wikimapper.domain.datastate.PlaceDetailsDataState
 import ru.fivefourtyfive.wikimapper.domain.entity.Place
-import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.ILocalDataSource
-import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.IUseCase
+import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.datasource.ILocalDataSource
+import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.usecase.IUseCase
 import javax.inject.Inject
 
 class PersistPlaceUseCase @Inject constructor(private val localDataSource: ILocalDataSource) :

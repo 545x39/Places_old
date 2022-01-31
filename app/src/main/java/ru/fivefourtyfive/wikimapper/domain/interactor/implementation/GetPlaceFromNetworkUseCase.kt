@@ -2,9 +2,8 @@ package ru.fivefourtyfive.wikimapper.domain.interactor.implementation
 
 import ru.fivefourtyfive.wikimapper.domain.datastate.PlaceDetailsDataState
 import ru.fivefourtyfive.wikimapper.domain.dto.PlaceDescriptionDTO
-import ru.fivefourtyfive.wikimapper.domain.entity.Place
-import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.IRemoteDataSource
-import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.IUseCase
+import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.datasource.IRemoteDataSource
+import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.usecase.IUseCase
 import javax.inject.Inject
 
 class GetPlaceFromNetworkUseCase @Inject constructor(private val dataSource: IRemoteDataSource) :
