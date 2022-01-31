@@ -195,7 +195,6 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
                 }
             }
         })
-        subscribeToButtonClicks()
     }
 
     @ExperimentalCoroutinesApi
