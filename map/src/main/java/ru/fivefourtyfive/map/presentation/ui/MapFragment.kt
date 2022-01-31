@@ -195,6 +195,24 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
                 }
             }
         })
+        subscribeToButtonClicks()
+    }
+
+    @ExperimentalCoroutinesApi
+    private fun subscribeToButtonClicks() {
+        bearingButton.clicks()
+            .throttleFirst(200)
+            .map { onBearingButtonClick() }
+            .launchIn(lifecycleScope)
+        centerButton.apply {
+            clicks()
+                .throttleFirst(200)
+                .map { onCenterButtonLongClick() }
+                .launchIn(lifecycleScope)
+            longClicks()
+                .map { onCenterButtonLongClick() }
+                .launchIn(lifecycleScope)
+        }
     }
 
     @ExperimentalCoroutinesApi

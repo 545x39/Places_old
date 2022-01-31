@@ -127,6 +127,7 @@ data class Place(
     @Expose
     val distance: Int? = null,
 //    @SerializedName("availableLanguages")
+
 //    @Expose
 //    val availableLanguages: AvailableLanguages? = null,
 //    @SerializedName("similarPlaces")
