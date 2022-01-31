@@ -1,19 +1,19 @@
-package ru.fivefourtyfive.wikimapper.domain.interactor
+package ru.fivefourtyfive.wikimapper.domain.interactor.implementation
 
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
-import ru.fivefourtyfive.wikimapper.data.datasource.abstraction.LocalDataSource
-import ru.fivefourtyfive.wikimapper.data.datasource.abstraction.RemoteDataSource
-import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Value
+import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.ILocalDataSource
+import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.IRemoteDataSource
+import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Value
 import ru.fivefourtyfive.wikimapper.domain.datastate.AreaDataState
 import ru.fivefourtyfive.wikimapper.domain.dto.AreaDTO
 import javax.inject.Inject
 
 class GetArea @Inject constructor(
-    private val remoteDataSource: RemoteDataSource,
-    private val localDataSource: LocalDataSource
+    private val remoteDataSource: IRemoteDataSource,
+    private val localDataSource: ILocalDataSource
 ) {
 
     suspend fun execute(

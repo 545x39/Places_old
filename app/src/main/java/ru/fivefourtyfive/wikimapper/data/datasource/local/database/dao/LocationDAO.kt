@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.wikimapper.data.datasource.implementation.local.database.dao
+package ru.fivefourtyfive.wikimapper.data.datasource.local.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert

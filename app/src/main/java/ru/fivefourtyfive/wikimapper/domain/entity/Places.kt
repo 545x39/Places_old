@@ -2,7 +2,7 @@ package ru.fivefourtyfive.wikimapper.domain.entity
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Value.RU
+import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Value.RU
 
 data class Places(
     @SerializedName("debug")

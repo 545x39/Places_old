@@ -1,10 +1,10 @@
-package ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote
+package ru.fivefourtyfive.wikimapper.data.datasource.remote
 
-import ru.fivefourtyfive.wikimapper.data.datasource.abstraction.RemoteDataSource
-import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Parameters
+import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.IRemoteDataSource
+import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Parameters
 import javax.inject.Inject
 
-class RetrofitDataSource @Inject constructor(private val api: Api) : RemoteDataSource {
+class RetrofitDataSource @Inject constructor(private val api: Api) : IRemoteDataSource {
 
     override suspend fun getPlace(id: Int, dataBlocks: String?) = api.getPlace(
         id = id,

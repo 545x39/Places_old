@@ -1,14 +1,14 @@
-package ru.fivefourtyfive.wikimapper.data.datasource.abstraction
+package ru.fivefourtyfive.wikimapper.domain.interactor.abstraction
 
-import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.DataBlock
-import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Parameters
-import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Value
+import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.DataBlock
+import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Parameters
+import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Value
 import ru.fivefourtyfive.wikimapper.domain.entity.Categories
 import ru.fivefourtyfive.wikimapper.domain.entity.Category
 import ru.fivefourtyfive.wikimapper.domain.entity.Places
 import ru.fivefourtyfive.wikimapper.domain.entity.Place
 
-interface RemoteDataSource {
+interface IRemoteDataSource {
 
     suspend fun getPlace(
         id: Int, dataBlocks: String? = Parameters.add(

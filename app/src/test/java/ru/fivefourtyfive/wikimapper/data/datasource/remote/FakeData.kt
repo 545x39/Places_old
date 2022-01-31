@@ -1,6 +1,6 @@
 package ru.fivefourtyfive.wikimapper.data.datasource.remote
 
-import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Value.RU
+import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Value.RU
 import ru.fivefourtyfive.wikimapper.domain.entity.*
 
 object FakeData {

@@ -1,12 +1,12 @@
-package ru.fivefourtyfive.wikimapper.data.datasource.implementation.local
+package ru.fivefourtyfive.wikimapper.data.datasource.local
 
-import ru.fivefourtyfive.wikimapper.data.datasource.abstraction.LocalDataSource
-import ru.fivefourtyfive.wikimapper.data.datasource.implementation.local.database.Database
+import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.ILocalDataSource
+import ru.fivefourtyfive.wikimapper.data.datasource.local.database.Database
 import ru.fivefourtyfive.wikimapper.domain.entity.Place
 import ru.fivefourtyfive.wikimapper.domain.entity.Places
 import javax.inject.Inject
 
-class RoomDataSource @Inject constructor(private val database: Database) : LocalDataSource {
+class RoomDataSource @Inject constructor(private val database: Database) : ILocalDataSource {
 
     override suspend fun persistPlace(place: Place) = database.placeDAO().insert(place)
 
@@ -35,9 +35,7 @@ class RoomDataSource @Inject constructor(private val database: Database) : Local
 
     override suspend fun getPlacesCount() = database.placeDAO().getPlacesCount()
 
-//    override suspend fun getPlace(id: Int): Place {
-//        //TODO
-//    }
+    override suspend fun getPlace(id: Int) = database.placeDAO().getPlace(id)
 //
 //
 //    override suspend fun persistSearchResults(places: Places) {

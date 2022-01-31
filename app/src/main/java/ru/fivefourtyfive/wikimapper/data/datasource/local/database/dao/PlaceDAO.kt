@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.wikimapper.data.datasource.implementation.local.database.dao
+package ru.fivefourtyfive.wikimapper.data.datasource.local.database.dao
 
 import androidx.room.*
 import ru.fivefourtyfive.wikimapper.domain.entity.Location
@@ -40,4 +40,7 @@ abstract class PlaceDAO {
         west: Double,
         limiter: Int = 25
     ): List<Place>
+
+    @Query("SELECT * FROM places WHERE id = :id")
+    abstract suspend fun getPlace(id: Int): Place?
 }

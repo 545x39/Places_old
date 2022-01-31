@@ -1,6 +1,6 @@
 package ru.fivefourtyfive.wikimapper.data.repository
 
-import ru.fivefourtyfive.wikimapper.domain.interactor.GetArea
+import ru.fivefourtyfive.wikimapper.domain.interactor.implementation.GetArea
 import javax.inject.Inject
 
 class AreaRepository @Inject constructor(private val getArea: GetArea) {

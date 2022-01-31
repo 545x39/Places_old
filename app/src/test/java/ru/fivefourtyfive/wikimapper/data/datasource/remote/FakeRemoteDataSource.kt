@@ -1,8 +1,8 @@
 package ru.fivefourtyfive.wikimapper.data.datasource.remote
 
-import ru.fivefourtyfive.wikimapper.data.datasource.abstraction.RemoteDataSource
+import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.IRemoteDataSource
 
-class FakeRemoteDataSource : RemoteDataSource {
+class FakeRemoteDataSource : IRemoteDataSource {
 
     override suspend fun getPlace(id: Int, dataBlocks: String?) = when (id) {
         0 -> FakeData.getFort()

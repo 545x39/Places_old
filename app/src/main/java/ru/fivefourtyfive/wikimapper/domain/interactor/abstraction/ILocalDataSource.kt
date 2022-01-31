@@ -1,9 +1,9 @@
-package ru.fivefourtyfive.wikimapper.data.datasource.abstraction
+package ru.fivefourtyfive.wikimapper.domain.interactor.abstraction
 
 import ru.fivefourtyfive.wikimapper.domain.entity.Place
 import ru.fivefourtyfive.wikimapper.domain.entity.Places
 
-interface LocalDataSource {
+interface ILocalDataSource {
 
     suspend fun persistPlace(place: Place)
 
@@ -21,7 +21,7 @@ interface LocalDataSource {
 
     suspend fun getPlacesCount(): Int
 
-//    suspend fun getPlace(id: Int): Place
+    suspend fun getPlace(id: Int): Place?
 //
 //    suspend fun persistSearchResults(places: Places)
 //

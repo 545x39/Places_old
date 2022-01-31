@@ -1,6 +1,6 @@
 @file:Suppress("SpellCheckingInspection")
 
-package ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util
+package ru.fivefourtyfive.wikimapper.data.datasource.remote.util
 
 object Parameter {
     const val FUNCTION              = "function"

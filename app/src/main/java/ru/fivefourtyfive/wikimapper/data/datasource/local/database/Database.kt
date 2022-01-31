@@ -1,9 +1,9 @@
-package ru.fivefourtyfive.wikimapper.data.datasource.implementation.local.database
+package ru.fivefourtyfive.wikimapper.data.datasource.local.database
 
 import androidx.room.RoomDatabase
-import ru.fivefourtyfive.wikimapper.data.datasource.implementation.local.database.dao.LocationDAO
-import ru.fivefourtyfive.wikimapper.data.datasource.implementation.local.database.dao.PlaceDAO
-import ru.fivefourtyfive.wikimapper.data.datasource.implementation.local.database.util.Version.DB_VERSION
+import ru.fivefourtyfive.wikimapper.data.datasource.local.database.dao.LocationDAO
+import ru.fivefourtyfive.wikimapper.data.datasource.local.database.dao.PlaceDAO
+import ru.fivefourtyfive.wikimapper.data.datasource.local.database.util.Version.DB_VERSION
 import ru.fivefourtyfive.wikimapper.domain.entity.Location
 import ru.fivefourtyfive.wikimapper.domain.entity.Place
 
