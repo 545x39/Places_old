@@ -18,6 +18,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.osmdroid.api.IGeoPoint
 import org.osmdroid.events.DelayedMapListener
@@ -111,6 +112,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
             bearingButton = findViewById(R.id.bearing_button)
             centerButton = findViewById(R.id.center_button)
         }
+        subscribeToButtonClicks()
         subscribeObservers()
     }
 
@@ -194,7 +196,6 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
                 }
             }
         })
-        subscribeToButtonClicks()
     }
 
     @ExperimentalCoroutinesApi
@@ -203,15 +204,13 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
             .throttleFirst(200)
             .map { onBearingButtonClick() }
             .launchIn(lifecycleScope)
-        centerButton.apply {
-            clicks()
+        centerButton.clicks()
                 .throttleFirst(200)
-                .map { onCenterButtonLongClick() }
+                .map {onCenterButtonClick() }
                 .launchIn(lifecycleScope)
-            longClicks()
-                .map { onCenterButtonLongClick() }
-                .launchIn(lifecycleScope)
-        }
+        centerButton.longClicks()
+            .map { onCenterButtonLongClick() }
+            .launchIn(lifecycleScope)
     }
 
     private fun MapView.setMapListener() {
