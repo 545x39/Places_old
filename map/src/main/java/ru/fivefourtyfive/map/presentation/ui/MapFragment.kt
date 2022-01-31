@@ -141,7 +141,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
     }
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="SETUP">
+    //<editor-fold defaultstate="collapsed" desc="SETUP METHODS">
     private fun setMap() {
         with(viewModel) {
             progress.visibility = GONE
