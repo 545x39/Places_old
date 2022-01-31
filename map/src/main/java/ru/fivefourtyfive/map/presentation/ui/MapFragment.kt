@@ -204,23 +204,6 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
             .throttleFirst(200)
             .map { onBearingButtonClick() }
             .launchIn(lifecycleScope)
-        centerButton.apply {
-            clicks()
-                .throttleFirst(200)
-                .map { onCenterButtonLongClick() }
-                .launchIn(lifecycleScope)
-            longClicks()
-                .map { onCenterButtonLongClick() }
-                .launchIn(lifecycleScope)
-        }
-    }
-
-    @ExperimentalCoroutinesApi
-    private fun subscribeToButtonClicks() {
-        bearingButton.clicks()
-            .throttleFirst(200)
-            .map { onBearingButtonClick() }
-            .launchIn(lifecycleScope)
         centerButton.clicks()
                 .throttleFirst(200)
                 .map {onCenterButtonClick() }
