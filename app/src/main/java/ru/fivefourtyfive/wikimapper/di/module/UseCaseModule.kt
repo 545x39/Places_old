@@ -12,6 +12,6 @@ interface UseCaseModule {
     @Binds
     fun providePersistUseCase(useCase: PersistPlaceUseCase): IPersistPlaceUseCase
 
-    @Binds
-    fun provideUseCaseFactory(factory: UseCaseFactory): IUseCaseFactory
+//    @Binds
+//    fun provideUseCaseFactory(factory: UseCaseFactory): IUseCaseFactory
 }
