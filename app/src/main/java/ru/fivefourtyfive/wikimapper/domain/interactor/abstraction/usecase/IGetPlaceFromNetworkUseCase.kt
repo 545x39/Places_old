@@ -5,6 +5,7 @@ import ru.fivefourtyfive.wikimapper.domain.entity.Place
 interface IGetPlaceFromNetworkUseCase : IUseCase<Place> {
 
     var id: Int?
+
     var dataBlocks: String?
 
     fun id(id: Int) = this.apply { this.id = id }
