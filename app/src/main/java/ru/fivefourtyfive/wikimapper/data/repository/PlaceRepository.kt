@@ -6,34 +6,38 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import ru.fivefourtyfive.wikimapper.domain.datastate.PlaceDetailsDataState
+import ru.fivefourtyfive.wikimapper.domain.dto.PlaceDescriptionDTO
+import ru.fivefourtyfive.wikimapper.domain.entity.Place
+import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.usecase.IPersistPlaceUseCase
 import ru.fivefourtyfive.wikimapper.domain.interactor.implementation.GetPlaceFromCacheUseCase
 import ru.fivefourtyfive.wikimapper.domain.interactor.implementation.GetPlaceFromNetworkUseCase
-import ru.fivefourtyfive.wikimapper.domain.interactor.implementation.PersistPlaceUseCase
 import javax.inject.Inject
 
 class PlaceRepository @Inject constructor(
-    private val getPlaceFromCache: GetPlaceFromCacheUseCase,
-    private val getPlaceFromNetwork: GetPlaceFromNetworkUseCase,
-    private val persistPlaceUseCase: PersistPlaceUseCase
+    private val getPlaceFromCacheUseCase: GetPlaceFromCacheUseCase,
+    private val getPlaceFromNetworkUseCase: GetPlaceFromNetworkUseCase,
+    private val persistPlaceUseCase: IPersistPlaceUseCase
 ) {
 
-    suspend fun getPlace(id: Int, dataBlocks: String? = null) = flow<PlaceDetailsDataState> {
+    suspend fun getPlace(id: Int, dataBlocks: String? = null) = flow {
         emit(PlaceDetailsDataState.Loading)
-        emit(
-            getPlaceFromCache.Builder()
-                .id(id)
-                .build()
+        getPlaceFromCacheUseCase.withId(id).execute()
+            ?.let { emit(PlaceDetailsDataState.Success(PlaceDescriptionDTO(it))) }
+        emit(PlaceDetailsDataState.Loading)
+        when (val place: Place? = runCatching {
+            getPlaceFromNetworkUseCase
+                .withId(id)
+                .withDataBlocks(dataBlocks)
                 .execute()
-        )
-        emit(PlaceDetailsDataState.Loading)
-        emit(getPlaceFromNetwork.Builder()
-            .id(id)
-            .dataBlocks(dataBlocks)
-            .build()
-            .execute()
-            .also {
-                CoroutineScope(IO).launch { persistPlaceUseCase.Builder().place(it).build().execute()
+        }.getOrNull()) {
+            null -> PlaceDetailsDataState.Error()
+            else -> PlaceDetailsDataState.Success(PlaceDescriptionDTO(place))
+                .also {
+                    CoroutineScope(IO).launch {
+                        persistPlaceUseCase.withPlace(place).execute()
+                    }
                 }
-            })
+        }
+
     }.flowOn(IO)
 }

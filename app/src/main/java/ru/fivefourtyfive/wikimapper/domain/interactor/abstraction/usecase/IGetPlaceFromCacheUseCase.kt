@@ -6,5 +6,5 @@ interface IGetPlaceFromCacheUseCase : IUseCase<Place> {
 
     var id: Int?
 
-    fun id(id: Int): IGetPlaceFromCacheUseCase = this.apply { this.id = id }
+    fun withId(id: Int): IGetPlaceFromCacheUseCase = this.apply { this.id = id }
 }

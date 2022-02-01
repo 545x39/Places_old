@@ -8,8 +8,8 @@ interface IGetPlaceFromNetworkUseCase : IUseCase<Place> {
 
     var dataBlocks: String?
 
-    fun id(id: Int) = this.apply { this.id = id }
+    fun withId(id: Int) = this.apply { this.id = id }
 
-    fun dataBlocks(dataBlocks: String?) = this.apply { this.dataBlocks = dataBlocks }
+    fun withDataBlocks(dataBlocks: String?) = this.apply { this.dataBlocks = dataBlocks }
 
 }
