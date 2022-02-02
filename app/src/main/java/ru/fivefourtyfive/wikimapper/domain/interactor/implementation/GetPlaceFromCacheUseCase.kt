@@ -5,7 +5,7 @@ import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.datasource.ILo
 import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.usecase.IGetPlaceFromCacheUseCase
 import javax.inject.Inject
 
-class GetPlaceFromCacheUseCase @Inject constructor(private val dataSource: ILocalDataSource) :
+class GetPlaceFromCacheUseCase (private val dataSource: ILocalDataSource) :
     IGetPlaceFromCacheUseCase {
 
     override var id: Int? = null
