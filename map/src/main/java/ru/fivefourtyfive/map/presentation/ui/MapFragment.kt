@@ -407,7 +407,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         return true
     }
 
-    fun updateLastLocationAndZoom() {
+    private fun updateLastLocationAndZoom() {
         with(mapView) {
             viewModel.apply {
                 setLastLocation(mapCenter.latitude, mapCenter.longitude)

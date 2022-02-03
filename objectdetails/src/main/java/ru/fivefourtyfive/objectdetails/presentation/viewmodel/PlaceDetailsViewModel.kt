@@ -44,7 +44,7 @@ class PlaceDetailsViewModel @Inject constructor(
                 .catch {
                     _viewStateLiveData.postValue(reduce(PlaceDetailsDataState.Error()))
                 }.collect {
-                    _viewStateLiveData.postValue(reduce(it as PlaceDetailsDataState))
+                    _viewStateLiveData.postValue(reduce(it))
                 }
         }
     }
