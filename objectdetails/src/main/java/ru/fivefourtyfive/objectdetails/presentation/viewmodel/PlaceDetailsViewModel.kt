@@ -34,12 +34,4 @@ class PlaceDetailsViewModel @Inject constructor(
     }
 
     fun slideshow() = preferences.getBoolean(PREFERENCE_SLIDESHOW, false)
-
-    fun getPlace(id: Int) {
-        viewModelScope.launch {
-            factory.getPlaceUseCase(id).execute().collect {
-                _viewStateLiveData.postValue(it)
-            }
-        }
-    }
 }
