@@ -1,6 +1,6 @@
 package ru.fivefourtyfive.map.presentation.viewmodel
 
-import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.Event
+import ru.fivefourtyfive.wikimapper.framework.presentation.abstraction.Event
 
 sealed class MapEvent : Event {
     class GetAreaEvent(

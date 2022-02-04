@@ -23,12 +23,12 @@ import ru.fivefourtyfive.objectdetails.presentation.viewmodel.PlaceDetailsViewMo
 import ru.fivefourtyfive.objectdetails.presentation.viewmodel.PlaceDetailsViewState
 import ru.fivefourtyfive.objectdetails.presentation.viewmodel.PlaceEvent
 import ru.fivefourtyfive.wikimapper.Places
-import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Parameter.ID
+import ru.fivefourtyfive.wikimapper.framework.datasource.implementation.remote.util.Parameter.ID
 import ru.fivefourtyfive.wikimapper.di.factory.ViewModelProviderFactory
 import ru.fivefourtyfive.wikimapper.domain.dto.CommentDTO
 import ru.fivefourtyfive.wikimapper.domain.dto.PhotoDTO
-import ru.fivefourtyfive.wikimapper.presentation.ui.MainActivity
-import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.Renderer
+import ru.fivefourtyfive.wikimapper.framework.presentation.ui.MainActivity
+import ru.fivefourtyfive.wikimapper.framework.presentation.abstraction.Renderer
 import ru.fivefourtyfive.wikimapper.util.Network.ROOT_URL
 import javax.inject.Inject
 import ru.fivefourtyfive.wikimapper.R as appR

@@ -1,6 +1,6 @@
 package ru.fivefourtyfive.objectdetails.presentation.viewmodel
 
-import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.Event
+import ru.fivefourtyfive.wikimapper.framework.presentation.abstraction.Event
 
 sealed class PlaceEvent : Event {
     class GetPlace(val id : Int): PlaceEvent()

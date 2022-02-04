@@ -8,7 +8,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.fivefourtyfive.wikimapper.BuildConfig
-import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.Api
+import ru.fivefourtyfive.wikimapper.framework.datasource.implementation.remote.Api
 import ru.fivefourtyfive.wikimapper.util.Network.API_URL
 import ru.fivefourtyfive.wikimapper.util.Network.CONNECT_TIMEOUT
 import ru.fivefourtyfive.wikimapper.util.Network.READ_TIMEOUT

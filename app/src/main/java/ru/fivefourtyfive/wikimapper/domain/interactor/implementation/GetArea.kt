@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import ru.fivefourtyfive.wikimapper.data.datasource.abstraction.ILocalDataSource
 import ru.fivefourtyfive.wikimapper.data.datasource.abstraction.IRemoteDataSource
-import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Value
+import ru.fivefourtyfive.wikimapper.framework.datasource.implementation.remote.util.Value
 import ru.fivefourtyfive.wikimapper.domain.datastate.AreaDataState
 import ru.fivefourtyfive.wikimapper.domain.dto.AreaDTO
 import javax.inject.Inject

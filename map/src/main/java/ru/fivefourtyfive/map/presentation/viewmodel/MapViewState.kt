@@ -1,8 +1,7 @@
 package ru.fivefourtyfive.map.presentation.viewmodel
 
 import android.view.View
-import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
-import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.ViewState
+import ru.fivefourtyfive.wikimapper.framework.presentation.abstraction.ViewState
 
 sealed class MapViewState : ViewState {
     open val progressVisibility = View.GONE
