@@ -56,3 +56,15 @@ object Preferences {
     ////
     const val DEFAULT_LOCATION                  = "59.939039;30.315780"
 }
+
+object MapZoom {
+    /** Smaller min values allows map to zoom out to show more than one map repetition.*/
+    const val ZOOM_MIN = 2.0
+    const val ZOOM_MAX = 18.0
+    const val ZOOM_DEFAULT = 13.0
+}
+
+object MapMode {
+    const val SCHEME = 0
+    const val SATELLITE = 1
+}

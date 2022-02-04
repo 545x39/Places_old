@@ -26,7 +26,7 @@ fun decimalIpToString(decimal: Long) = ((decimal shr 24 and 0xFF).toString() + "
         + (decimal shr 8 and 0xFF) + "."
         + (decimal and 0xFF))
 
-@ExperimentalCoroutinesApi
+//@ExperimentalCoroutinesApi
 fun View.clicks(): Flow<Unit> = callbackFlow {
     setOnClickListener {
         trySend(Unit)
@@ -34,7 +34,7 @@ fun View.clicks(): Flow<Unit> = callbackFlow {
     awaitClose { setOnClickListener(null) }
 }
 
-@ExperimentalCoroutinesApi
+//@ExperimentalCoroutinesApi
 fun View.longClicks(): Flow<Unit> = callbackFlow {
     setOnLongClickListener {
         @Suppress("DEPRECATION")
@@ -43,7 +43,7 @@ fun View.longClicks(): Flow<Unit> = callbackFlow {
     awaitClose { setOnLongClickListener(null) }
 }
 
-@ExperimentalCoroutinesApi
+//@ExperimentalCoroutinesApi
 fun <T> Flow<T>.throttleFirst(duration: Long): Flow<T> = flow {
     var lastEmissionTime = 0L
     collect { upstream ->

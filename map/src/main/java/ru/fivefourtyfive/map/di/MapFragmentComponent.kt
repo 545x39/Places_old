@@ -1,10 +1,7 @@
 package ru.fivefourtyfive.map.di
 
 import dagger.Component
-import ru.fivefourtyfive.map.di.module.MapModule
-import ru.fivefourtyfive.map.di.module.MapFragmentViewModelModule
-import ru.fivefourtyfive.map.di.module.OverlayModule
-import ru.fivefourtyfive.map.di.module.TileSourceModule
+import ru.fivefourtyfive.map.di.module.*
 import ru.fivefourtyfive.map.presentation.ui.MapFragment
 import ru.fivefourtyfive.places.di.AppComponent
 
@@ -13,6 +10,7 @@ import ru.fivefourtyfive.places.di.AppComponent
     dependencies = [AppComponent::class],
     modules = [
         MapFragmentViewModelModule::class,
+        RepositoryModule::class,
         MapModule::class,
         TileSourceModule::class,
         OverlayModule::class

@@ -32,7 +32,6 @@ import org.osmdroid.views.overlay.gestures.RotationGestureOverlay
 import ru.fivefourtyfive.map.R
 import ru.fivefourtyfive.map.di.DaggerMapFragmentComponent
 import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
-import ru.fivefourtyfive.map.presentation.util.MapMode
 import ru.fivefourtyfive.map.presentation.util.getDistance
 import ru.fivefourtyfive.map.presentation.viewmodel.MapEvent
 import ru.fivefourtyfive.map.presentation.viewmodel.MapFragmentViewModel
@@ -94,8 +93,8 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         return inflater.inflate(R.layout.fragment_map, container, false)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @ExperimentalCoroutinesApi
+//    @OptIn(ExperimentalCoroutinesApi::class)
+//    @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().setTitle(appR.string.app_name)
@@ -183,7 +182,6 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         }
     }
 
-    @ExperimentalCoroutinesApi
     private fun subscribeObservers() {
         viewModel.liveData.observe(viewLifecycleOwner, {
             with(it) {
@@ -198,7 +196,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         })
     }
 
-    @ExperimentalCoroutinesApi
+//    @ExperimentalCoroutinesApi
     private fun subscribeToButtonClicks() {
         bearingButton.clicks()
             .throttleFirst(200)

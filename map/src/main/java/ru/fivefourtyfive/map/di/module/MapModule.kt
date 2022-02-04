@@ -9,8 +9,8 @@ import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.MapView
 import ru.fivefourtyfive.map.di.MapFragmentScope
 import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
-import ru.fivefourtyfive.map.presentation.util.Zoom
 import ru.fivefourtyfive.places.BuildConfig
+import ru.fivefourtyfive.places.util.MapZoom
 import timber.log.Timber
 import java.io.File
 
@@ -38,11 +38,11 @@ class MapModule {
             MapView.getTileSystem().maxLongitude,
             0
         )
-        minZoomLevel = Zoom.ZOOM_MIN
-        maxZoomLevel = Zoom.ZOOM_MAX
+        minZoomLevel = MapZoom.ZOOM_MIN
+        maxZoomLevel = MapZoom.ZOOM_MAX
         isTilesScaledToDpi = true
         zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
-        controller.setZoom(Zoom.ZOOM_DEFAULT)
+        controller.setZoom(MapZoom.ZOOM_DEFAULT)
         isVerticalMapRepetitionEnabled = true
         isHorizontalMapRepetitionEnabled = true
     }

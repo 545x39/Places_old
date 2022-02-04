@@ -1,6 +1,8 @@
 package ru.fivefourtyfive.map.presentation.util
 
 import android.content.SharedPreferences
+import ru.fivefourtyfive.places.util.MapMode
+import ru.fivefourtyfive.places.util.MapZoom
 import ru.fivefourtyfive.places.util.Preferences
 import ru.fivefourtyfive.places.util.Preferences.PREFERENCE_AUTO_ROTATE_MAP
 import ru.fivefourtyfive.places.util.Preferences.PREFERENCE_CENTER_SELECTION
@@ -20,7 +22,7 @@ class MapSettingsUtil @Inject constructor(preferences: SharedPreferences) : Sett
     //<editor-fold defaultstate="collapsed" desc="GETTERS">
     fun getLastLocation() = getPairOfDouble(Preferences.PREFERENCE_LAST_LOCATION, Preferences.DEFAULT_LOCATION)
 
-    fun getLastZoom() = preferences.getFloat(PREFERENCE_LAST_ZOOM, Zoom.ZOOM_DEFAULT.toFloat()).toDouble()
+    fun getLastZoom() = preferences.getFloat(PREFERENCE_LAST_ZOOM, MapZoom.ZOOM_DEFAULT.toFloat()).toDouble()
 
     fun getMapMode(): Int = preferences.getInt(PREFERENCE_MAP_MODE, MapMode.SCHEME)
 

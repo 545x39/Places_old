@@ -16,17 +16,17 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
 import ru.fivefourtyfive.map.presentation.util.MapListenerDelay.DEFAULT_DELAY
 import ru.fivefourtyfive.map.presentation.util.MapListenerDelay.FOLLOWING_LOCATION_DELAY
-import ru.fivefourtyfive.map.presentation.util.MapMode
 import ru.fivefourtyfive.map.presentation.util.MapSettingsUtil
 import ru.fivefourtyfive.map.presentation.util.Overlay
 import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.WIKIMEDIA_NO_LABELS_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.toPlacePolygon
 import ru.fivefourtyfive.places.domain.datastate.AreaDataState
-import ru.fivefourtyfive.places.domain.repository.abstraction.IAreaRepository
+import ru.fivefourtyfive.places.domain.repository.abstraction.IMapSettingsRepository
 import ru.fivefourtyfive.places.domain.usecase.abstraction.factory.IUseCaseFactory
 import ru.fivefourtyfive.places.framework.presentation.abstraction.EventHandler
 import ru.fivefourtyfive.places.framework.presentation.abstraction.Reducer
+import ru.fivefourtyfive.places.util.MapMode
 import ru.fivefourtyfive.places.util.ifTrue
 import timber.log.Timber
 import javax.inject.Inject
@@ -34,7 +34,7 @@ import javax.inject.Named
 
 class MapFragmentViewModel @Inject constructor(
     private val factory: IUseCaseFactory,
-    private val settings: MapSettingsUtil,
+    private val settings: IMapSettingsRepository,
     @Named(WIKIMEDIA_NO_LABELS_TILE_SOURCE)
     val schemeTileSource: OnlineTileSourceBase,
     @Named(ARCGIS_IMAGERY_TILE_SOURCE)

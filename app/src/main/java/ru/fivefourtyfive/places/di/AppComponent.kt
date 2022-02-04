@@ -4,9 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import dagger.Component
 import ru.fivefourtyfive.places.Places
+import ru.fivefourtyfive.places.data.datasource.abstraction.ISettingsDataSource
 import ru.fivefourtyfive.places.di.module.*
-import ru.fivefourtyfive.places.domain.repository.abstraction.IAreaRepository
-import ru.fivefourtyfive.places.domain.repository.abstraction.IPlaceRepository
+import ru.fivefourtyfive.places.domain.repository.abstraction.IMapSettingsRepository
 import ru.fivefourtyfive.places.domain.usecase.abstraction.factory.IUseCaseFactory
 import javax.inject.Singleton
 
@@ -26,7 +26,11 @@ interface AppComponent {
 
     fun inject(app: Places)
 
-    fun getPreferences(): SharedPreferences
+    fun getSettingsRepository(): IMapSettingsRepository
+
+    fun getSettingsDataSource(): ISettingsDataSource
+
+    fun getSharedPreferences() : SharedPreferences
 
     fun getUseCaseFactory(): IUseCaseFactory
 
