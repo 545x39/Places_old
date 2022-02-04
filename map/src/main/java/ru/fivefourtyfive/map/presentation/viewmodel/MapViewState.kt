@@ -6,9 +6,7 @@ import ru.fivefourtyfive.wikimapper.framework.presentation.abstraction.ViewState
 sealed class MapViewState : ViewState {
     open val progressVisibility = View.GONE
 
-    class DataLoaded(
-//        val places: ArrayList<PlacePolygon> = arrayListOf()
-    ) : MapViewState()
+    class DataLoaded() : MapViewState()
 
     object Loading : MapViewState() {
         override val progressVisibility = View.VISIBLE
