@@ -5,8 +5,9 @@ import android.content.SharedPreferences
 import dagger.Component
 import ru.fivefourtyfive.wikimapper.Places
 import ru.fivefourtyfive.wikimapper.di.module.*
-import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.repository.IAreaRepository
-import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.repository.IPlaceRepository
+import ru.fivefourtyfive.wikimapper.domain.repository.abstraction.IAreaRepository
+import ru.fivefourtyfive.wikimapper.domain.repository.abstraction.IPlaceRepository
+import ru.fivefourtyfive.wikimapper.domain.usecase.abstraction.factory.IUseCaseFactory
 import javax.inject.Singleton
 
 @Singleton
@@ -30,6 +31,8 @@ interface AppComponent {
     fun getPlaceRepository(): IPlaceRepository
 
     fun getAreaRepository(): IAreaRepository
+
+    fun getUseCaseFactory(): IUseCaseFactory
 
     fun getContext(): Context
 

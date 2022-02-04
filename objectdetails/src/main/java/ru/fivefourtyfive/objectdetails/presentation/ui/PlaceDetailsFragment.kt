@@ -23,7 +23,7 @@ import ru.fivefourtyfive.objectdetails.presentation.viewmodel.PlaceDetailsViewMo
 import ru.fivefourtyfive.objectdetails.presentation.viewmodel.PlaceDetailsViewState
 import ru.fivefourtyfive.objectdetails.presentation.viewmodel.PlaceEvent
 import ru.fivefourtyfive.wikimapper.Places
-import ru.fivefourtyfive.wikimapper.framework.datasource.implementation.remote.util.Parameter.ID
+import ru.fivefourtyfive.wikimapper.framework.datasource.remote.util.Parameter.ID
 import ru.fivefourtyfive.wikimapper.di.factory.ViewModelProviderFactory
 import ru.fivefourtyfive.wikimapper.domain.entity.dto.CommentDTO
 import ru.fivefourtyfive.wikimapper.domain.entity.dto.PhotoDTO

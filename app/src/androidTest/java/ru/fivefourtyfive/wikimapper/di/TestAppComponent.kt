@@ -1,7 +1,7 @@
 package ru.fivefourtyfive.wikimapper.di
 
 import dagger.Component
-import ru.fivefourtyfive.wikimapper.framework.datasource.implementation.remote.RemoteDataSourceTests
+import ru.fivefourtyfive.wikimapper.framework.datasource.remote.RemoteDataSourceTests
 import ru.fivefourtyfive.wikimapper.di.module.AppModule
 import ru.fivefourtyfive.wikimapper.di.module.DataSourceModule
 import ru.fivefourtyfive.wikimapper.di.module.NetworkModule

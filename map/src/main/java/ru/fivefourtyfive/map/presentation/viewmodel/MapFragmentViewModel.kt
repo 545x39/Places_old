@@ -23,7 +23,7 @@ import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_TILE_SO
 import ru.fivefourtyfive.map.presentation.util.TileSource.WIKIMEDIA_NO_LABELS_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.toPlacePolygon
 import ru.fivefourtyfive.wikimapper.domain.datastate.AreaDataState
-import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.repository.IAreaRepository
+import ru.fivefourtyfive.wikimapper.domain.repository.abstraction.IAreaRepository
 import ru.fivefourtyfive.wikimapper.framework.presentation.abstraction.EventHandler
 import ru.fivefourtyfive.wikimapper.framework.presentation.abstraction.Reducer
 import ru.fivefourtyfive.wikimapper.util.ifTrue

@@ -6,7 +6,7 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import ru.fivefourtyfive.wikimapper.framework.datasource.implementation.local.database.util.TableName.TABLE_LOCATIONS
+import ru.fivefourtyfive.wikimapper.framework.datasource.local.database.util.TableName.TABLE_LOCATIONS
 import ru.fivefourtyfive.wikimapper.domain.entity.util.ID
 import ru.fivefourtyfive.wikimapper.domain.entity.util.LocationFields.CITY
 import ru.fivefourtyfive.wikimapper.domain.entity.util.LocationFields.CITY_ID

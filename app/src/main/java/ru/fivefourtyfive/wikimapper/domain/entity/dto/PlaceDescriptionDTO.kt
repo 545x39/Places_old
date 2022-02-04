@@ -1,6 +1,6 @@
 package ru.fivefourtyfive.wikimapper.domain.entity.dto
 
-import ru.fivefourtyfive.wikimapper.framework.datasource.implementation.remote.util.Value.RU
+import ru.fivefourtyfive.wikimapper.framework.datasource.remote.util.Value.RU
 import ru.fivefourtyfive.wikimapper.domain.entity.DebugInfo
 import ru.fivefourtyfive.wikimapper.domain.entity.Location
 import ru.fivefourtyfive.wikimapper.domain.entity.Place

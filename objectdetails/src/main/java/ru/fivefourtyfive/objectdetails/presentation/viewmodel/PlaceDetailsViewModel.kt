@@ -9,7 +9,8 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.fivefourtyfive.wikimapper.domain.datastate.PlaceDetailsDataState
-import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.repository.IPlaceRepository
+import ru.fivefourtyfive.wikimapper.domain.repository.abstraction.IPlaceRepository
+import ru.fivefourtyfive.wikimapper.domain.usecase.abstraction.factory.IUseCaseFactory
 import ru.fivefourtyfive.wikimapper.framework.presentation.abstraction.EventHandler
 import ru.fivefourtyfive.wikimapper.framework.presentation.abstraction.Reducer
 import ru.fivefourtyfive.wikimapper.util.Preferences.PREFERENCE_SLIDESHOW
@@ -17,6 +18,7 @@ import javax.inject.Inject
 
 class PlaceDetailsViewModel @Inject constructor(
     private val repository: IPlaceRepository,
+    private val useCaseFactory: IUseCaseFactory,
     private val preferences: SharedPreferences
 ) :
     ViewModel(), Reducer<PlaceDetailsDataState, PlaceDetailsViewState>, EventHandler<PlaceEvent> {

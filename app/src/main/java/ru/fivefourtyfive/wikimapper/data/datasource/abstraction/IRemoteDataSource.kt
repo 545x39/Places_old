@@ -1,8 +1,8 @@
 package ru.fivefourtyfive.wikimapper.data.datasource.abstraction
 
-import ru.fivefourtyfive.wikimapper.framework.datasource.implementation.remote.util.DataBlock
-import ru.fivefourtyfive.wikimapper.framework.datasource.implementation.remote.util.Parameters
-import ru.fivefourtyfive.wikimapper.framework.datasource.implementation.remote.util.Value
+import ru.fivefourtyfive.wikimapper.framework.datasource.remote.util.DataBlock
+import ru.fivefourtyfive.wikimapper.framework.datasource.remote.util.Parameters
+import ru.fivefourtyfive.wikimapper.framework.datasource.remote.util.Value
 import ru.fivefourtyfive.wikimapper.domain.entity.Categories
 import ru.fivefourtyfive.wikimapper.domain.entity.Category
 import ru.fivefourtyfive.wikimapper.domain.entity.Places
@@ -18,7 +18,7 @@ interface IRemoteDataSource {
             DataBlock.GEOMETRY,
             DataBlock.LOCATION
         )
-    ): Place
+    ): Place?
 
     suspend fun getArea(
         lonMin: Double,

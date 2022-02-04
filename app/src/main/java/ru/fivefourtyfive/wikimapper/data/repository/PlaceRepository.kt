@@ -6,31 +6,34 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import ru.fivefourtyfive.wikimapper.data.datasource.abstraction.ILocalDataSource
+import ru.fivefourtyfive.wikimapper.data.datasource.abstraction.IRemoteDataSource
 import ru.fivefourtyfive.wikimapper.domain.datastate.PlaceDetailsDataState
-import ru.fivefourtyfive.wikimapper.domain.entity.dto.PlaceDescriptionDTO
 import ru.fivefourtyfive.wikimapper.domain.entity.Place
-import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.repository.IPlaceRepository
-import ru.fivefourtyfive.wikimapper.domain.interactor.implementation.factory.IUseCaseFactory
+import ru.fivefourtyfive.wikimapper.domain.entity.dto.PlaceDescriptionDTO
+import ru.fivefourtyfive.wikimapper.domain.repository.abstraction.IPlaceRepository
 import javax.inject.Inject
 
-class PlaceRepository @Inject constructor(private val factory: IUseCaseFactory): IPlaceRepository {
+class PlaceRepository @Inject constructor(
+    private val localDataSource: ILocalDataSource,
+    private val remoteDatasource: IRemoteDataSource
+) : IPlaceRepository {
 
-    override suspend fun getPlace(id: Int, dataBlocks: String?): Flow<PlaceDetailsDataState> = flow {
-        emit(PlaceDetailsDataState.Loading)
-        factory.getPlaceFromCacheUseCase(id).execute()
+    override suspend fun getPlace(id: Int, dataBlocks: String?): Flow<PlaceDetailsDataState> =
+        flow {
+            emit(PlaceDetailsDataState.Loading)
+            localDataSource.getPlace(id)
             ?.let {
                 emit(PlaceDetailsDataState.Success(PlaceDescriptionDTO(it)))
                 emit(PlaceDetailsDataState.Loading)
             }
         emit(when (val place: Place? =
-            factory.getPlaceFromNetworkUseCase(id, dataBlocks).execute()) {
+            remoteDatasource.getPlace(id, dataBlocks)) {
             null -> PlaceDetailsDataState.Error()
             else -> PlaceDetailsDataState.Success(PlaceDescriptionDTO(place))
                 .also {
-                    CoroutineScope(IO).launch {
-                        factory.persistPlaceUseCase(place).execute()
-                    }
+                    CoroutineScope(IO).launch {localDataSource.persistPlace(place)}
                 }
         })
-    }.flowOn(IO)
+        }.flowOn(IO)
 }

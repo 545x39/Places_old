@@ -4,8 +4,8 @@ import dagger.Binds
 import dagger.Module
 import ru.fivefourtyfive.wikimapper.data.repository.AreaRepository
 import ru.fivefourtyfive.wikimapper.data.repository.PlaceRepository
-import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.repository.IAreaRepository
-import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.repository.IPlaceRepository
+import ru.fivefourtyfive.wikimapper.domain.repository.abstraction.IAreaRepository
+import ru.fivefourtyfive.wikimapper.domain.repository.abstraction.IPlaceRepository
 
 @Module
 interface RepositoryModule {
