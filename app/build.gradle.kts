@@ -81,7 +81,9 @@ android {
 
 //<editor-fold defaultstate="collapsed" desc="DEPENDENCIES">
 dependencies {
-    /**CORE */
+    /** CORE */
+    project(":core")
+    /** ANDROID CORE */
     implementation("androidx.core:core-ktx:$CORE_VERSION")
     implementation("androidx.appcompat:appcompat:$APPCOMPAT_VERSION")
     implementation("com.google.android.material:material:$MATERIAL_VERSION")

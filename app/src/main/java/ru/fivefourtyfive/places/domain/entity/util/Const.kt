@@ -38,6 +38,7 @@ object PlaceFields{
     const val DISTANCE                  = "distance"
 }
 
+@Suppress("SpellCheckingInspection")
 object LocationFields{
     const val PLACE_ID                  = "place_id"
     const val LON                       = "lon"

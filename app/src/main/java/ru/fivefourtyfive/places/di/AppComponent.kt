@@ -26,7 +26,7 @@ interface AppComponent {
 
     fun inject(app: Places)
 
-    fun getSettingsRepository(): IMapSettingsRepository
+//    fun getSettingsRepository(): IMapSettingsRepository
 
     fun getSettingsDataSource(): ISettingsDataSource
 
