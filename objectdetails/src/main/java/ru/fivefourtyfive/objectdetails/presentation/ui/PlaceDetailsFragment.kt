@@ -23,18 +23,19 @@ import ru.fivefourtyfive.objectdetails.presentation.viewmodel.PlaceDetailsViewMo
 import ru.fivefourtyfive.objectdetails.presentation.viewmodel.PlaceDetailsViewState
 import ru.fivefourtyfive.objectdetails.presentation.viewmodel.PlaceEvent
 import ru.fivefourtyfive.places.Places
-import ru.fivefourtyfive.places.framework.datasource.remote.util.Parameter.ID
 import ru.fivefourtyfive.places.di.factory.ViewModelProviderFactory
 import ru.fivefourtyfive.places.domain.entity.dto.CommentDTO
 import ru.fivefourtyfive.places.domain.entity.dto.PhotoDTO
+import ru.fivefourtyfive.places.framework.datasource.remote.util.Parameter.ID
 import ru.fivefourtyfive.places.framework.presentation.abstraction.EventDispatcher
-import ru.fivefourtyfive.places.framework.presentation.ui.MainActivity
 import ru.fivefourtyfive.places.framework.presentation.abstraction.Renderer
+import ru.fivefourtyfive.places.framework.presentation.ui.MainActivity
 import ru.fivefourtyfive.places.util.Network.ROOT_URL
 import javax.inject.Inject
 import ru.fivefourtyfive.places.R as appR
 
-class PlaceDetailsFragment : Fragment(), EventDispatcher<PlaceEvent>, Renderer<PlaceDetailsViewState> {
+class PlaceDetailsFragment : Fragment(), EventDispatcher<PlaceEvent>,
+    Renderer<PlaceDetailsViewState> {
 
     @Inject
     lateinit var providerFactory: ViewModelProviderFactory
@@ -64,7 +65,7 @@ class PlaceDetailsFragment : Fragment(), EventDispatcher<PlaceEvent>, Renderer<P
         viewModel = ViewModelProvider(this, providerFactory).get(PlaceDetailsViewModel::class.java)
         binding.viewModel = viewModel
         binding.viewModel?.viewStateLiveData?.observe(viewLifecycleOwner, { render(it) })
-        arguments?.let { dispatchEvent(PlaceEvent.GetPlace(it.getInt(ID)))}
+        arguments?.let { dispatchEvent(PlaceEvent.GetPlace(it.getInt(ID))) }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) =
@@ -75,9 +76,9 @@ class PlaceDetailsFragment : Fragment(), EventDispatcher<PlaceEvent>, Renderer<P
     }
 
     @SuppressLint("SourceLockedOrientationActivity")
-    //TODO При добавлении данных об организациях сделать недостающие варианты раскладыки.
     override fun onResume() {
         super.onResume()
+        //TODO Сделать корректное отображение в Landscape.
         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
@@ -139,15 +140,11 @@ class PlaceDetailsFragment : Fragment(), EventDispatcher<PlaceEvent>, Renderer<P
             R.id.action_share_coordinates -> shareCoordinates()
             R.id.action_show_on_website -> showOnWebsite()
             R.id.action_slide_show -> switchSlideShow()
-            //TODO remove
-            R.id.action_show_on_map -> test()
+            R.id.action_show_on_map -> {
+                //TODO Remove or implement
+            }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    //TODO remove
-    private fun test(){
-
     }
 
     override fun render(viewState: PlaceDetailsViewState) {
@@ -179,20 +176,21 @@ class PlaceDetailsFragment : Fragment(), EventDispatcher<PlaceEvent>, Renderer<P
 
     private fun setMain(title: String, description: String) {
         requireActivity().title = title
-        binding.title.text = title
-        binding.description.text = description
+        binding.apply {
+            this.title.text = title
+            this.description.text = description
+        }
     }
 
-    private fun setPhotos(photos: List<PhotoDTO>) {
-        SliderBuilder(requireContext(), binding.slider)
-            .setPresetTransformer(SliderLayout.Transformer.Accordion)
-            .setPresetIndicator(SliderLayout.PresetIndicators.Center_Top)
-            .setCustomAnimation(DescriptionAnimation())
-            .enableAutoCycling(binding.viewModel?.slideshow() ?: false)
-            .setDuration(4000)
-            .stopCyclingWhenTouch(true)
-            .buildWith(photos)
-    }
+    private fun setPhotos(photos: List<PhotoDTO>) = SliderBuilder(requireContext(), binding.slider)
+        .setPresetTransformer(SliderLayout.Transformer.Accordion)
+        .setPresetIndicator(SliderLayout.PresetIndicators.Center_Top)
+        .setCustomAnimation(DescriptionAnimation())
+        .enableAutoCycling(binding.viewModel?.slideshow() ?: false)
+        .setDuration(4000)
+        .stopCyclingWhenTouch(true)
+        .buildWith(photos)
+
 
     private fun setLocation(location: String) {
         binding.location.text = location
@@ -207,8 +205,6 @@ class PlaceDetailsFragment : Fragment(), EventDispatcher<PlaceEvent>, Renderer<P
         super.onStop()
     }
 
-    override fun dispatchEvent(event: PlaceEvent) {
-        viewModel.handleEvent(event)
-    }
+    override fun dispatchEvent(event: PlaceEvent) = viewModel.handleEvent(event)
 
 }
