@@ -1,6 +1,6 @@
 package ru.fivefourtyfive.wikimapper.domain.datastate
 
-import ru.fivefourtyfive.wikimapper.domain.dto.SearchResultsDTO
+import ru.fivefourtyfive.wikimapper.domain.entity.dto.SearchResultsDTO
 
 sealed class SearchResultDataState : DataState{
     class Success(val area: SearchResultsDTO) : SearchResultDataState()

@@ -1,6 +1,6 @@
 package ru.fivefourtyfive.wikimapper.domain.datastate
 
-import ru.fivefourtyfive.wikimapper.domain.dto.AreaDTO
+import ru.fivefourtyfive.wikimapper.domain.entity.dto.AreaDTO
 
 sealed class AreaDataState : DataState {
     class Success(val area: AreaDTO) : AreaDataState()

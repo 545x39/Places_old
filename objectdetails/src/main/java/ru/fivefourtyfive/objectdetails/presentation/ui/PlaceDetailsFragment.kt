@@ -25,8 +25,8 @@ import ru.fivefourtyfive.objectdetails.presentation.viewmodel.PlaceEvent
 import ru.fivefourtyfive.wikimapper.Places
 import ru.fivefourtyfive.wikimapper.framework.datasource.implementation.remote.util.Parameter.ID
 import ru.fivefourtyfive.wikimapper.di.factory.ViewModelProviderFactory
-import ru.fivefourtyfive.wikimapper.domain.dto.CommentDTO
-import ru.fivefourtyfive.wikimapper.domain.dto.PhotoDTO
+import ru.fivefourtyfive.wikimapper.domain.entity.dto.CommentDTO
+import ru.fivefourtyfive.wikimapper.domain.entity.dto.PhotoDTO
 import ru.fivefourtyfive.wikimapper.framework.presentation.ui.MainActivity
 import ru.fivefourtyfive.wikimapper.framework.presentation.abstraction.Renderer
 import ru.fivefourtyfive.wikimapper.util.Network.ROOT_URL

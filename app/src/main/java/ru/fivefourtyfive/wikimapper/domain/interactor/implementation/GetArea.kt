@@ -8,7 +8,7 @@ import ru.fivefourtyfive.wikimapper.data.datasource.abstraction.ILocalDataSource
 import ru.fivefourtyfive.wikimapper.data.datasource.abstraction.IRemoteDataSource
 import ru.fivefourtyfive.wikimapper.framework.datasource.implementation.remote.util.Value
 import ru.fivefourtyfive.wikimapper.domain.datastate.AreaDataState
-import ru.fivefourtyfive.wikimapper.domain.dto.AreaDTO
+import ru.fivefourtyfive.wikimapper.domain.entity.dto.AreaDTO
 import javax.inject.Inject
 
 class GetArea @Inject constructor(

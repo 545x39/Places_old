@@ -9,8 +9,7 @@ import com.glide.slider.library.SliderLayout
 import com.glide.slider.library.animations.SliderAnimationInterface
 import com.glide.slider.library.slidertypes.TextSliderView
 import com.glide.slider.library.tricks.ViewPagerEx
-import ru.fivefourtyfive.wikimapper.domain.dto.PhotoDTO
-import ru.fivefourtyfive.wikimapper.domain.entity.Photo
+import ru.fivefourtyfive.wikimapper.domain.entity.dto.PhotoDTO
 
 class SliderBuilder(private val context: Context, private val layout: SliderLayout) {
 

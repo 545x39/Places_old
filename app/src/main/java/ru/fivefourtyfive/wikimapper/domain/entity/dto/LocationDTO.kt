@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.wikimapper.domain.dto
+package ru.fivefourtyfive.wikimapper.domain.entity.dto
 
 import ru.fivefourtyfive.wikimapper.domain.entity.Location
 

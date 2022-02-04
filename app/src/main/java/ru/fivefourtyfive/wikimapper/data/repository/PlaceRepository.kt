@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import ru.fivefourtyfive.wikimapper.domain.datastate.PlaceDetailsDataState
-import ru.fivefourtyfive.wikimapper.domain.dto.PlaceDescriptionDTO
+import ru.fivefourtyfive.wikimapper.domain.entity.dto.PlaceDescriptionDTO
 import ru.fivefourtyfive.wikimapper.domain.entity.Place
 import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.repository.IPlaceRepository
 import ru.fivefourtyfive.wikimapper.domain.interactor.implementation.factory.IUseCaseFactory

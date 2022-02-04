@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.flowOn
 import ru.fivefourtyfive.wikimapper.data.datasource.abstraction.IRemoteDataSource
 import ru.fivefourtyfive.wikimapper.framework.datasource.implementation.remote.util.Value
 import ru.fivefourtyfive.wikimapper.domain.datastate.SearchResultDataState
-import ru.fivefourtyfive.wikimapper.domain.dto.SearchResultsDTO
+import ru.fivefourtyfive.wikimapper.domain.entity.dto.SearchResultsDTO
 import javax.inject.Inject
 
 class Search @Inject constructor(private val remoteDataSource: IRemoteDataSource) {

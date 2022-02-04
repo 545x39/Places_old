@@ -1,6 +1,6 @@
 package ru.fivefourtyfive.wikimapper.domain.datastate
 
-import ru.fivefourtyfive.wikimapper.domain.dto.PlaceDescriptionDTO
+import ru.fivefourtyfive.wikimapper.domain.entity.dto.PlaceDescriptionDTO
 
 sealed class PlaceDetailsDataState : DataState {
     class Success(val place: PlaceDescriptionDTO) : PlaceDetailsDataState()
