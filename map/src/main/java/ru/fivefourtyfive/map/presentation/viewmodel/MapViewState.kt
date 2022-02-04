@@ -1,7 +1,7 @@
 package ru.fivefourtyfive.map.presentation.viewmodel
 
 import android.view.View
-import ru.fivefourtyfive.wikimapper.framework.presentation.abstraction.ViewState
+import ru.fivefourtyfive.places.framework.presentation.abstraction.ViewState
 
 sealed class MapViewState : ViewState {
     open val progressVisibility = View.GONE

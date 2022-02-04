@@ -22,17 +22,18 @@ import ru.fivefourtyfive.map.presentation.util.Overlay
 import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.WIKIMEDIA_NO_LABELS_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.toPlacePolygon
-import ru.fivefourtyfive.wikimapper.domain.datastate.AreaDataState
-import ru.fivefourtyfive.wikimapper.domain.repository.abstraction.IAreaRepository
-import ru.fivefourtyfive.wikimapper.framework.presentation.abstraction.EventHandler
-import ru.fivefourtyfive.wikimapper.framework.presentation.abstraction.Reducer
-import ru.fivefourtyfive.wikimapper.util.ifTrue
+import ru.fivefourtyfive.places.domain.datastate.AreaDataState
+import ru.fivefourtyfive.places.domain.repository.abstraction.IAreaRepository
+import ru.fivefourtyfive.places.domain.usecase.abstraction.factory.IUseCaseFactory
+import ru.fivefourtyfive.places.framework.presentation.abstraction.EventHandler
+import ru.fivefourtyfive.places.framework.presentation.abstraction.Reducer
+import ru.fivefourtyfive.places.util.ifTrue
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
 
 class MapFragmentViewModel @Inject constructor(
-    private val repository: IAreaRepository,
+    private val factory: IUseCaseFactory,
     private val settings: MapSettingsUtil,
     @Named(WIKIMEDIA_NO_LABELS_TILE_SOURCE)
     val schemeTileSource: OnlineTileSourceBase,
@@ -113,7 +114,7 @@ class MapFragmentViewModel @Inject constructor(
         lonMax: Double,
         latMax: Double
     ) = viewModelScope.launch {
-        repository.getArea(lonMin, latMin, lonMax, latMax)
+        factory.getAreaUseCase(lonMin, latMin, lonMax, latMax).execute()
             .catch { _liveData.postValue(MapViewState.Error()) }
             .collect { _liveData.postValue(reduce(it)) }
     }

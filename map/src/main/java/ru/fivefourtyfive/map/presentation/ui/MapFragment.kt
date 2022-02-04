@@ -37,17 +37,17 @@ import ru.fivefourtyfive.map.presentation.util.getDistance
 import ru.fivefourtyfive.map.presentation.viewmodel.MapEvent
 import ru.fivefourtyfive.map.presentation.viewmodel.MapFragmentViewModel
 import ru.fivefourtyfive.map.presentation.viewmodel.MapViewState
-import ru.fivefourtyfive.wikimapper.Places
-import ru.fivefourtyfive.wikimapper.framework.datasource.remote.util.Parameter.ID
-import ru.fivefourtyfive.wikimapper.di.factory.ViewModelProviderFactory
-import ru.fivefourtyfive.wikimapper.framework.presentation.ui.MainActivity
-import ru.fivefourtyfive.wikimapper.framework.presentation.ui.NavFragment
-import ru.fivefourtyfive.wikimapper.framework.presentation.abstraction.EventDispatcher
-import ru.fivefourtyfive.wikimapper.util.*
-import ru.fivefourtyfive.wikimapper.util.PermissionsUtil.isPermissionGranted
+import ru.fivefourtyfive.places.Places
+import ru.fivefourtyfive.places.framework.datasource.remote.util.Parameter.ID
+import ru.fivefourtyfive.places.di.factory.ViewModelProviderFactory
+import ru.fivefourtyfive.places.framework.presentation.ui.MainActivity
+import ru.fivefourtyfive.places.framework.presentation.ui.NavFragment
+import ru.fivefourtyfive.places.framework.presentation.abstraction.EventDispatcher
+import ru.fivefourtyfive.places.util.*
+import ru.fivefourtyfive.places.util.PermissionsUtil.isPermissionGranted
 import timber.log.Timber
 import javax.inject.Inject
-import ru.fivefourtyfive.wikimapper.R as appR
+import ru.fivefourtyfive.places.R as appR
 
 class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
 

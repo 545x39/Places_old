@@ -14,8 +14,8 @@ import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlay
 import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlayOptions
 import org.osmdroid.views.overlay.simplefastpoint.SimplePointTheme
 import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
-import ru.fivefourtyfive.wikimapper.domain.entity.dto.PlaceDTO
-import ru.fivefourtyfive.wikimapper.util.ifTrue
+import ru.fivefourtyfive.places.domain.entity.dto.PlaceDTO
+import ru.fivefourtyfive.places.util.ifTrue
 import java.io.File
 
 

@@ -1,18 +1,18 @@
 package ru.fivefourtyfive.map.presentation.util
 
 import android.content.SharedPreferences
-import ru.fivefourtyfive.wikimapper.util.Preferences
-import ru.fivefourtyfive.wikimapper.util.Preferences.PREFERENCE_AUTO_ROTATE_MAP
-import ru.fivefourtyfive.wikimapper.util.Preferences.PREFERENCE_CENTER_SELECTION
-import ru.fivefourtyfive.wikimapper.util.Preferences.PREFERENCE_FOLLOW_LOCATION
-import ru.fivefourtyfive.wikimapper.util.Preferences.PREFERENCE_KEEP_SCREEN_ON
-import ru.fivefourtyfive.wikimapper.util.Preferences.PREFERENCE_LAST_ZOOM
-import ru.fivefourtyfive.wikimapper.util.Preferences.PREFERENCE_MAP_MODE
-import ru.fivefourtyfive.wikimapper.util.Preferences.PREFERENCE_SHOW_GRID
-import ru.fivefourtyfive.wikimapper.util.Preferences.PREFERENCE_SHOW_SCALE
-import ru.fivefourtyfive.wikimapper.util.Preferences.PREFERENCE_TRANSPOTRATION_OVERLAY
-import ru.fivefourtyfive.wikimapper.util.Preferences.PREFERENCE_WIKIMAPIA_OVERLAYS
-import ru.fivefourtyfive.wikimapper.util.SettingsUtil
+import ru.fivefourtyfive.places.util.Preferences
+import ru.fivefourtyfive.places.util.Preferences.PREFERENCE_AUTO_ROTATE_MAP
+import ru.fivefourtyfive.places.util.Preferences.PREFERENCE_CENTER_SELECTION
+import ru.fivefourtyfive.places.util.Preferences.PREFERENCE_FOLLOW_LOCATION
+import ru.fivefourtyfive.places.util.Preferences.PREFERENCE_KEEP_SCREEN_ON
+import ru.fivefourtyfive.places.util.Preferences.PREFERENCE_LAST_ZOOM
+import ru.fivefourtyfive.places.util.Preferences.PREFERENCE_MAP_MODE
+import ru.fivefourtyfive.places.util.Preferences.PREFERENCE_SHOW_GRID
+import ru.fivefourtyfive.places.util.Preferences.PREFERENCE_SHOW_SCALE
+import ru.fivefourtyfive.places.util.Preferences.PREFERENCE_TRANSPOTRATION_OVERLAY
+import ru.fivefourtyfive.places.util.Preferences.PREFERENCE_WIKIMAPIA_OVERLAYS
+import ru.fivefourtyfive.places.util.SettingsUtil
 import javax.inject.Inject
 
 class MapSettingsUtil @Inject constructor(preferences: SharedPreferences) : SettingsUtil(preferences) {

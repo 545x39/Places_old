@@ -8,17 +8,15 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import ru.fivefourtyfive.wikimapper.domain.datastate.PlaceDetailsDataState
-import ru.fivefourtyfive.wikimapper.domain.repository.abstraction.IPlaceRepository
-import ru.fivefourtyfive.wikimapper.domain.usecase.abstraction.factory.IUseCaseFactory
-import ru.fivefourtyfive.wikimapper.framework.presentation.abstraction.EventHandler
-import ru.fivefourtyfive.wikimapper.framework.presentation.abstraction.Reducer
-import ru.fivefourtyfive.wikimapper.util.Preferences.PREFERENCE_SLIDESHOW
+import ru.fivefourtyfive.places.domain.datastate.PlaceDetailsDataState
+import ru.fivefourtyfive.places.domain.usecase.abstraction.factory.IUseCaseFactory
+import ru.fivefourtyfive.places.framework.presentation.abstraction.EventHandler
+import ru.fivefourtyfive.places.framework.presentation.abstraction.Reducer
+import ru.fivefourtyfive.places.util.Preferences.PREFERENCE_SLIDESHOW
 import javax.inject.Inject
 
 class PlaceDetailsViewModel @Inject constructor(
-    private val repository: IPlaceRepository,
-    private val useCaseFactory: IUseCaseFactory,
+    private val factory: IUseCaseFactory,
     private val preferences: SharedPreferences
 ) :
     ViewModel(), Reducer<PlaceDetailsDataState, PlaceDetailsViewState>, EventHandler<PlaceEvent> {
@@ -42,7 +40,7 @@ class PlaceDetailsViewModel @Inject constructor(
 
     fun getPlace(id: Int) {
         viewModelScope.launch {
-            repository.getPlace(id)
+            factory.getPlaceUseCase(id).execute()
                 .catch {
                     _viewStateLiveData.postValue(reduce(PlaceDetailsDataState.Error()))
                 }.collect {

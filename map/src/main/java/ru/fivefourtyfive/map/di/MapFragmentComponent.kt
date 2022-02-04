@@ -6,7 +6,7 @@ import ru.fivefourtyfive.map.di.module.MapFragmentViewModelModule
 import ru.fivefourtyfive.map.di.module.OverlayModule
 import ru.fivefourtyfive.map.di.module.TileSourceModule
 import ru.fivefourtyfive.map.presentation.ui.MapFragment
-import ru.fivefourtyfive.wikimapper.di.AppComponent
+import ru.fivefourtyfive.places.di.AppComponent
 
 @MapFragmentScope
 @Component(
