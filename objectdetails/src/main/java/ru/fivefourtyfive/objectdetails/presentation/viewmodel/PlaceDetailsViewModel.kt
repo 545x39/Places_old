@@ -24,15 +24,16 @@ class PlaceDetailsViewModel @Inject constructor(
 
     override fun handleEvent(event: PlaceEvent) {
         when (event) {
-            is PlaceEvent.GetPlace -> getPlace(event.id)
-            is PlaceEvent.SetSlideshow -> setSlideshow(event.enable)
+            is PlaceEvent.GetPlace ->viewModelScope.launch {
+                factory.getPlaceUseCase(event.id).execute().collect {
+                    _viewStateLiveData.postValue(it)
+                }
+            }
+            is PlaceEvent.SetSlideshow -> preferences.edit().putBoolean(PREFERENCE_SLIDESHOW, event.enable).apply()
         }
     }
 
     fun slideshow() = preferences.getBoolean(PREFERENCE_SLIDESHOW, false)
-
-    private fun setSlideshow(enabled: Boolean) =
-        preferences.edit().putBoolean(PREFERENCE_SLIDESHOW, enabled).apply()
 
     fun getPlace(id: Int) {
         viewModelScope.launch {

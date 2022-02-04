@@ -27,13 +27,14 @@ import ru.fivefourtyfive.places.framework.datasource.remote.util.Parameter.ID
 import ru.fivefourtyfive.places.di.factory.ViewModelProviderFactory
 import ru.fivefourtyfive.places.domain.entity.dto.CommentDTO
 import ru.fivefourtyfive.places.domain.entity.dto.PhotoDTO
+import ru.fivefourtyfive.places.framework.presentation.abstraction.EventDispatcher
 import ru.fivefourtyfive.places.framework.presentation.ui.MainActivity
 import ru.fivefourtyfive.places.framework.presentation.abstraction.Renderer
 import ru.fivefourtyfive.places.util.Network.ROOT_URL
 import javax.inject.Inject
 import ru.fivefourtyfive.places.R as appR
 
-class PlaceDetailsFragment : Fragment(), Renderer<PlaceDetailsViewState> {
+class PlaceDetailsFragment : Fragment(), EventDispatcher<PlaceEvent>, Renderer<PlaceDetailsViewState> {
 
     @Inject
     lateinit var providerFactory: ViewModelProviderFactory
@@ -63,7 +64,7 @@ class PlaceDetailsFragment : Fragment(), Renderer<PlaceDetailsViewState> {
         viewModel = ViewModelProvider(this, providerFactory).get(PlaceDetailsViewModel::class.java)
         binding.viewModel = viewModel
         binding.viewModel?.viewStateLiveData?.observe(viewLifecycleOwner, { render(it) })
-        arguments?.let { viewModel.getPlace(it.getInt(ID)) }
+        arguments?.let { dispatchEvent(PlaceEvent.GetPlace(it.getInt(ID)))}
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) =
@@ -125,7 +126,7 @@ class PlaceDetailsFragment : Fragment(), Renderer<PlaceDetailsViewState> {
 
         fun switchSlideShow() {
             item.isChecked = !item.isChecked
-            viewModel.handleEvent(PlaceEvent.SetSlideshow(item.isChecked))
+            dispatchEvent(PlaceEvent.SetSlideshow(item.isChecked))
             when (item.isChecked) {
                 true -> binding.slider.startAutoCycle()
                 false -> binding.slider.stopAutoCycle()
@@ -204,6 +205,10 @@ class PlaceDetailsFragment : Fragment(), Renderer<PlaceDetailsViewState> {
     override fun onStop() {
         binding.slider.stopAutoCycle()
         super.onStop()
+    }
+
+    override fun dispatchEvent(event: PlaceEvent) {
+        viewModel.handleEvent(event)
     }
 
 }
