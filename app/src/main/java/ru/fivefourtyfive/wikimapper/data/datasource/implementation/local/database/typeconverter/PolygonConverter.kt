@@ -1,8 +1,8 @@
-package ru.fivefourtyfive.wikimapper.data.datasource.local.database.typeconverter
+package ru.fivefourtyfive.wikimapper.data.datasource.implementation.local.database.typeconverter
 
 import androidx.room.TypeConverter
-import ru.fivefourtyfive.wikimapper.data.datasource.local.database.typeconverter.util.CoordinateDelimiters.VALUE_DELIMITER
-import ru.fivefourtyfive.wikimapper.data.datasource.local.database.typeconverter.util.CoordinateDelimiters.COORDINATE_DELIMITER
+import ru.fivefourtyfive.wikimapper.data.datasource.implementation.local.database.typeconverter.util.CoordinateDelimiters.VALUE_DELIMITER
+import ru.fivefourtyfive.wikimapper.data.datasource.implementation.local.database.typeconverter.util.CoordinateDelimiters.COORDINATE_DELIMITER
 import ru.fivefourtyfive.wikimapper.domain.entity.PolygonPoint
 import ru.fivefourtyfive.wikimapper.util.ifTrue
 

@@ -1,8 +1,8 @@
 package ru.fivefourtyfive.wikimapper.domain.interactor.implementation.factory
 
 import ru.fivefourtyfive.wikimapper.domain.entity.Place
-import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.datasource.ILocalDataSource
-import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.datasource.IRemoteDataSource
+import ru.fivefourtyfive.wikimapper.data.datasource.abstraction.ILocalDataSource
+import ru.fivefourtyfive.wikimapper.data.datasource.abstraction.IRemoteDataSource
 import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.usecase.IGetPlaceFromCacheUseCase
 import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.usecase.IGetPlaceFromNetworkUseCase
 import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.usecase.IPersistPlaceUseCase

@@ -1,7 +1,7 @@
-package ru.fivefourtyfive.wikimapper.data.datasource.local
+package ru.fivefourtyfive.wikimapper.data.datasource.implementation.local
 
-import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.datasource.ILocalDataSource
-import ru.fivefourtyfive.wikimapper.data.datasource.local.database.Database
+import ru.fivefourtyfive.wikimapper.data.datasource.abstraction.ILocalDataSource
+import ru.fivefourtyfive.wikimapper.data.datasource.implementation.local.database.Database
 import ru.fivefourtyfive.wikimapper.domain.entity.Place
 import ru.fivefourtyfive.wikimapper.domain.entity.Places
 import javax.inject.Inject

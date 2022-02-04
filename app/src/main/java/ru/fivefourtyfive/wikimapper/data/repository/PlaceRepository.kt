@@ -9,12 +9,13 @@ import kotlinx.coroutines.launch
 import ru.fivefourtyfive.wikimapper.domain.datastate.PlaceDetailsDataState
 import ru.fivefourtyfive.wikimapper.domain.dto.PlaceDescriptionDTO
 import ru.fivefourtyfive.wikimapper.domain.entity.Place
+import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.repository.IPlaceRepository
 import ru.fivefourtyfive.wikimapper.domain.interactor.implementation.factory.IUseCaseFactory
 import javax.inject.Inject
 
-class PlaceRepository @Inject constructor(private val factory: IUseCaseFactory) {
+class PlaceRepository @Inject constructor(private val factory: IUseCaseFactory): IPlaceRepository {
 
-    suspend fun getPlace(id: Int, dataBlocks: String? = null): Flow<PlaceDetailsDataState> = flow {
+    override suspend fun getPlace(id: Int, dataBlocks: String?): Flow<PlaceDetailsDataState> = flow {
         emit(PlaceDetailsDataState.Loading)
         factory.getPlaceFromCacheUseCase(id).execute()
             ?.let {

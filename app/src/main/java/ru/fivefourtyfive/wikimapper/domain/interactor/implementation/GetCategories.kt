@@ -3,7 +3,7 @@ package ru.fivefourtyfive.wikimapper.domain.interactor.implementation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.datasource.IRemoteDataSource
+import ru.fivefourtyfive.wikimapper.data.datasource.abstraction.IRemoteDataSource
 import javax.inject.Inject
 
 class GetCategories @Inject constructor(private val remoteDataSource: IRemoteDataSource) {

@@ -1,7 +1,7 @@
 package ru.fivefourtyfive.wikimapper.domain.interactor.implementation
 
 import ru.fivefourtyfive.wikimapper.domain.entity.Place
-import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.datasource.IRemoteDataSource
+import ru.fivefourtyfive.wikimapper.data.datasource.abstraction.IRemoteDataSource
 import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.usecase.IGetPlaceFromNetworkUseCase
 import javax.inject.Inject
 

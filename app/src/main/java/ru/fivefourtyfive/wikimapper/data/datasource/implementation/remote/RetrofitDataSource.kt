@@ -1,7 +1,7 @@
-package ru.fivefourtyfive.wikimapper.data.datasource.remote
+package ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote
 
-import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.datasource.IRemoteDataSource
-import ru.fivefourtyfive.wikimapper.data.datasource.remote.util.Parameters
+import ru.fivefourtyfive.wikimapper.data.datasource.abstraction.IRemoteDataSource
+import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Parameters
 import javax.inject.Inject
 
 class RetrofitDataSource @Inject constructor(private val api: Api) : IRemoteDataSource {

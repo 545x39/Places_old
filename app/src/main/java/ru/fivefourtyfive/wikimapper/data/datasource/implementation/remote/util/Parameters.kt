@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.wikimapper.data.datasource.remote.util
+package ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util
 
 import ru.fivefourtyfive.wikimapper.util.ifTrue
 

@@ -2,10 +2,10 @@ package ru.fivefourtyfive.wikimapper.di.module
 
 import dagger.Binds
 import dagger.Module
-import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.datasource.ILocalDataSource
-import ru.fivefourtyfive.wikimapper.data.datasource.remote.RetrofitDataSource
-import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.datasource.IRemoteDataSource
-import ru.fivefourtyfive.wikimapper.data.datasource.local.RoomDataSource
+import ru.fivefourtyfive.wikimapper.data.datasource.abstraction.ILocalDataSource
+import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.RetrofitDataSource
+import ru.fivefourtyfive.wikimapper.data.datasource.abstraction.IRemoteDataSource
+import ru.fivefourtyfive.wikimapper.data.datasource.implementation.local.RoomDataSource
 
 @Module
 interface DataSourceModule {

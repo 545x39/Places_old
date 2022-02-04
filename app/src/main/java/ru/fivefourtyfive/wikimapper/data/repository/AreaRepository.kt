@@ -1,16 +1,17 @@
 package ru.fivefourtyfive.wikimapper.data.repository
 
+import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.repository.IAreaRepository
 import ru.fivefourtyfive.wikimapper.domain.interactor.implementation.GetArea
 import javax.inject.Inject
 
-class AreaRepository @Inject constructor(private val getArea: GetArea) {
+class AreaRepository @Inject constructor(private val getArea: GetArea): IAreaRepository {
 
-    suspend fun getArea(
+    override suspend fun getArea(
         lonMin: Double,
         latMin: Double,
         lonMax: Double,
         latMax: Double,
-        page: Int? = 1
+        page: Int?
     ) =
         getArea.execute(
             lonMin = lonMin,

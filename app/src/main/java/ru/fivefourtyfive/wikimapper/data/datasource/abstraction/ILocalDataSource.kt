@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.datasource
+package ru.fivefourtyfive.wikimapper.data.datasource.abstraction
 
 import ru.fivefourtyfive.wikimapper.domain.entity.Place
 import ru.fivefourtyfive.wikimapper.domain.entity.Places

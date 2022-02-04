@@ -4,9 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import dagger.Component
 import ru.fivefourtyfive.wikimapper.Places
-import ru.fivefourtyfive.wikimapper.data.repository.AreaRepository
-import ru.fivefourtyfive.wikimapper.data.repository.PlaceRepository
 import ru.fivefourtyfive.wikimapper.di.module.*
+import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.repository.IAreaRepository
+import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.repository.IPlaceRepository
 import javax.inject.Singleton
 
 @Singleton
@@ -17,7 +17,8 @@ import javax.inject.Singleton
         DatabaseModule::class,
         DataSourceModule::class,
         ViewModelProviderFactoryModule::class,
-        UseCaseModule::class
+        UseCaseModule::class,
+        RepositoryModule::class
     ]
 )
 interface AppComponent {
@@ -26,9 +27,9 @@ interface AppComponent {
 
     fun getPreferences(): SharedPreferences
 
-    fun getPlaceRepository(): PlaceRepository
+    fun getPlaceRepository(): IPlaceRepository
 
-    fun getAreaRepository(): AreaRepository
+    fun getAreaRepository(): IAreaRepository
 
     fun getContext(): Context
 

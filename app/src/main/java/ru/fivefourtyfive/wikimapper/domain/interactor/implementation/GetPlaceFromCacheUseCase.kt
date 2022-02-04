@@ -1,7 +1,7 @@
 package ru.fivefourtyfive.wikimapper.domain.interactor.implementation
 
 import ru.fivefourtyfive.wikimapper.domain.entity.Place
-import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.datasource.ILocalDataSource
+import ru.fivefourtyfive.wikimapper.data.datasource.abstraction.ILocalDataSource
 import ru.fivefourtyfive.wikimapper.domain.interactor.abstraction.usecase.IGetPlaceFromCacheUseCase
 
 class GetPlaceFromCacheUseCase (private val dataSource: ILocalDataSource) :

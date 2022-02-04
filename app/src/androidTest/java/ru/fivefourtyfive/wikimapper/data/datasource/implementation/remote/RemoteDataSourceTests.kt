@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.wikimapper.data.datasource.remote
+package ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Test

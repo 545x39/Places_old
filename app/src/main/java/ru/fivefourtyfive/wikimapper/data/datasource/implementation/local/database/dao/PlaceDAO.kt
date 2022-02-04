@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.wikimapper.data.datasource.local.database.dao
+package ru.fivefourtyfive.wikimapper.data.datasource.implementation.local.database.dao
 
 import androidx.room.*
 import ru.fivefourtyfive.wikimapper.domain.entity.Location

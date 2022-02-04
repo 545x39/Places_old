@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.wikimapper.data.datasource.local.database.util
+package ru.fivefourtyfive.wikimapper.data.datasource.implementation.local.database.util
 
 object Version{
     const val DB_VERSION = 2
