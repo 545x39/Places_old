@@ -1,17 +1,16 @@
-package ru.fivefourtyfive.places.data.repository
+package ru.fivefourtyfive.objectdetails.data.repository
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import ru.fivefourtyfive.objectdetails.domain.repository.abstraction.IPlaceRepository
 import ru.fivefourtyfive.places.data.datasource.abstraction.ILocalDataSource
 import ru.fivefourtyfive.places.data.datasource.abstraction.IRemoteDataSource
 import ru.fivefourtyfive.places.domain.datastate.PlaceDetailsDataState
 import ru.fivefourtyfive.places.domain.entity.Place
 import ru.fivefourtyfive.places.domain.entity.dto.PlaceDescriptionDTO
-import ru.fivefourtyfive.places.domain.repository.abstraction.IPlaceRepository
 import javax.inject.Inject
 
 class PlaceRepository @Inject constructor(
@@ -35,5 +34,5 @@ class PlaceRepository @Inject constructor(
                     CoroutineScope(IO).launch {localDataSource.persistPlace(place)}
                 }
         })
-        }.flowOn(IO)
+        }
 }

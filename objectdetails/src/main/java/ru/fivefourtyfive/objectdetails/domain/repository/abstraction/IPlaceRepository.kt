@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.places.domain.repository.abstraction
+package ru.fivefourtyfive.objectdetails.domain.repository.abstraction
 
 import kotlinx.coroutines.flow.Flow
 import ru.fivefourtyfive.places.domain.datastate.PlaceDetailsDataState

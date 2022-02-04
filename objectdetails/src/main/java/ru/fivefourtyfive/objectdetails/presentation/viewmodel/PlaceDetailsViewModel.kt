@@ -5,21 +5,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import ru.fivefourtyfive.places.domain.datastate.PlaceDetailsDataState
-import ru.fivefourtyfive.places.domain.usecase.abstraction.factory.IUseCaseFactory
+import ru.fivefourtyfive.objectdetails.domain.usecase.abstraction.factory.IPlaceDetailsUseCaseFactory
 import ru.fivefourtyfive.places.framework.presentation.abstraction.EventHandler
-import ru.fivefourtyfive.places.framework.presentation.abstraction.Reducer
 import ru.fivefourtyfive.places.util.Preferences.PREFERENCE_SLIDESHOW
 import javax.inject.Inject
 
 class PlaceDetailsViewModel @Inject constructor(
-    private val factory: IUseCaseFactory,
+    private val factory: IPlaceDetailsUseCaseFactory,
     private val preferences: SharedPreferences
-) :
-    ViewModel(), Reducer<PlaceDetailsDataState, PlaceDetailsViewState>, EventHandler<PlaceEvent> {
+) : ViewModel(), EventHandler<PlaceEvent> {
 
     private val _viewStateLiveData: MutableLiveData<PlaceDetailsViewState> =
         MutableLiveData(PlaceDetailsViewState.Loading)
@@ -40,32 +36,8 @@ class PlaceDetailsViewModel @Inject constructor(
 
     fun getPlace(id: Int) {
         viewModelScope.launch {
-            factory.getPlaceUseCase(id).execute()
-                .catch {
-                    _viewStateLiveData.postValue(reduce(PlaceDetailsDataState.Error()))
-                }.collect {
-                    _viewStateLiveData.postValue(reduce(it))
-                }
-        }
-    }
-
-    override fun reduce(dataState: PlaceDetailsDataState): PlaceDetailsViewState {
-        with(dataState) {
-            return when (this) {
-                is PlaceDetailsDataState.Success -> PlaceDetailsViewState.Success(
-                    id          = place.id,
-                    title       = place.title,
-                    description = place.description,
-                    languageIso = place.languageIso,
-                    photos      = place.photos,
-                    comments    = place.comments,
-                    tags        = place.tags,
-                    lat         = place.lat,
-                    lon         = place.lon,
-                    location    = place.location
-                )
-                is PlaceDetailsDataState.Loading -> PlaceDetailsViewState.Loading
-                is PlaceDetailsDataState.Error -> PlaceDetailsViewState.Error(message = message)
+            factory.getPlaceUseCase(id).execute().collect {
+                _viewStateLiveData.postValue(it)
             }
         }
     }

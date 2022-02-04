@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import dagger.Component
 import ru.fivefourtyfive.places.Places
+import ru.fivefourtyfive.places.data.datasource.abstraction.ILocalDataSource
+import ru.fivefourtyfive.places.data.datasource.abstraction.IRemoteDataSource
 import ru.fivefourtyfive.places.data.datasource.abstraction.ISettingsDataSource
 import ru.fivefourtyfive.places.di.module.*
 import ru.fivefourtyfive.places.domain.repository.abstraction.IMapSettingsRepository
@@ -26,9 +28,11 @@ interface AppComponent {
 
     fun inject(app: Places)
 
-//    fun getSettingsRepository(): IMapSettingsRepository
-
     fun getSettingsDataSource(): ISettingsDataSource
+
+    fun getRemoteDataSource(): IRemoteDataSource
+
+    fun getLocalDataSource(): ILocalDataSource
 
     fun getSharedPreferences() : SharedPreferences
 
