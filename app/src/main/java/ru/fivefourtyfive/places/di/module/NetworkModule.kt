@@ -8,7 +8,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.fivefourtyfive.places.BuildConfig
-import ru.fivefourtyfive.places.framework.datasource.remote.Api
+import ru.fivefourtyfive.places.framework.datasource.implementation.remote.Api
 import ru.fivefourtyfive.places.util.Network.API_URL
 import ru.fivefourtyfive.places.util.Network.CONNECT_TIMEOUT
 import ru.fivefourtyfive.places.util.Network.READ_TIMEOUT

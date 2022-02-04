@@ -1,6 +1,6 @@
 package ru.fivefourtyfive.places.domain.entity.dto
 
-import ru.fivefourtyfive.places.framework.datasource.remote.util.Value.RU
+import ru.fivefourtyfive.places.framework.datasource.implementation.remote.util.Value.RU
 import ru.fivefourtyfive.places.domain.entity.DebugInfo
 import ru.fivefourtyfive.places.domain.entity.Location
 import ru.fivefourtyfive.places.domain.entity.Place

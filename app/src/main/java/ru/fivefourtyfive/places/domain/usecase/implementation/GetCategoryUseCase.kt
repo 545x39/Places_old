@@ -4,7 +4,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import ru.fivefourtyfive.places.data.datasource.abstraction.IRemoteDataSource
-import ru.fivefourtyfive.places.framework.datasource.remote.util.Value.RU
+import ru.fivefourtyfive.places.framework.datasource.implementation.remote.util.Value.RU
 import javax.inject.Inject
 
 class GetCategoryUseCase @Inject constructor(private val remoteDataSource: IRemoteDataSource)  {

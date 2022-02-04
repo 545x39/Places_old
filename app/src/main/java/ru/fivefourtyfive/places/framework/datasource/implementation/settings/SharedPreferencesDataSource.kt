@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.places.framework.datasource.settings
+package ru.fivefourtyfive.places.framework.datasource.implementation.settings
 
 import android.content.SharedPreferences
 import ru.fivefourtyfive.places.data.datasource.abstraction.ISettingsDataSource

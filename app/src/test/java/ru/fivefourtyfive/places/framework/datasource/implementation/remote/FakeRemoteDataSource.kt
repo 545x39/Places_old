@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.places.framework.datasource.remote
+package ru.fivefourtyfive.places.framework.datasource.implementation.remote
 
 import ru.fivefourtyfive.places.data.datasource.abstraction.IRemoteDataSource
 

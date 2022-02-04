@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.places.framework.datasource.remote.util
+package ru.fivefourtyfive.places.framework.datasource.implementation.remote.util
 
 import ru.fivefourtyfive.places.util.ifTrue
 

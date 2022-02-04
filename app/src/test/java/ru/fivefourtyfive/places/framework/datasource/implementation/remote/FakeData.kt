@@ -1,6 +1,6 @@
-package ru.fivefourtyfive.places.framework.datasource.remote
+package ru.fivefourtyfive.places.framework.datasource.implementation.remote
 
-import ru.fivefourtyfive.places.framework.datasource.remote.util.Value.RU
+import ru.fivefourtyfive.places.framework.datasource.implementation.remote.util.Value.RU
 import ru.fivefourtyfive.places.domain.entity.*
 
 object FakeData {

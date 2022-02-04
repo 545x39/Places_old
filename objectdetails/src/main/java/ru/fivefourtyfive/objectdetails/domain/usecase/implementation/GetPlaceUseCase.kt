@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.map
 import ru.fivefourtyfive.objectdetails.domain.repository.abstraction.IPlaceRepository
 import ru.fivefourtyfive.objectdetails.domain.usecase.abstraction.IGetPlaceUseCase
 import ru.fivefourtyfive.objectdetails.presentation.viewmodel.PlaceDetailsViewState
-import ru.fivefourtyfive.places.domain.datastate.PlaceDetailsDataState
+import ru.fivefourtyfive.objectdetails.domain.datastate.PlaceDetailsDataState
 import ru.fivefourtyfive.places.framework.presentation.abstraction.Reducer
 import javax.inject.Inject
 

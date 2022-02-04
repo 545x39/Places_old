@@ -14,7 +14,6 @@ import android.widget.*
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -37,7 +36,7 @@ import ru.fivefourtyfive.map.presentation.viewmodel.MapEvent
 import ru.fivefourtyfive.map.presentation.viewmodel.MapFragmentViewModel
 import ru.fivefourtyfive.map.presentation.viewmodel.MapViewState
 import ru.fivefourtyfive.places.Places
-import ru.fivefourtyfive.places.framework.datasource.remote.util.Parameter.ID
+import ru.fivefourtyfive.places.framework.datasource.implementation.remote.util.Parameter.ID
 import ru.fivefourtyfive.places.di.factory.ViewModelProviderFactory
 import ru.fivefourtyfive.places.framework.presentation.ui.MainActivity
 import ru.fivefourtyfive.places.framework.presentation.ui.NavFragment

@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.places.framework.datasource.local.database.util
+package ru.fivefourtyfive.places.framework.datasource.implementation.local.database.util
 
 object Version{
     const val DB_VERSION = 2

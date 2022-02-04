@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.places.framework.datasource.local.database.dao
+package ru.fivefourtyfive.places.framework.datasource.implementation.local.database.dao
 
 import androidx.room.*
 import ru.fivefourtyfive.places.domain.entity.Location

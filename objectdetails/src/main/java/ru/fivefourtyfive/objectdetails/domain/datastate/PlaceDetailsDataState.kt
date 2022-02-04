@@ -1,5 +1,6 @@
-package ru.fivefourtyfive.places.domain.datastate
+package ru.fivefourtyfive.objectdetails.domain.datastate
 
+import ru.fivefourtyfive.places.domain.datastate.DataState
 import ru.fivefourtyfive.places.domain.entity.dto.PlaceDescriptionDTO
 
 sealed class PlaceDetailsDataState : DataState {

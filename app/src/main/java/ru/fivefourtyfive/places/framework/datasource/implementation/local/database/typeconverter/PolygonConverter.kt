@@ -1,8 +1,8 @@
-package ru.fivefourtyfive.places.framework.datasource.local.database.typeconverter
+package ru.fivefourtyfive.places.framework.datasource.implementation.local.database.typeconverter
 
 import androidx.room.TypeConverter
-import ru.fivefourtyfive.places.framework.datasource.local.database.typeconverter.util.CoordinateDelimiters.VALUE_DELIMITER
-import ru.fivefourtyfive.places.framework.datasource.local.database.typeconverter.util.CoordinateDelimiters.COORDINATE_DELIMITER
+import ru.fivefourtyfive.places.framework.datasource.implementation.local.database.typeconverter.util.CoordinateDelimiters.VALUE_DELIMITER
+import ru.fivefourtyfive.places.framework.datasource.implementation.local.database.typeconverter.util.CoordinateDelimiters.COORDINATE_DELIMITER
 import ru.fivefourtyfive.places.domain.entity.PolygonPoint
 import ru.fivefourtyfive.places.util.ifTrue
 

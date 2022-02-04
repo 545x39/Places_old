@@ -1,7 +1,7 @@
-package ru.fivefourtyfive.places.framework.datasource.local
+package ru.fivefourtyfive.places.framework.datasource.implementation.local
 
 import ru.fivefourtyfive.places.data.datasource.abstraction.ILocalDataSource
-import ru.fivefourtyfive.places.framework.datasource.local.database.Database
+import ru.fivefourtyfive.places.framework.datasource.implementation.local.database.Database
 import ru.fivefourtyfive.places.domain.entity.Place
 import ru.fivefourtyfive.places.domain.entity.Places
 import javax.inject.Inject

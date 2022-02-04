@@ -6,7 +6,7 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import ru.fivefourtyfive.places.framework.datasource.local.database.util.TableName.TABLE_LOCATIONS
+import ru.fivefourtyfive.places.framework.datasource.implementation.local.database.util.TableName.TABLE_LOCATIONS
 import ru.fivefourtyfive.places.domain.entity.util.ID
 import ru.fivefourtyfive.places.domain.entity.util.LocationFields.CITY
 import ru.fivefourtyfive.places.domain.entity.util.LocationFields.CITY_ID

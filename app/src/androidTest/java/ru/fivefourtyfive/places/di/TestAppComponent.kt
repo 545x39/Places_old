@@ -1,7 +1,7 @@
 package ru.fivefourtyfive.places.di
 
 import dagger.Component
-import ru.fivefourtyfive.places.framework.datasource.remote.RemoteDataSourceTests
+import ru.fivefourtyfive.places.framework.datasource.implementation.remote.RemoteDataSourceTests
 import ru.fivefourtyfive.places.di.module.AppModule
 import ru.fivefourtyfive.places.di.module.DataSourceModule
 import ru.fivefourtyfive.places.di.module.NetworkModule

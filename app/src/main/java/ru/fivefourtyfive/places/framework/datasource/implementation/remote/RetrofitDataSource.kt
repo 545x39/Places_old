@@ -1,7 +1,7 @@
-package ru.fivefourtyfive.places.framework.datasource.remote
+package ru.fivefourtyfive.places.framework.datasource.implementation.remote
 
 import ru.fivefourtyfive.places.data.datasource.abstraction.IRemoteDataSource
-import ru.fivefourtyfive.places.framework.datasource.remote.util.Parameters
+import ru.fivefourtyfive.places.framework.datasource.implementation.remote.util.Parameters
 import javax.inject.Inject
 
 class RetrofitDataSource @Inject constructor(private val api: Api) : IRemoteDataSource {

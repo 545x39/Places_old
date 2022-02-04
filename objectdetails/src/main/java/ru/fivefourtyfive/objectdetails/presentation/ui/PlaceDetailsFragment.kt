@@ -26,7 +26,7 @@ import ru.fivefourtyfive.places.Places
 import ru.fivefourtyfive.places.di.factory.ViewModelProviderFactory
 import ru.fivefourtyfive.places.domain.entity.dto.CommentDTO
 import ru.fivefourtyfive.places.domain.entity.dto.PhotoDTO
-import ru.fivefourtyfive.places.framework.datasource.remote.util.Parameter.ID
+import ru.fivefourtyfive.places.framework.datasource.implementation.remote.util.Parameter.ID
 import ru.fivefourtyfive.places.framework.presentation.abstraction.EventDispatcher
 import ru.fivefourtyfive.places.framework.presentation.abstraction.Renderer
 import ru.fivefourtyfive.places.framework.presentation.ui.MainActivity

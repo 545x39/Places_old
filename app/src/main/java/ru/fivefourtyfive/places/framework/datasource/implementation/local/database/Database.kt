@@ -1,9 +1,9 @@
-package ru.fivefourtyfive.places.framework.datasource.local.database
+package ru.fivefourtyfive.places.framework.datasource.implementation.local.database
 
 import androidx.room.RoomDatabase
-import ru.fivefourtyfive.places.framework.datasource.local.database.dao.LocationDAO
-import ru.fivefourtyfive.places.framework.datasource.local.database.dao.PlaceDAO
-import ru.fivefourtyfive.places.framework.datasource.local.database.util.Version.DB_VERSION
+import ru.fivefourtyfive.places.framework.datasource.implementation.local.database.dao.LocationDAO
+import ru.fivefourtyfive.places.framework.datasource.implementation.local.database.dao.PlaceDAO
+import ru.fivefourtyfive.places.framework.datasource.implementation.local.database.util.Version.DB_VERSION
 import ru.fivefourtyfive.places.domain.entity.Location
 import ru.fivefourtyfive.places.domain.entity.Place
 

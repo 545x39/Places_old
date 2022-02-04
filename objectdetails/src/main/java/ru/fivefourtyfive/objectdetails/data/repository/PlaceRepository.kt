@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 import ru.fivefourtyfive.objectdetails.domain.repository.abstraction.IPlaceRepository
 import ru.fivefourtyfive.places.data.datasource.abstraction.ILocalDataSource
 import ru.fivefourtyfive.places.data.datasource.abstraction.IRemoteDataSource
-import ru.fivefourtyfive.places.domain.datastate.PlaceDetailsDataState
+import ru.fivefourtyfive.objectdetails.domain.datastate.PlaceDetailsDataState
 import ru.fivefourtyfive.places.domain.entity.Place
 import ru.fivefourtyfive.places.domain.entity.dto.PlaceDescriptionDTO
 import javax.inject.Inject

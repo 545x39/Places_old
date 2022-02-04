@@ -2,7 +2,7 @@ package ru.fivefourtyfive.places.domain.entity
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import ru.fivefourtyfive.places.framework.datasource.remote.util.Value.RU
+import ru.fivefourtyfive.places.framework.datasource.implementation.remote.util.Value.RU
 
 data class Places(
     @SerializedName("debug")

@@ -2,7 +2,7 @@ package ru.fivefourtyfive.places.domain.usecase.abstraction
 
 import kotlinx.coroutines.flow.Flow
 import ru.fivefourtyfive.places.domain.datastate.AreaDataState
-import ru.fivefourtyfive.places.framework.datasource.remote.util.Value
+import ru.fivefourtyfive.places.framework.datasource.implementation.remote.util.Value
 
 interface IGetAreaUseCase : IUseCase<Flow<AreaDataState>> {
 
