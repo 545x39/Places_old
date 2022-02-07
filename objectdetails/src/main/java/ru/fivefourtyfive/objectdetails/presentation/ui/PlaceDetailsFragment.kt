@@ -27,15 +27,15 @@ import ru.fivefourtyfive.places.di.factory.ViewModelProviderFactory
 import ru.fivefourtyfive.places.domain.entity.dto.CommentDTO
 import ru.fivefourtyfive.places.domain.entity.dto.PhotoDTO
 import ru.fivefourtyfive.places.framework.datasource.implementation.remote.util.Parameter.ID
-import ru.fivefourtyfive.places.framework.presentation.abstraction.EventDispatcher
-import ru.fivefourtyfive.places.framework.presentation.abstraction.Renderer
+import ru.fivefourtyfive.places.framework.presentation.abstraction.IEventDispatcher
+import ru.fivefourtyfive.places.framework.presentation.abstraction.IRenderer
 import ru.fivefourtyfive.places.framework.presentation.ui.MainActivity
 import ru.fivefourtyfive.places.util.Network.ROOT_URL
 import javax.inject.Inject
 import ru.fivefourtyfive.places.R as appR
 
-class PlaceDetailsFragment : Fragment(), EventDispatcher<PlaceEvent>,
-    Renderer<PlaceDetailsViewState> {
+class PlaceDetailsFragment : Fragment(), IEventDispatcher<PlaceEvent>,
+    IRenderer<PlaceDetailsViewState> {
 
     @Inject
     lateinit var providerFactory: ViewModelProviderFactory

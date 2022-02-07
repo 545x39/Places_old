@@ -2,9 +2,9 @@ package ru.fivefourtyfive.map.presentation.viewmodel
 
 import android.view.View
 import ru.fivefourtyfive.places.domain.entity.dto.AreaDTO
-import ru.fivefourtyfive.places.framework.presentation.abstraction.ViewState
+import ru.fivefourtyfive.places.framework.presentation.abstraction.IViewState
 
-sealed class MapViewState : ViewState {
+sealed class MapViewState : IViewState {
     open val progressVisibility = View.GONE
 
     class DataLoaded(val area: AreaDTO) : MapViewState()

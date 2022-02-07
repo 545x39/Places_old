@@ -1,9 +1,9 @@
 package ru.fivefourtyfive.map.presentation.viewmodel
 
-import ru.fivefourtyfive.places.framework.presentation.abstraction.Event
+import ru.fivefourtyfive.places.framework.presentation.abstraction.IEvent
 
 @Suppress("SpellCheckingInspection")
-sealed class MapEvent : Event {
+sealed class MapEvent : IEvent {
     class GetAreaEvent(
         val lonM: Double,
         val latM: Double,

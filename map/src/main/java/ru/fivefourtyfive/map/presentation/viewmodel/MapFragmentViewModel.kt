@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 import org.osmdroid.util.GeoPoint
@@ -20,9 +21,9 @@ import ru.fivefourtyfive.map.presentation.util.Overlay
 import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.WIKIMEDIA_NO_LABELS_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.toPlacePolygon
-import ru.fivefourtyfive.places.domain.datastate.AreaDataState
-import ru.fivefourtyfive.places.domain.repository.abstraction.IMapSettingsRepository
-import ru.fivefourtyfive.places.framework.presentation.abstraction.EventHandler
+import ru.fivefourtyfive.places.domain.entity.dto.AreaDTO
+import ru.fivefourtyfive.map.domain.repository.abstratcion.IMapSettingsRepository
+import ru.fivefourtyfive.places.framework.presentation.abstraction.IEventHandler
 import ru.fivefourtyfive.places.util.MapMode
 import ru.fivefourtyfive.places.util.ifTrue
 import timber.log.Timber
@@ -45,7 +46,7 @@ class MapFragmentViewModel @Inject constructor(
     val myLocation: MyLocationNewOverlay,
     val gridOverlay: LatLonGridlineOverlay2,
     val folder: FolderOverlay
-) : ViewModel(), EventHandler<MapEvent> {
+) : ViewModel(), IEventHandler<MapEvent> {
 
     private val _liveData = MutableLiveData<MapViewState>(MapViewState.Loading)
 
@@ -111,38 +112,40 @@ class MapFragmentViewModel @Inject constructor(
         lonMax: Double,
         latMax: Double
     ) = viewModelScope.launch {
-        factory.getAreaUseCase(lonMin, latMin, lonMax, latMax).execute()
+        factory.getAreaUseCase(lonMin, latMin, lonMax, latMax)
+            .execute()
             .catch { _liveData.postValue(MapViewState.Error()) }
-//            .collect {
-////                _liveData.postValue(it)
-//            }
+            .collect {
+                (it is MapViewState.DataLoaded).ifTrue { merge((it as MapViewState.DataLoaded).area) }
+                _liveData.postValue(it)
+            }
     }
 
-
-    private fun merge(dataState: AreaDataState.Success) = MapViewState.DataLoaded(dataState.area).apply {
-        folder.items.apply {
-            clear()
-            dataState.area.places.map {
-                add(
-                    it.toPlacePolygon().apply {
-                        (this == currentSelection).ifTrue { setHighlighted(true) }
-                    })
+    private fun merge(area: AreaDTO) =
+        MapViewState.DataLoaded(area).apply {
+            folder.items.apply {
+                clear()
+                area.places.map {
+                    add(
+                        it.toPlacePolygon().apply {
+                            (this == currentSelection).ifTrue { setHighlighted(true) }
+                        })
+                }
             }
         }
-    }
 
     override fun handleEvent(event: MapEvent) {
-        when (event) {
-            is MapEvent.GetAreaEvent -> event.apply { getArea(lonM, latM, lonMx, latMx) }
-            is MapEvent.SwitchMapModeEvent -> settings.setMapMode(event.mode)
-            is MapEvent.SwitchWikimapiaOverlayEvent -> settings.setWikimapiaOverlays(event.enable)
-            is MapEvent.SwitchTransportationOverlayEvent -> settings.setTransportationOverlay(
-                event.enable
-            )
-            is MapEvent.SwitchFollowLocationEvent -> settings.setFollowLocation(event.enable)
-            is MapEvent.SwitchCenterSelectionEvent -> settings.setCenterSelection(event.enable)
-            is MapEvent.SwitchScaleEvent -> settings.setScale(event.enable)
-            is MapEvent.SwitchGridEvent -> settings.setGrid(event.enable)
+        settings.apply {
+            when (event) {
+                is MapEvent.GetAreaEvent -> event.apply { getArea(lonM, latM, lonMx, latMx) }
+                is MapEvent.SwitchMapModeEvent -> setMapMode(event.mode)
+                is MapEvent.SwitchWikimapiaOverlayEvent -> setWikimapiaOverlays(event.enable)
+                is MapEvent.SwitchTransportationOverlayEvent -> setTransportationOverlay(event.enable)
+                is MapEvent.SwitchFollowLocationEvent -> setFollowLocation(event.enable)
+                is MapEvent.SwitchCenterSelectionEvent -> setCenterSelection(event.enable)
+                is MapEvent.SwitchScaleEvent -> setScale(event.enable)
+                is MapEvent.SwitchGridEvent -> setGrid(event.enable)
+            }
         }
     }
 }

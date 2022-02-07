@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.places.domain.repository.abstraction
+package ru.fivefourtyfive.map.domain.repository.abstratcion
 
 interface IMapSettingsRepository {
 

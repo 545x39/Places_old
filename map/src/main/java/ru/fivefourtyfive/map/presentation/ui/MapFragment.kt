@@ -40,7 +40,7 @@ import ru.fivefourtyfive.places.framework.datasource.implementation.remote.util.
 import ru.fivefourtyfive.places.di.factory.ViewModelProviderFactory
 import ru.fivefourtyfive.places.framework.presentation.ui.MainActivity
 import ru.fivefourtyfive.places.framework.presentation.ui.NavFragment
-import ru.fivefourtyfive.places.framework.presentation.abstraction.EventDispatcher
+import ru.fivefourtyfive.places.framework.presentation.abstraction.IEventDispatcher
 import ru.fivefourtyfive.places.util.*
 import ru.fivefourtyfive.places.util.PermissionsUtil.isPermissionGranted
 import timber.log.Timber
@@ -48,7 +48,7 @@ import javax.inject.Inject
 import ru.fivefourtyfive.places.R as appR
 
 @Suppress("SpellCheckingInspection")
-class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
+class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener {
 
     //<editor-fold defaultstate="collapsed" desc="FIELDS">
     @Inject

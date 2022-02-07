@@ -3,8 +3,8 @@ package ru.fivefourtyfive.map.di.module
 import dagger.Binds
 import dagger.Module
 import ru.fivefourtyfive.map.data.repository.MapSettingsRepository
-import ru.fivefourtyfive.places.domain.repository.abstraction.IMapRepository
-import ru.fivefourtyfive.places.domain.repository.abstraction.IMapSettingsRepository
+import ru.fivefourtyfive.map.domain.repository.abstratcion.IMapRepository
+import ru.fivefourtyfive.map.domain.repository.abstratcion.IMapSettingsRepository
 
 @Module
 interface RepositoryModule {

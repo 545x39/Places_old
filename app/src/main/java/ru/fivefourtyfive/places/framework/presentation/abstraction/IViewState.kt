@@ -1,4 +1,3 @@
 package ru.fivefourtyfive.places.framework.presentation.abstraction
 
-interface Event {
-}
+interface IViewState

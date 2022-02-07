@@ -4,9 +4,9 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import ru.fivefourtyfive.places.domain.entity.dto.CommentDTO
 import ru.fivefourtyfive.places.domain.entity.dto.PhotoDTO
-import ru.fivefourtyfive.places.framework.presentation.abstraction.ViewState
+import ru.fivefourtyfive.places.framework.presentation.abstraction.IViewState
 
-sealed class PlaceDetailsViewState : ViewState {
+sealed class PlaceDetailsViewState : IViewState {
     open val progressVisibility = GONE
     open val contentVisibility = GONE
 

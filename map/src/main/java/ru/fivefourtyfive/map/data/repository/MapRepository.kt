@@ -8,7 +8,7 @@ import ru.fivefourtyfive.places.data.datasource.abstraction.ILocalDataSource
 import ru.fivefourtyfive.places.data.datasource.abstraction.IRemoteDataSource
 import ru.fivefourtyfive.places.domain.datastate.AreaDataState
 import ru.fivefourtyfive.places.domain.entity.dto.AreaDTO
-import ru.fivefourtyfive.places.domain.repository.abstraction.IMapRepository
+import ru.fivefourtyfive.map.domain.repository.abstratcion.IMapRepository
 import javax.inject.Inject
 
 class MapRepository @Inject constructor(
