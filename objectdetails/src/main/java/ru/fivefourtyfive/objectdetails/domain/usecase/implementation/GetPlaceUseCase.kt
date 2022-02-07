@@ -6,14 +6,14 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import ru.fivefourtyfive.objectdetails.domain.repository.abstraction.IPlaceRepository
+import ru.fivefourtyfive.objectdetails.domain.repository.abstraction.IPlaceDetailsRepository
 import ru.fivefourtyfive.objectdetails.domain.usecase.abstraction.IGetPlaceUseCase
 import ru.fivefourtyfive.objectdetails.presentation.viewmodel.PlaceDetailsViewState
 import ru.fivefourtyfive.objectdetails.domain.datastate.PlaceDetailsDataState
 import ru.fivefourtyfive.places.framework.presentation.abstraction.IReducer
 import javax.inject.Inject
 
-class GetPlaceUseCase @Inject constructor(private val repository: IPlaceRepository) :
+class GetPlaceUseCase @Inject constructor(private val repository: IPlaceDetailsRepository) :
     IGetPlaceUseCase, IReducer<PlaceDetailsDataState, PlaceDetailsViewState> {
 
     override var id: Int = 0

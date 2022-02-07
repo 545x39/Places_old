@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.places.data.repository
+package ru.fivefourtyfive.map.data.repository
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow

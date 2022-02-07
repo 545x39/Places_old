@@ -81,8 +81,6 @@ android {
 
 //<editor-fold defaultstate="collapsed" desc="DEPENDENCIES">
 dependencies {
-    /** CORE */
-    project(":core")
     /** ANDROID CORE */
     implementation("androidx.core:core-ktx:$CORE_VERSION")
     implementation("androidx.appcompat:appcompat:$APPCOMPAT_VERSION")
@@ -94,15 +92,8 @@ dependencies {
     kapt("com.google.dagger:dagger-compiler:$DAGGER_VERSION")
     kapt("com.google.dagger:dagger-android-processor:$DAGGER_VERSION")
     ////
-//    kaptTest("com.google.dagger:dagger-compiler:$DAGGER_VERSION")
     kaptAndroidTest("com.google.dagger:dagger-compiler:$DAGGER_VERSION")
     androidTestAnnotationProcessor("com.google.dagger:dagger-compiler:$DAGGER_VERSION")
-//    kaptTest("com.google.dagger:dagger-compiler:2.38.1")
-//    kaptTest("com.google.dagger:dagger-android-processor:2.38.1")
-//    kapt("com.google.dagger:dagger-compiler:2.38.1")
-//    androidTestAnnotationProcessor("com.google.dagger:dagger-android-processor:2.38.1")
-//    testAnnotationProcessor("com.google.dagger:dagger-compiler:2.38.1")
-//    kapt("com.google.dagger:dagger-android-processor:2.38.1")
     /** ROOM */
     implementation("androidx.room:room-runtime:$ROOM_VERSION")
     kapt("androidx.room:room-compiler:$ROOM_VERSION")

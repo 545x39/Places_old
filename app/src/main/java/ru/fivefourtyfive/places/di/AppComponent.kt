@@ -8,8 +8,6 @@ import ru.fivefourtyfive.places.data.datasource.abstraction.ILocalDataSource
 import ru.fivefourtyfive.places.data.datasource.abstraction.IRemoteDataSource
 import ru.fivefourtyfive.places.data.datasource.abstraction.ISettingsDataSource
 import ru.fivefourtyfive.places.di.module.*
-import ru.fivefourtyfive.places.domain.repository.abstraction.IMapSettingsRepository
-import ru.fivefourtyfive.places.domain.usecase.abstraction.factory.IUseCaseFactory
 import javax.inject.Singleton
 
 @Singleton
@@ -19,9 +17,7 @@ import javax.inject.Singleton
         NetworkModule::class,
         DatabaseModule::class,
         DataSourceModule::class,
-        ViewModelProviderFactoryModule::class,
-        UseCaseModule::class,
-        RepositoryModule::class
+        ViewModelProviderFactoryModule::class
     ]
 )
 interface AppComponent {
@@ -35,8 +31,6 @@ interface AppComponent {
     fun getLocalDataSource(): ILocalDataSource
 
     fun getSharedPreferences() : SharedPreferences
-
-    fun getUseCaseFactory(): IUseCaseFactory
 
     fun getContext(): Context
 

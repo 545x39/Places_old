@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.places.data.repository
+package ru.fivefourtyfive.map.data.repository
 
 import ru.fivefourtyfive.places.data.datasource.abstraction.ISettingsDataSource
 import ru.fivefourtyfive.places.domain.repository.abstraction.IMapSettingsRepository

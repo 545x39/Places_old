@@ -1,10 +1,11 @@
-package ru.fivefourtyfive.places.domain.usecase.abstraction
+package ru.fivefourtyfive.map.domain.usecase.abstraction
 
 import kotlinx.coroutines.flow.Flow
-import ru.fivefourtyfive.places.domain.datastate.AreaDataState
+import ru.fivefourtyfive.map.presentation.viewmodel.MapViewState
+import ru.fivefourtyfive.places.domain.usecase.abstraction.IUseCase
 import ru.fivefourtyfive.places.framework.datasource.implementation.remote.util.Value
 
-interface IGetAreaUseCase : IUseCase<Flow<AreaDataState>> {
+interface IGetAreaUseCase : IUseCase<Flow<MapViewState>> {
 
     var lonMin: Double
     var latMin: Double

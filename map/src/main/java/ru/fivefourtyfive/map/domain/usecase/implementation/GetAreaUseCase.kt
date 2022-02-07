@@ -1,12 +1,11 @@
-package ru.fivefourtyfive.places.domain.usecase.implementation
+package ru.fivefourtyfive.map.domain.usecase.implementation
 
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.*
+import ru.fivefourtyfive.map.domain.usecase.abstraction.IGetAreaUseCase
+import ru.fivefourtyfive.map.presentation.viewmodel.MapViewState
 import ru.fivefourtyfive.places.domain.datastate.AreaDataState
 import ru.fivefourtyfive.places.domain.repository.abstraction.IMapRepository
-import ru.fivefourtyfive.places.domain.usecase.abstraction.IGetAreaUseCase
 import ru.fivefourtyfive.places.framework.presentation.abstraction.IReducer
 import javax.inject.Inject
 
@@ -22,8 +21,8 @@ class GetAreaUseCase @Inject constructor(
     override var count: Int? = 100
     override var language: String? = null
 
-    override suspend fun execute(): Flow<AreaDataState> = runCatching {
-        return@runCatching repository.getArea(
+    override suspend fun execute(): Flow<MapViewState> = flow {
+        repository.getArea(
             lonMin,
             latMin,
             lonMax,
@@ -32,6 +31,13 @@ class GetAreaUseCase @Inject constructor(
             page,
             count,
             language
-        )
-    }.getOrDefault(flowOf(AreaDataState.Error(null)).flowOn(IO))
+        ).catch { emit(MapViewState.Error(null)) }.collect { emit(reduce(it)) }
+    }.flowOn(IO)
+
+    override fun reduce(dataState: AreaDataState) = when (dataState) {
+        is AreaDataState.Success -> MapViewState.DataLoaded(dataState.area)
+        is AreaDataState.Loading -> MapViewState.Loading
+        is AreaDataState.Error -> MapViewState.Error(dataState.message)
+    }
+
 }

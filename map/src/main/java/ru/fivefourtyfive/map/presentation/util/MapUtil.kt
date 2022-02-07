@@ -50,6 +50,7 @@ object MapUtil {
 
     fun MapView.addListener(listener: MapListener) = this.apply { addMapListener(listener) }
 
+    @Suppress("DEPRECATION")
     private fun MapView.clearTileCache() {
         val cache =
             File(Environment.getExternalStorageDirectory().absolutePath + File.separator + "osmdroid" + File.separator + "tiles")

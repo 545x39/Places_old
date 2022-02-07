@@ -11,6 +11,7 @@ import ru.fivefourtyfive.places.di.AppComponent
     modules = [
         MapFragmentViewModelModule::class,
         RepositoryModule::class,
+        UseCaseModule::class,
         MapModule::class,
         TileSourceModule::class,
         OverlayModule::class

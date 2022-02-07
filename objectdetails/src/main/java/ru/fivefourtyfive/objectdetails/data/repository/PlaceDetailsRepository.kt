@@ -5,7 +5,7 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
-import ru.fivefourtyfive.objectdetails.domain.repository.abstraction.IPlaceRepository
+import ru.fivefourtyfive.objectdetails.domain.repository.abstraction.IPlaceDetailsRepository
 import ru.fivefourtyfive.places.data.datasource.abstraction.ILocalDataSource
 import ru.fivefourtyfive.places.data.datasource.abstraction.IRemoteDataSource
 import ru.fivefourtyfive.objectdetails.domain.datastate.PlaceDetailsDataState
@@ -13,10 +13,10 @@ import ru.fivefourtyfive.places.domain.entity.Place
 import ru.fivefourtyfive.places.domain.entity.dto.PlaceDescriptionDTO
 import javax.inject.Inject
 
-class PlaceRepository @Inject constructor(
+class PlaceDetailsRepository @Inject constructor(
     private val localDataSource: ILocalDataSource,
     private val remoteDatasource: IRemoteDataSource
-) : IPlaceRepository {
+) : IPlaceDetailsRepository {
 
     override suspend fun getPlace(id: Int, dataBlocks: String?): Flow<PlaceDetailsDataState> =
         flow {

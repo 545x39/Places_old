@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
-import ru.fivefourtyfive.objectdetails.data.repository.PlaceRepository
-import ru.fivefourtyfive.objectdetails.domain.repository.abstraction.IPlaceRepository
+import ru.fivefourtyfive.objectdetails.data.repository.PlaceDetailsRepository
+import ru.fivefourtyfive.objectdetails.domain.repository.abstraction.IPlaceDetailsRepository
 import ru.fivefourtyfive.objectdetails.domain.usecase.abstraction.IGetPlaceUseCase
 import ru.fivefourtyfive.objectdetails.domain.usecase.abstraction.factory.IPlaceDetailsUseCaseFactory
 import ru.fivefourtyfive.objectdetails.domain.usecase.implementation.GetPlaceUseCase
@@ -27,7 +27,7 @@ interface PlaceDetailsModule {
 
     @PlaceDetailsScope
     @Binds
-    fun providePlaceRepository(repository: PlaceRepository): IPlaceRepository
+    fun providePlaceDetailsRepository(repository: PlaceDetailsRepository): IPlaceDetailsRepository
 
     @PlaceDetailsScope
     @Binds
