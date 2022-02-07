@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
+    <output url="file://$MODULE_DIR$/../../../places/build/intermediates/javac/debug/classes" />
+    <output-test url="file://$MODULE_DIR$/../../../places/build/intermediates/javac/debugUnitTest/classes" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../../places">
+      <sourceFolder url="file://$MODULE_DIR$/../../../places/src/androidTest/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../places/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../places/src/test/java" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../places/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../places/build" />
+    </content>
+    <orderEntry type="jdk" jdkName="Android API 31, Sv2 preview Platform" jdkType="Android SDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.30" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.30" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.5.30" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.5.30" level="project" />
+  </component>
+</module>

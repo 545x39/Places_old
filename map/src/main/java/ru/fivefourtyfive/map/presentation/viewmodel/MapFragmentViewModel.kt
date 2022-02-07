@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 import org.osmdroid.util.GeoPoint
@@ -13,27 +12,26 @@ import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.TilesOverlay
 import org.osmdroid.views.overlay.gridlines.LatLonGridlineOverlay2
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
+import ru.fivefourtyfive.map.domain.usecase.abstraction.factory.IMapUseCaseFactory
 import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
 import ru.fivefourtyfive.map.presentation.util.MapListenerDelay.DEFAULT_DELAY
 import ru.fivefourtyfive.map.presentation.util.MapListenerDelay.FOLLOWING_LOCATION_DELAY
-import ru.fivefourtyfive.map.presentation.util.MapMode
-import ru.fivefourtyfive.map.presentation.util.MapSettingsUtil
 import ru.fivefourtyfive.map.presentation.util.Overlay
 import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.WIKIMEDIA_NO_LABELS_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.toPlacePolygon
-import ru.fivefourtyfive.wikimapper.data.repository.AreaRepository
-import ru.fivefourtyfive.wikimapper.domain.datastate.AreaDataState
-import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.EventHandler
-import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.Reducer
-import ru.fivefourtyfive.wikimapper.util.ifTrue
+import ru.fivefourtyfive.places.domain.datastate.AreaDataState
+import ru.fivefourtyfive.places.domain.repository.abstraction.IMapSettingsRepository
+import ru.fivefourtyfive.places.framework.presentation.abstraction.EventHandler
+import ru.fivefourtyfive.places.util.MapMode
+import ru.fivefourtyfive.places.util.ifTrue
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
 
 class MapFragmentViewModel @Inject constructor(
-    private val repository: AreaRepository,
-    private val settings: MapSettingsUtil,
+    private val factory: IMapUseCaseFactory,
+    private val settings: IMapSettingsRepository,
     @Named(WIKIMEDIA_NO_LABELS_TILE_SOURCE)
     val schemeTileSource: OnlineTileSourceBase,
     @Named(ARCGIS_IMAGERY_TILE_SOURCE)
@@ -47,7 +45,7 @@ class MapFragmentViewModel @Inject constructor(
     val myLocation: MyLocationNewOverlay,
     val gridOverlay: LatLonGridlineOverlay2,
     val folder: FolderOverlay
-) : ViewModel(), Reducer<AreaDataState, MapViewState>, EventHandler<MapEvent> {
+) : ViewModel(), EventHandler<MapEvent> {
 
     private val _liveData = MutableLiveData<MapViewState>(MapViewState.Loading)
 
@@ -113,13 +111,15 @@ class MapFragmentViewModel @Inject constructor(
         lonMax: Double,
         latMax: Double
     ) = viewModelScope.launch {
-        repository.getArea(lonMin, latMin, lonMax, latMax)
+        factory.getAreaUseCase(lonMin, latMin, lonMax, latMax).execute()
             .catch { _liveData.postValue(MapViewState.Error()) }
-            .collect { _liveData.postValue(reduce(it)) }
+//            .collect {
+////                _liveData.postValue(it)
+//            }
     }
 
 
-    private fun onSuccess(dataState: AreaDataState.Success) = MapViewState.DataLoaded().apply {
+    private fun merge(dataState: AreaDataState.Success) = MapViewState.DataLoaded(dataState.area).apply {
         folder.items.apply {
             clear()
             dataState.area.places.map {
@@ -129,12 +129,6 @@ class MapFragmentViewModel @Inject constructor(
                     })
             }
         }
-    }
-
-    override fun reduce(dataState: AreaDataState) = when (dataState) {
-        is AreaDataState.Success -> onSuccess(dataState)
-        is AreaDataState.Loading -> MapViewState.Loading
-        is AreaDataState.Error -> MapViewState.Error(dataState.message)
     }
 
     override fun handleEvent(event: MapEvent) {

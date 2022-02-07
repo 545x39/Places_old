@@ -20,9 +20,9 @@ import ru.fivefourtyfive.map.presentation.util.TileSource.TILE_EXTENSION
 import ru.fivefourtyfive.map.presentation.util.TileSource.TILE_SIZE_PIXELS
 import ru.fivefourtyfive.map.presentation.util.TileSource.WIKIMAPIA_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.WIKIMEDIA_NO_LABELS_TILE_SOURCE
-import ru.fivefourtyfive.wikimapper.util.Network.ARCGIS_TILE_SERVERS
-import ru.fivefourtyfive.wikimapper.util.Network.WIKIMAPIA_TILE_SERVERS
-import ru.fivefourtyfive.wikimapper.util.Network.WIKIMEDIA_TILE_SERVERS
+import ru.fivefourtyfive.places.util.Network.ARCGIS_TILE_SERVERS
+import ru.fivefourtyfive.places.util.Network.WIKIMAPIA_TILE_SERVERS
+import ru.fivefourtyfive.places.util.Network.WIKIMEDIA_TILE_SERVERS
 import javax.inject.Named
 
 @Module

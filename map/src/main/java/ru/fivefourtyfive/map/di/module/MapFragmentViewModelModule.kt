@@ -6,7 +6,7 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import ru.fivefourtyfive.map.di.MapFragmentScope
 import ru.fivefourtyfive.map.presentation.viewmodel.MapFragmentViewModel
-import ru.fivefourtyfive.wikimapper.di.key.ViewModelKey
+import ru.fivefourtyfive.places.di.key.ViewModelKey
 
 @Module
 interface MapFragmentViewModelModule {

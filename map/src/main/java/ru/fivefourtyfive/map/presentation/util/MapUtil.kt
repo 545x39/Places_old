@@ -14,8 +14,8 @@ import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlay
 import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlayOptions
 import org.osmdroid.views.overlay.simplefastpoint.SimplePointTheme
 import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
-import ru.fivefourtyfive.wikimapper.domain.dto.PlaceDTO
-import ru.fivefourtyfive.wikimapper.util.ifTrue
+import ru.fivefourtyfive.places.domain.entity.dto.PlaceDTO
+import ru.fivefourtyfive.places.util.ifTrue
 import java.io.File
 
 
@@ -50,6 +50,7 @@ object MapUtil {
 
     fun MapView.addListener(listener: MapListener) = this.apply { addMapListener(listener) }
 
+    @Suppress("DEPRECATION")
     private fun MapView.clearTileCache() {
         val cache =
             File(Environment.getExternalStorageDirectory().absolutePath + File.separator + "osmdroid" + File.separator + "tiles")

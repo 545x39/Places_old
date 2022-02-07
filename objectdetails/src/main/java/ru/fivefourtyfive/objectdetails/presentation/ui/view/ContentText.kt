@@ -4,7 +4,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.sp
-import ru.fivefourtyfive.wikimapper.R
+import ru.fivefourtyfive.places.R
 
 @Composable
 fun ContentText(text: String?){

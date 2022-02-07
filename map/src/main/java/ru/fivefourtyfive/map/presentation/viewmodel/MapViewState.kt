@@ -1,15 +1,13 @@
 package ru.fivefourtyfive.map.presentation.viewmodel
 
 import android.view.View
-import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
-import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.ViewState
+import ru.fivefourtyfive.places.domain.entity.dto.AreaDTO
+import ru.fivefourtyfive.places.framework.presentation.abstraction.ViewState
 
 sealed class MapViewState : ViewState {
     open val progressVisibility = View.GONE
 
-    class DataLoaded(
-//        val places: ArrayList<PlacePolygon> = arrayListOf()
-    ) : MapViewState()
+    class DataLoaded(val area: AreaDTO) : MapViewState()
 
     object Loading : MapViewState() {
         override val progressVisibility = View.VISIBLE

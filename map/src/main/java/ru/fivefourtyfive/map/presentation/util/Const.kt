@@ -7,18 +7,6 @@ object MapListenerDelay{
     const val FOLLOWING_LOCATION_DELAY = 1500L
 }
 
-object Zoom {
-    /** Smaller min values allows map to zoom out to show more than one map repetition.*/
-    const val ZOOM_MIN = 2.0
-    const val ZOOM_MAX = 18.0
-    const val ZOOM_DEFAULT = 13.0
-}
-
-object MapMode {
-    const val SCHEME = 0
-    const val SATELLITE = 1
-}
-
 /** Maximum zoom level for this source is 17, in case of greater number it sends
  * gray tiles with "No tile data available" text on them.*/
 object TileSource {

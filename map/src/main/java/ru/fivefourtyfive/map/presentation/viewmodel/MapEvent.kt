@@ -1,7 +1,8 @@
 package ru.fivefourtyfive.map.presentation.viewmodel
 
-import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.Event
+import ru.fivefourtyfive.places.framework.presentation.abstraction.Event
 
+@Suppress("SpellCheckingInspection")
 sealed class MapEvent : Event {
     class GetAreaEvent(
         val lonM: Double,

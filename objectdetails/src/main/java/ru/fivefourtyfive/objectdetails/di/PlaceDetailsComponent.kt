@@ -2,7 +2,7 @@ package ru.fivefourtyfive.objectdetails.di
 
 import dagger.Component
 import ru.fivefourtyfive.objectdetails.presentation.ui.PlaceDetailsFragment
-import ru.fivefourtyfive.wikimapper.di.AppComponent
+import ru.fivefourtyfive.places.di.AppComponent
 
 @PlaceDetailsScope
 @Component(

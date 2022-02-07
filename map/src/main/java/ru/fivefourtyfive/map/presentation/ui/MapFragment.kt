@@ -14,7 +14,6 @@ import android.widget.*
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -32,23 +31,23 @@ import org.osmdroid.views.overlay.gestures.RotationGestureOverlay
 import ru.fivefourtyfive.map.R
 import ru.fivefourtyfive.map.di.DaggerMapFragmentComponent
 import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
-import ru.fivefourtyfive.map.presentation.util.MapMode
 import ru.fivefourtyfive.map.presentation.util.getDistance
 import ru.fivefourtyfive.map.presentation.viewmodel.MapEvent
 import ru.fivefourtyfive.map.presentation.viewmodel.MapFragmentViewModel
 import ru.fivefourtyfive.map.presentation.viewmodel.MapViewState
-import ru.fivefourtyfive.wikimapper.Places
-import ru.fivefourtyfive.wikimapper.data.datasource.implementation.remote.util.Parameter.ID
-import ru.fivefourtyfive.wikimapper.di.factory.ViewModelProviderFactory
-import ru.fivefourtyfive.wikimapper.presentation.ui.MainActivity
-import ru.fivefourtyfive.wikimapper.presentation.ui.NavFragment
-import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.EventDispatcher
-import ru.fivefourtyfive.wikimapper.util.*
-import ru.fivefourtyfive.wikimapper.util.PermissionsUtil.isPermissionGranted
+import ru.fivefourtyfive.places.Places
+import ru.fivefourtyfive.places.framework.datasource.implementation.remote.util.Parameter.ID
+import ru.fivefourtyfive.places.di.factory.ViewModelProviderFactory
+import ru.fivefourtyfive.places.framework.presentation.ui.MainActivity
+import ru.fivefourtyfive.places.framework.presentation.ui.NavFragment
+import ru.fivefourtyfive.places.framework.presentation.abstraction.EventDispatcher
+import ru.fivefourtyfive.places.util.*
+import ru.fivefourtyfive.places.util.PermissionsUtil.isPermissionGranted
 import timber.log.Timber
 import javax.inject.Inject
-import ru.fivefourtyfive.wikimapper.R as appR
+import ru.fivefourtyfive.places.R as appR
 
+@Suppress("SpellCheckingInspection")
 class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
 
     //<editor-fold defaultstate="collapsed" desc="FIELDS">
@@ -94,7 +93,8 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         return inflater.inflate(R.layout.fragment_map, container, false)
     }
 
-    @ExperimentalCoroutinesApi
+//    @OptIn(ExperimentalCoroutinesApi::class)
+//    @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().setTitle(appR.string.app_name)
@@ -182,7 +182,6 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         }
     }
 
-    @ExperimentalCoroutinesApi
     private fun subscribeObservers() {
         viewModel.liveData.observe(viewLifecycleOwner, {
             with(it) {
@@ -195,10 +194,9 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
                 }
             }
         })
-        subscribeToButtonClicks()
     }
 
-    @ExperimentalCoroutinesApi
+//    @ExperimentalCoroutinesApi
     private fun subscribeToButtonClicks() {
         bearingButton.clicks()
             .throttleFirst(200)
@@ -207,7 +205,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         centerButton.apply {
             clicks()
                 .throttleFirst(200)
-                .map { onCenterButtonLongClick() }
+                .map { onCenterButtonClick() }
                 .launchIn(lifecycleScope)
             longClicks()
                 .map { onCenterButtonLongClick() }
@@ -215,31 +213,18 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         }
     }
 
-    @ExperimentalCoroutinesApi
-    private fun subscribeToButtonClicks() {
-        bearingButton.clicks()
-            .throttleFirst(200)
-            .map { onBearingButtonClick() }
-            .launchIn(lifecycleScope)
-        centerButton.clicks()
-                .throttleFirst(200)
-                .map {onCenterButtonClick() }
-                .launchIn(lifecycleScope)
-        centerButton.longClicks()
-            .map { onCenterButtonLongClick() }
-            .launchIn(lifecycleScope)
-    }
-
     private fun MapView.setMapListener() {
+        fun getAndUpdate(){
+            getArea()
+            updateLastLocationAndZoom()
+        }
         addMapListener(DelayedMapListener(object : MapListener {
             override fun onScroll(event: ScrollEvent?) = true.also {
-                getArea()
-                updateLastLocationAndZoom()
+                getAndUpdate()
             }
 
             override fun onZoom(event: ZoomEvent?) = true.also {
-                getArea()
-                updateLastLocationAndZoom()
+                getAndUpdate()
             }
         }, viewModel.mapListenerDelay))
     }
@@ -421,7 +406,7 @@ class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
         return true
     }
 
-    fun updateLastLocationAndZoom() {
+    private fun updateLastLocationAndZoom() {
         with(mapView) {
             viewModel.apply {
                 setLastLocation(mapCenter.latitude, mapCenter.longitude)

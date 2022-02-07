@@ -2,9 +2,9 @@ package ru.fivefourtyfive.objectdetails.presentation.viewmodel
 
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import ru.fivefourtyfive.wikimapper.domain.dto.CommentDTO
-import ru.fivefourtyfive.wikimapper.domain.dto.PhotoDTO
-import ru.fivefourtyfive.wikimapper.presentation.ui.abstraction.ViewState
+import ru.fivefourtyfive.places.domain.entity.dto.CommentDTO
+import ru.fivefourtyfive.places.domain.entity.dto.PhotoDTO
+import ru.fivefourtyfive.places.framework.presentation.abstraction.ViewState
 
 sealed class PlaceDetailsViewState : ViewState {
     open val progressVisibility = GONE

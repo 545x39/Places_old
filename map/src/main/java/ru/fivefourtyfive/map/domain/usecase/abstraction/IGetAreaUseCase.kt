@@ -1,0 +1,38 @@
+package ru.fivefourtyfive.map.domain.usecase.abstraction
+
+import kotlinx.coroutines.flow.Flow
+import ru.fivefourtyfive.map.presentation.viewmodel.MapViewState
+import ru.fivefourtyfive.places.domain.usecase.abstraction.IUseCase
+import ru.fivefourtyfive.places.framework.datasource.implementation.remote.util.Value
+
+interface IGetAreaUseCase : IUseCase<Flow<MapViewState>> {
+
+    var lonMin: Double
+    var latMin: Double
+    var lonMax: Double
+    var latMax: Double
+    var category: String?
+    var page: Int?
+    var count: Int?
+    var language: String?
+
+    fun init(
+        lonMin: Double,
+        latMin: Double,
+        lonMax: Double,
+        latMax: Double,
+        category: String? = null,
+        page: Int? = 1,
+        count: Int? = Value.MAX_OBJECTS_PER_PAGE,
+        language: String? = Value.RU
+    ) = this.apply {
+        this.lonMin = lonMin
+        this.latMin = latMin
+        this.lonMax = lonMax
+        this.latMax = latMax
+        this.category = category
+        this.page = page
+        this.count = count
+        this.language = language
+    }
+}

@@ -10,8 +10,8 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import de.hdodenhof.circleimageview.CircleImageView
 import ru.fivefourtyfive.objectdetails.R
-import ru.fivefourtyfive.wikimapper.R as appR
-import ru.fivefourtyfive.wikimapper.util.Network.ROOT_URL
+import ru.fivefourtyfive.places.R as appR
+import ru.fivefourtyfive.places.util.Network.ROOT_URL
 
 @Composable
 fun UserPic(path: String? = null) {
