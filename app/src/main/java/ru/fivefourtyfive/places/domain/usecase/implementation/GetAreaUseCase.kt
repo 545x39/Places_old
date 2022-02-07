@@ -5,13 +5,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import ru.fivefourtyfive.places.domain.datastate.AreaDataState
-import ru.fivefourtyfive.places.domain.repository.abstraction.IAreaRepository
+import ru.fivefourtyfive.places.domain.repository.abstraction.IMapRepository
 import ru.fivefourtyfive.places.domain.usecase.abstraction.IGetAreaUseCase
+import ru.fivefourtyfive.places.framework.presentation.abstraction.IReducer
 import javax.inject.Inject
 
 class GetAreaUseCase @Inject constructor(
-    private val repository: IAreaRepository
-) : IGetAreaUseCase {
+    private val repository: IMapRepository
+) : IGetAreaUseCase, IReducer<AreaDataState, MapViewState> {
     override var lonMin: Double = 0.0
     override var latMin: Double = 0.0
     override var lonMax: Double = 0.0

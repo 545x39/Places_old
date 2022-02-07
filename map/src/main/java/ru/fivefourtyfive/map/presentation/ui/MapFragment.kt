@@ -47,6 +47,7 @@ import timber.log.Timber
 import javax.inject.Inject
 import ru.fivefourtyfive.places.R as appR
 
+@Suppress("SpellCheckingInspection")
 class MapFragment : NavFragment(), EventDispatcher<MapEvent>, LocationListener {
 
     //<editor-fold defaultstate="collapsed" desc="FIELDS">

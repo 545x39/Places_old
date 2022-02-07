@@ -10,11 +10,11 @@ import ru.fivefourtyfive.objectdetails.domain.repository.abstraction.IPlaceRepos
 import ru.fivefourtyfive.objectdetails.domain.usecase.abstraction.IGetPlaceUseCase
 import ru.fivefourtyfive.objectdetails.presentation.viewmodel.PlaceDetailsViewState
 import ru.fivefourtyfive.objectdetails.domain.datastate.PlaceDetailsDataState
-import ru.fivefourtyfive.places.framework.presentation.abstraction.Reducer
+import ru.fivefourtyfive.places.framework.presentation.abstraction.IReducer
 import javax.inject.Inject
 
 class GetPlaceUseCase @Inject constructor(private val repository: IPlaceRepository) :
-    IGetPlaceUseCase, Reducer<PlaceDetailsDataState, PlaceDetailsViewState> {
+    IGetPlaceUseCase, IReducer<PlaceDetailsDataState, PlaceDetailsViewState> {
 
     override var id: Int = 0
 

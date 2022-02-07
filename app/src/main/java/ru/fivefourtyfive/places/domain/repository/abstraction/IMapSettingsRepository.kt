@@ -1,6 +1,7 @@
 package ru.fivefourtyfive.places.domain.repository.abstraction
 
 interface IMapSettingsRepository {
+
     //<editor-fold defaultstate="collapsed" desc="GETTERS">
     fun getLastLocation(): Pair<Double, Double>
 

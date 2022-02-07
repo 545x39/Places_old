@@ -10,7 +10,6 @@ interface IGetPlaceUseCase : IUseCase<Flow<PlaceDetailsViewState>> {
 
     var dataBlocks: String?
 
-
     fun init(id: Int = 1, dataBlocks: String? = null) = this.apply {
         this.id = id
         this.dataBlocks = dataBlocks

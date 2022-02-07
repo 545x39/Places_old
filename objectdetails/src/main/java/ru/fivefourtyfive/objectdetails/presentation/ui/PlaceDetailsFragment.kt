@@ -65,14 +65,14 @@ class PlaceDetailsFragment : Fragment(), EventDispatcher<PlaceEvent>,
         viewModel = ViewModelProvider(this, providerFactory).get(PlaceDetailsViewModel::class.java)
         binding.viewModel = viewModel
         binding.viewModel?.viewStateLiveData?.observe(viewLifecycleOwner, { render(it) })
-        arguments?.let { dispatchEvent(PlaceEvent.GetPlace(it.getInt(ID))) }
+        arguments?.getInt(ID)?.also { dispatchEvent(PlaceEvent.GetPlace(it)) }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) =
         inflater.inflate(R.menu.menu_place_details, menu)
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.findItem(R.id.action_slide_show).isChecked = binding.viewModel!!.slideshow()
+        menu.findItem(R.id.action_slide_show).isChecked = binding.viewModel!!.slideshow
     }
 
     @SuppressLint("SourceLockedOrientationActivity")
@@ -186,7 +186,7 @@ class PlaceDetailsFragment : Fragment(), EventDispatcher<PlaceEvent>,
         .setPresetTransformer(SliderLayout.Transformer.Accordion)
         .setPresetIndicator(SliderLayout.PresetIndicators.Center_Top)
         .setCustomAnimation(DescriptionAnimation())
-        .enableAutoCycling(binding.viewModel?.slideshow() ?: false)
+        .enableAutoCycling(binding.viewModel?.slideshow ?: false)
         .setDuration(4000)
         .stopCyclingWhenTouch(true)
         .buildWith(photos)

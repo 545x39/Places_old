@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import ru.fivefourtyfive.places.domain.datastate.AreaDataState
 import ru.fivefourtyfive.places.framework.datasource.implementation.remote.util.Value
 
-interface IAreaRepository {
+interface IMapRepository {
 
     suspend fun getArea(
         lonMin: Double,

@@ -8,13 +8,13 @@ import ru.fivefourtyfive.places.data.datasource.abstraction.ILocalDataSource
 import ru.fivefourtyfive.places.data.datasource.abstraction.IRemoteDataSource
 import ru.fivefourtyfive.places.domain.datastate.AreaDataState
 import ru.fivefourtyfive.places.domain.entity.dto.AreaDTO
-import ru.fivefourtyfive.places.domain.repository.abstraction.IAreaRepository
+import ru.fivefourtyfive.places.domain.repository.abstraction.IMapRepository
 import javax.inject.Inject
 
-class AreaRepository @Inject constructor(
+class MapRepository @Inject constructor(
     private val localDataSource: ILocalDataSource,
     private val remoteDataSource: IRemoteDataSource
-) : IAreaRepository {
+) : IMapRepository {
 
     override suspend fun getArea(
         lonMin: Double,

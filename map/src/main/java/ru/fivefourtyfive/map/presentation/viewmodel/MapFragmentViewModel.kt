@@ -16,7 +16,6 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
 import ru.fivefourtyfive.map.presentation.util.MapListenerDelay.DEFAULT_DELAY
 import ru.fivefourtyfive.map.presentation.util.MapListenerDelay.FOLLOWING_LOCATION_DELAY
-import ru.fivefourtyfive.map.presentation.util.MapSettingsUtil
 import ru.fivefourtyfive.map.presentation.util.Overlay
 import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.WIKIMEDIA_NO_LABELS_TILE_SOURCE
@@ -25,7 +24,7 @@ import ru.fivefourtyfive.places.domain.datastate.AreaDataState
 import ru.fivefourtyfive.places.domain.repository.abstraction.IMapSettingsRepository
 import ru.fivefourtyfive.places.domain.usecase.abstraction.factory.IUseCaseFactory
 import ru.fivefourtyfive.places.framework.presentation.abstraction.EventHandler
-import ru.fivefourtyfive.places.framework.presentation.abstraction.Reducer
+import ru.fivefourtyfive.places.framework.presentation.abstraction.IReducer
 import ru.fivefourtyfive.places.util.MapMode
 import ru.fivefourtyfive.places.util.ifTrue
 import timber.log.Timber
@@ -48,7 +47,7 @@ class MapFragmentViewModel @Inject constructor(
     val myLocation: MyLocationNewOverlay,
     val gridOverlay: LatLonGridlineOverlay2,
     val folder: FolderOverlay
-) : ViewModel(), Reducer<AreaDataState, MapViewState>, EventHandler<MapEvent> {
+) : ViewModel(), EventHandler<MapEvent> {
 
     private val _liveData = MutableLiveData<MapViewState>(MapViewState.Loading)
 
@@ -131,7 +130,7 @@ class MapFragmentViewModel @Inject constructor(
         }
     }
 
-    override fun reduce(dataState: AreaDataState) = when (dataState) {
+    fun reduce(dataState: AreaDataState) = when (dataState) {
         is AreaDataState.Success -> onSuccess(dataState)
         is AreaDataState.Loading -> MapViewState.Loading
         is AreaDataState.Error -> MapViewState.Error(dataState.message)
