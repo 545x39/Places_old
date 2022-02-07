@@ -1,6 +1,5 @@
 package ru.fivefourtyfive.objectdetails.presentation.viewmodel
 
-import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,19 +7,22 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.fivefourtyfive.objectdetails.domain.usecase.abstraction.factory.IPlaceDetailsUseCaseFactory
-import ru.fivefourtyfive.places.framework.presentation.abstraction.EventHandler
-import ru.fivefourtyfive.places.util.Preferences.PREFERENCE_SLIDESHOW
+import ru.fivefourtyfive.objectdetails.domain.repository.abstraction.IPlaceDetailsSettingsRepository
+import ru.fivefourtyfive.places.framework.presentation.abstraction.IEventHandler
 import javax.inject.Inject
 
 class PlaceDetailsViewModel @Inject constructor(
     private val factory: IPlaceDetailsUseCaseFactory,
-    private val preferences: SharedPreferences
-) : ViewModel(), EventHandler<PlaceEvent> {
+    private val settings: IPlaceDetailsSettingsRepository
+) : ViewModel(), IEventHandler<PlaceEvent> {
 
     private val _viewStateLiveData: MutableLiveData<PlaceDetailsViewState> =
         MutableLiveData(PlaceDetailsViewState.Loading)
 
     val viewStateLiveData = _viewStateLiveData as LiveData<PlaceDetailsViewState>
+
+    val slideshow: Boolean
+        get() = settings.isSlideshowEnabled()
 
     override fun handleEvent(event: PlaceEvent) {
         when (event) {
@@ -29,11 +31,7 @@ class PlaceDetailsViewModel @Inject constructor(
                     _viewStateLiveData.postValue(it)
                 }
             }
-            is PlaceEvent.SetSlideshow -> preferences.edit()
-                .putBoolean(PREFERENCE_SLIDESHOW, event.enable).apply()
+            is PlaceEvent.SetSlideshow -> settings.enableSlideShow(event.enable)
         }
     }
-
-    val slideshow: Boolean
-        get() = preferences.getBoolean(PREFERENCE_SLIDESHOW, false)
 }

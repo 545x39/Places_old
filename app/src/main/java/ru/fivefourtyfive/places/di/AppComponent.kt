@@ -30,8 +30,6 @@ interface AppComponent {
 
     fun getLocalDataSource(): ILocalDataSource
 
-    fun getSharedPreferences() : SharedPreferences
-
     fun getContext(): Context
 
 //    fun workerProviderFactory(): WorkerProviderFactory

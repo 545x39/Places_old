@@ -1,6 +1,6 @@
 package ru.fivefourtyfive.places.framework.presentation.abstraction
 
-interface EventDispatcher<EVENT : Event> {
+interface IEventDispatcher<EVENT : IEvent> {
 
     fun dispatchEvent(event: EVENT)
 }

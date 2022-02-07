@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.*
 import ru.fivefourtyfive.map.domain.usecase.abstraction.IGetAreaUseCase
 import ru.fivefourtyfive.map.presentation.viewmodel.MapViewState
 import ru.fivefourtyfive.places.domain.datastate.AreaDataState
-import ru.fivefourtyfive.places.domain.repository.abstraction.IMapRepository
+import ru.fivefourtyfive.map.domain.repository.abstratcion.IMapRepository
 import ru.fivefourtyfive.places.framework.presentation.abstraction.IReducer
 import javax.inject.Inject
 

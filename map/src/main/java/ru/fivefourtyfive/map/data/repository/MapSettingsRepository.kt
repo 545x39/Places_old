@@ -1,34 +1,35 @@
 package ru.fivefourtyfive.map.data.repository
 
 import ru.fivefourtyfive.places.data.datasource.abstraction.ISettingsDataSource
-import ru.fivefourtyfive.places.domain.repository.abstraction.IMapSettingsRepository
+import ru.fivefourtyfive.map.domain.repository.abstratcion.IMapSettingsRepository
 import ru.fivefourtyfive.places.util.MapMode.SCHEME
 import ru.fivefourtyfive.places.util.MapZoom.ZOOM_DEFAULT
 import ru.fivefourtyfive.places.util.Preferences
 import javax.inject.Inject
 
-class MapSettingsRepository @Inject constructor(private val settings: ISettingsDataSource): IMapSettingsRepository {
+class MapSettingsRepository @Inject constructor(private val settings: ISettingsDataSource):
+    IMapSettingsRepository {
 
     //<editor-fold defaultstate="collapsed" desc="GETTERS">
-    override fun getLastLocation() = settings.getPairOfDouble(Preferences.PREFERENCE_LAST_LOCATION, Preferences.DEFAULT_LOCATION)!!
+    override fun getLastLocation() = settings.getPairOfDouble(Preferences.PREFERENCE_LAST_LOCATION, Preferences.DEFAULT_LOCATION)
 
     override fun getLastZoom() = settings.getFloat(Preferences.PREFERENCE_LAST_ZOOM, ZOOM_DEFAULT.toFloat()).toDouble()
 
     override fun getMapMode(): Int = settings.getInt(Preferences.PREFERENCE_MAP_MODE, SCHEME)
 
-    override fun getWikimapiaOverlays(): Boolean = settings.getBoolean(Preferences.PREFERENCE_WIKIMAPIA_OVERLAYS, true)!!
+    override fun getWikimapiaOverlays(): Boolean = settings.getBoolean(Preferences.PREFERENCE_WIKIMAPIA_OVERLAYS, true)
 
-    override fun getFollowLocation() = settings.getBoolean(Preferences.PREFERENCE_FOLLOW_LOCATION, false)!!
+    override fun getFollowLocation() = settings.getBoolean(Preferences.PREFERENCE_FOLLOW_LOCATION, false)
 
-    override fun getCenterSelection() = settings.getBoolean(Preferences.PREFERENCE_CENTER_SELECTION, false)!!
+    override fun getCenterSelection() = settings.getBoolean(Preferences.PREFERENCE_CENTER_SELECTION, false)
 
-    override fun getScale() = settings.getBoolean(Preferences.PREFERENCE_SHOW_SCALE, true)!!
+    override fun getScale() = settings.getBoolean(Preferences.PREFERENCE_SHOW_SCALE, true)
 
-    override fun getGrid() = settings.getBoolean(Preferences.PREFERENCE_SHOW_GRID, false)!!
+    override fun getGrid() = settings.getBoolean(Preferences.PREFERENCE_SHOW_GRID, false)
 
-    override fun getKeepScreenOn() = settings.getBoolean(Preferences.PREFERENCE_KEEP_SCREEN_ON, true)!!
+    override fun getKeepScreenOn() = settings.getBoolean(Preferences.PREFERENCE_KEEP_SCREEN_ON, true)
 
-    override fun getAutoRotateMap() = settings.getBoolean(Preferences.PREFERENCE_AUTO_ROTATE_MAP, false)!!
+    override fun getAutoRotateMap() = settings.getBoolean(Preferences.PREFERENCE_AUTO_ROTATE_MAP, false)
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="SETTERS">

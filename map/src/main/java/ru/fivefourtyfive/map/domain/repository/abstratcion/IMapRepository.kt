@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.places.domain.repository.abstraction
+package ru.fivefourtyfive.map.domain.repository.abstratcion
 
 import kotlinx.coroutines.flow.Flow
 import ru.fivefourtyfive.places.domain.datastate.AreaDataState

@@ -1,8 +1,8 @@
 package ru.fivefourtyfive.objectdetails.presentation.viewmodel
 
-import ru.fivefourtyfive.places.framework.presentation.abstraction.Event
+import ru.fivefourtyfive.places.framework.presentation.abstraction.IEvent
 
-sealed class PlaceEvent : Event {
+sealed class PlaceEvent : IEvent {
     class GetPlace(val id : Int): PlaceEvent()
     class SetSlideshow(val enable: Boolean): PlaceEvent()
 //    class ShowOnMap(val lat : Double, val lon: Double): PlaceEvent()

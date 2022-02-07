@@ -11,9 +11,9 @@ interface ISettingsDataSource {
 
     fun getDouble(key: String, default: Double = .0): Double
 
-    fun getBoolean(key: String, default: Boolean = false): Boolean?
+    fun getBoolean(key: String, default: Boolean = false): Boolean
 
-    fun getPairOfDouble(key: String, default: String): Pair<Double, Double>?
+    fun getPairOfDouble(key: String, default: String): Pair<Double, Double>
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="SETTERS">
