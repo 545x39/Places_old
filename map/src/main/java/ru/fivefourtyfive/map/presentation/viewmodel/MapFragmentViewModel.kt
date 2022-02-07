@@ -4,6 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -122,14 +125,16 @@ class MapFragmentViewModel @Inject constructor(
     }
 
     private fun merge(area: AreaDTO) =
-        MapViewState.DataLoaded(area).apply {
-            folder.items.apply {
-                clear()
-                area.places.map {
-                    add(
-                        it.toPlacePolygon().apply {
-                            (this == currentSelection).ifTrue { setHighlighted(true) }
-                        })
+        CoroutineScope(IO).launch {
+            MapViewState.DataLoaded(area).apply {
+                folder.items.apply {
+                    clear()
+                    area.places.map {
+                        add(
+                            it.toPlacePolygon().apply {
+                                (this == currentSelection).ifTrue { setHighlighted(true) }
+                            })
+                    }
                 }
             }
         }

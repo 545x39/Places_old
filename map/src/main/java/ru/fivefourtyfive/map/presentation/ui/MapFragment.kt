@@ -370,10 +370,12 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
 
     //<editor-fold defaultstate="collapsed" desc="ON STATE CHANGE METHODS">
     private fun onSuccess() {
-        viewModel.folder.items.map {
-            (it as PlacePolygon).setOnClickListener(PlaceOnClickListener(it))
+        kotlin.runCatching {
+            viewModel.folder.items.map {
+                (it as PlacePolygon).setOnClickListener(PlaceOnClickListener(it))
+            }
+            mapView.invalidate()
         }
-        mapView.invalidate()
     }
 
     private fun onError(message: String?) =
