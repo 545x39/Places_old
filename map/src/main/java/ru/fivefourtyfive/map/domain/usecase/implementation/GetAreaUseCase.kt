@@ -6,6 +6,8 @@ import ru.fivefourtyfive.map.domain.usecase.abstraction.IGetAreaUseCase
 import ru.fivefourtyfive.map.presentation.viewmodel.MapViewState
 import ru.fivefourtyfive.places.domain.datastate.AreaDataState
 import ru.fivefourtyfive.map.domain.repository.abstratcion.IMapRepository
+import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
+import ru.fivefourtyfive.map.presentation.util.toPlacePolygon
 import ru.fivefourtyfive.places.framework.presentation.abstraction.IReducer
 import javax.inject.Inject
 
@@ -35,7 +37,10 @@ class GetAreaUseCase @Inject constructor(
     }.flowOn(IO)
 
     override fun reduce(dataState: AreaDataState) = when (dataState) {
-        is AreaDataState.Success -> MapViewState.DataLoaded(dataState.area)
+        is AreaDataState.Success -> {
+            MapViewState.DataLoaded(arrayListOf<PlacePolygon>().apply {
+                addAll(dataState.area.places.map { it.toPlacePolygon() })
+            })}
         is AreaDataState.Loading -> MapViewState.Loading
         is AreaDataState.Error -> MapViewState.Error(dataState.message)
     }

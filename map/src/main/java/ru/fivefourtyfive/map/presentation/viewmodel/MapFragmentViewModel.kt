@@ -23,10 +23,9 @@ import ru.fivefourtyfive.map.presentation.util.MapListenerDelay.FOLLOWING_LOCATI
 import ru.fivefourtyfive.map.presentation.util.Overlay
 import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.CARTO_VOYAGER_TILE_SOURCE
-import ru.fivefourtyfive.map.presentation.util.toPlacePolygon
-import ru.fivefourtyfive.places.domain.entity.dto.AreaDTO
 import ru.fivefourtyfive.places.framework.presentation.abstraction.IEventHandler
 import ru.fivefourtyfive.places.util.MapMode
+import ru.fivefourtyfive.places.util.ifFalse
 import ru.fivefourtyfive.places.util.ifTrue
 import timber.log.Timber
 import javax.inject.Inject
@@ -43,12 +42,15 @@ class MapFragmentViewModel @Inject constructor(
     val transportationOverlay: TilesOverlay,
     @Named(Overlay.IMAGERY_LABELS_OVERLAY)
     val imageryLabelsOverlay: TilesOverlay,
+    @Suppress("SpellCheckingInspection")
     @Named(Overlay.WIKIMAPIA_OVERLAY)
     val wikimapiaOverlay: TilesOverlay,
     val myLocation: MyLocationNewOverlay,
     val gridOverlay: LatLonGridlineOverlay2,
     val folder: FolderOverlay
 ) : ViewModel(), IEventHandler<MapEvent> {
+
+    private var places = listOf<PlacePolygon>()
 
     private val _liveData = MutableLiveData<MapViewState>(MapViewState.Loading)
 
@@ -113,30 +115,38 @@ class MapFragmentViewModel @Inject constructor(
         latMin: Double,
         lonMax: Double,
         latMax: Double
-    ) = viewModelScope.launch {
-        factory.getAreaUseCase(lonMin, latMin, lonMax, latMax)
-            .execute()
-            .catch { _liveData.postValue(MapViewState.Error()) }
-            .collect {
-                (it is MapViewState.DataLoaded).ifTrue { merge((it as MapViewState.DataLoaded).area) }
-                _liveData.postValue(it)
-            }
+    ) {
+        viewModelScope.launch {
+            factory.getAreaUseCase(lonMin, latMin, lonMax, latMax)
+                .execute()
+                .catch { _liveData.postValue(MapViewState.Error()) }
+                .collect {
+                    if (it is MapViewState.DataLoaded) {
+                        merge(it.places)
+                        _liveData.postValue(MapViewState.DataLoaded(places))
+                    } else _liveData.postValue(it)
+                }
+        }
     }
 
-    private fun merge(area: AreaDTO) =
-        CoroutineScope(IO).launch {
-            MapViewState.DataLoaded(area).apply {
-                folder.items.apply {
-                    clear()
-                    area.places.map {
-                        add(
-                            it.toPlacePolygon().apply {
-                                (this == currentSelection).ifTrue { setHighlighted(true) }
-                            })
+    private fun merge(newPlaces: List<PlacePolygon>) = CoroutineScope(IO).launch {
+        ((places.isNotEmpty() && newPlaces.isEmpty())).ifFalse {
+            places = newPlaces
+        }
+        val selectedId = currentSelection?.id ?: -1
+        currentSelection = null
+        MapViewState.DataLoaded(places).apply {
+            folder.items.apply {
+                clear()
+                places.map {
+                    (it.id == selectedId).ifTrue {
+                        currentSelection = it.apply { setHighlighted(true) }
                     }
                 }
+                addAll(places)
             }
         }
+    }
 
     override fun handleEvent(event: MapEvent) {
         settings.apply {
