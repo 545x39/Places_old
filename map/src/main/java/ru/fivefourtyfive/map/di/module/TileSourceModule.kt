@@ -13,6 +13,9 @@ import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_TRANSPO
 import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_MAX_ZOOM
 import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_MIN_ZOOM
 import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_STREETS_TILE_SOURCE
+import ru.fivefourtyfive.map.presentation.util.TileSource.CARTO_DARK_TILE_SOURCE
+import ru.fivefourtyfive.map.presentation.util.TileSource.CARTO_LIGHT_TILE_SOURCE
+import ru.fivefourtyfive.map.presentation.util.TileSource.CARTO_VOYAGER_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.COPYRIGHT
 import ru.fivefourtyfive.map.presentation.util.TileSource.OSM_DEFAULT_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.POLICY
@@ -21,6 +24,9 @@ import ru.fivefourtyfive.map.presentation.util.TileSource.TILE_SIZE_PIXELS
 import ru.fivefourtyfive.map.presentation.util.TileSource.WIKIMAPIA_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.WIKIMEDIA_NO_LABELS_TILE_SOURCE
 import ru.fivefourtyfive.places.util.Network.ARCGIS_TILE_SERVERS
+import ru.fivefourtyfive.places.util.Network.CARTO_DARK_TILE_SERVERS
+import ru.fivefourtyfive.places.util.Network.CARTO_LIGHT_TILE_SERVERS
+import ru.fivefourtyfive.places.util.Network.CARTO_VOYAGER_TILE_SERVERS
 import ru.fivefourtyfive.places.util.Network.WIKIMAPIA_TILE_SERVERS
 import ru.fivefourtyfive.places.util.Network.WIKIMEDIA_TILE_SERVERS
 import javax.inject.Named
@@ -91,6 +97,7 @@ class TileSourceModule {
                 }/${MapTileIndex.getY(pMapTileIndex)}/${MapTileIndex.getX(pMapTileIndex)}"
         }
 
+    @Suppress("SpellCheckingInspection")
     @MapFragmentScope
     @Provides
     @Named(WIKIMAPIA_TILE_SOURCE)
@@ -104,6 +111,51 @@ class TileSourceModule {
             "$baseUrl/?x=${MapTileIndex.getX(pMapTileIndex)}&y=${MapTileIndex.getY(pMapTileIndex)}&zoom=${
                 MapTileIndex.getZoom(pMapTileIndex)
             }&type=hybrid&lng=1"
+    }
+
+    @Suppress("SpellCheckingInspection")
+    @MapFragmentScope
+    @Provides
+    @Named(CARTO_DARK_TILE_SOURCE)
+    fun provideCartoDarkTileSource(): OnlineTileSourceBase = object : TileSource(
+        CARTO_DARK_TILE_SOURCE,
+        2,
+        19,
+        CARTO_DARK_TILE_SERVERS
+    ) {
+        override fun getTileURLString(pMapTileIndex: Long) =
+            "$baseUrl/${MapTileIndex.getZoom(pMapTileIndex)}/${MapTileIndex.getX(pMapTileIndex)}/${MapTileIndex.getY(pMapTileIndex)}@2x$TILE_EXTENSION"
+
+    }
+
+    @Suppress("SpellCheckingInspection")
+    @MapFragmentScope
+    @Provides
+    @Named(CARTO_LIGHT_TILE_SOURCE)
+    fun provideCartoLightTileSource(): OnlineTileSourceBase = object : TileSource(
+        CARTO_LIGHT_TILE_SOURCE,
+        2,
+        19,
+        CARTO_LIGHT_TILE_SERVERS
+    ) {
+        override fun getTileURLString(pMapTileIndex: Long) =
+            "$baseUrl/${MapTileIndex.getZoom(pMapTileIndex)}/${MapTileIndex.getX(pMapTileIndex)}/${MapTileIndex.getY(pMapTileIndex)}@2x$TILE_EXTENSION"
+
+    }
+
+    @Suppress("SpellCheckingInspection")
+    @MapFragmentScope
+    @Provides
+    @Named(CARTO_VOYAGER_TILE_SOURCE)
+    fun provideCartoVoyagerTileSource(): OnlineTileSourceBase = object : TileSource(
+        CARTO_VOYAGER_TILE_SOURCE,
+        2,
+        19,
+        CARTO_VOYAGER_TILE_SERVERS
+    ) {
+        override fun getTileURLString(pMapTileIndex: Long) =
+            "$baseUrl/${MapTileIndex.getZoom(pMapTileIndex)}/${MapTileIndex.getX(pMapTileIndex)}/${MapTileIndex.getY(pMapTileIndex)}@2x$TILE_EXTENSION"
+
     }
 
     abstract class TileSource(

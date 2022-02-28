@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -16,16 +15,16 @@ import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.TilesOverlay
 import org.osmdroid.views.overlay.gridlines.LatLonGridlineOverlay2
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
+import ru.fivefourtyfive.map.domain.repository.abstratcion.IMapSettingsRepository
 import ru.fivefourtyfive.map.domain.usecase.abstraction.factory.IMapUseCaseFactory
 import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
 import ru.fivefourtyfive.map.presentation.util.MapListenerDelay.DEFAULT_DELAY
 import ru.fivefourtyfive.map.presentation.util.MapListenerDelay.FOLLOWING_LOCATION_DELAY
 import ru.fivefourtyfive.map.presentation.util.Overlay
 import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_TILE_SOURCE
-import ru.fivefourtyfive.map.presentation.util.TileSource.WIKIMEDIA_NO_LABELS_TILE_SOURCE
+import ru.fivefourtyfive.map.presentation.util.TileSource.CARTO_VOYAGER_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.toPlacePolygon
 import ru.fivefourtyfive.places.domain.entity.dto.AreaDTO
-import ru.fivefourtyfive.map.domain.repository.abstratcion.IMapSettingsRepository
 import ru.fivefourtyfive.places.framework.presentation.abstraction.IEventHandler
 import ru.fivefourtyfive.places.util.MapMode
 import ru.fivefourtyfive.places.util.ifTrue
@@ -36,7 +35,7 @@ import javax.inject.Named
 class MapFragmentViewModel @Inject constructor(
     private val factory: IMapUseCaseFactory,
     private val settings: IMapSettingsRepository,
-    @Named(WIKIMEDIA_NO_LABELS_TILE_SOURCE)
+    @Named(CARTO_VOYAGER_TILE_SOURCE)
     val schemeTileSource: OnlineTileSourceBase,
     @Named(ARCGIS_IMAGERY_TILE_SOURCE)
     val satelliteTileSource: OnlineTileSourceBase,

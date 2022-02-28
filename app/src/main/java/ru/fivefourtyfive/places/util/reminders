@@ -116,10 +116,6 @@ https://stackoverflow.com/questions/38322233/how-to-share-a-text-link-via-text-i
 Map listener:
 https://stackoverflow.com/questions/39306301/osmdroid-load-marker-after-scroll
 
-DEBOUNCING:
-//https://www.hellsoft.se/instant-search-with-kotlin-coroutines/
-
-
 //* Multiply speed by 3.6 to convert meters per second to km per hour (3600 seconds / 1000 meters).
 ======================
 
@@ -339,6 +335,24 @@ https://github.com/osmdroid/osmdroid/blob/master/OpenStreetMapViewer/src/main/ja
           attributionUrl: 'https://static.arcgis.com/attribution/World_Imagery'
         }
       }
+
+------------------
+
+
+    Carto Dark No Labels:
+    https://a.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}@2x.png
+
+    Carto Light No Labels:
+    https://a.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}@2x.png
+
+    Carto Voyager No Labels:
+    https://a.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}@2x.png
+
+    Carto Voyager Only Labels Under:
+    https://a.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}@2x.png
+
+    OSM No Labels:
+    https://tiles.wmflabs.org/osm-no-labels/{z}/{x}/{y}.png
 
 
 =====================================================

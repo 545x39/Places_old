@@ -26,6 +26,12 @@ object Network {
                                                 "http://services.arcgisonline.com/"
                                             )
 
+    val CARTO_DARK_TILE_SERVERS              = arrayOf("https://a.basemaps.cartocdn.com/dark_nolabels/")
+
+    val CARTO_LIGHT_TILE_SERVERS             = arrayOf("https://a.basemaps.cartocdn.com/light_nolabels/")
+
+    val CARTO_VOYAGER_TILE_SERVERS           = arrayOf("https://a.basemaps.cartocdn.com/rastertiles/voyager_nolabels/")
+
     const val CONNECT_TIMEOUT               = 120L
     const val READ_TIMEOUT                  = 120L
 }
