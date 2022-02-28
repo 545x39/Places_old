@@ -31,17 +31,15 @@ class MapRepository @Inject constructor(
     ) = flow {
         emit(AreaDataState.Loading)
         Timber.e("FETCHING BY:  $latMin, $lonMin, $latMax, $lonMax")
-//        kotlin.runCatching {
-//            localDataSource.getArea(latMin, lonMin, latMax, lonMax, category, count, language)
-//                .apply {
-//                    Timber.e("FOUND PLACES: ${places?.size}")
-//
-//                    if (places?.isNotEmpty() == true) {
-//                        emit(AreaDataState.Success(AreaDTO(this)))
-////                        emit(AreaDataState.Loading)
-//                    }
-//                }
-//        }.onFailure { Timber.e("ERROR: ${stackTraceToString(it)}") }
+        kotlin.runCatching {
+            localDataSource.getArea(latMin, lonMin, latMax, lonMax, category, count, language)
+                .apply {
+                    Timber.e("FOUND PLACES: ${places?.size}")
+                    if (places?.isNotEmpty() == true) {
+                        emit(AreaDataState.Success(AreaDTO(this)))
+                    }
+                }
+        }
         remoteDataSource.getArea(lonMin, latMin, lonMax, latMax, category, page, count, language)
             .apply {
                 when (debugInfo) {

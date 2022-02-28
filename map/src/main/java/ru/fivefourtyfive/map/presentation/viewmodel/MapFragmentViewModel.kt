@@ -127,7 +127,7 @@ class MapFragmentViewModel @Inject constructor(
             factory.getAreaUseCase(lonMin, latMin, lonMax, latMax)
                 .execute()
                 .catch { _liveData.postValue(MapViewState.Error()) }
-                .collect { reduce(it).also {state -> _liveData.postValue(state)} }
+                .collect { reduce(it).also {viewState -> _liveData.postValue(viewState)} }
         }
     }
 
@@ -136,6 +136,10 @@ class MapFragmentViewModel @Inject constructor(
             .apply { addAll(newPlaces.map { it.toPlacePolygon() }) }
         if ((places.isNotEmpty() && polygons.isEmpty())) return
         places = polygons
+        // TODO Issue #42:
+        // TODO 1 Удалить из старых полигонов те, которые вышли за границу bounding box'а.
+        // TODO 2 Из оставшихся удалить те, которые присутствуют в новых.
+        // TODO 3 Слить оставшиеся полигоны с новыми.
         val selectedId = currentSelection?.id ?: -1
         currentSelection = null
         folder.items.apply {

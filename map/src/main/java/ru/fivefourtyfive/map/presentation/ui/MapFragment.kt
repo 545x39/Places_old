@@ -49,7 +49,9 @@ import ru.fivefourtyfive.places.R as appR
 
 @Suppress("SpellCheckingInspection")
 
-const val ZOOM_ANIMATION_SPEED = 300L
+private const val AUTO_ZOOM_IN_LEVEL = 16
+private const val AUTO_ZOOM_OUT_LEVEL = 14
+private const val ZOOM_ANIMATION_SPEED = 300L
 
 class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener {
 
@@ -253,15 +255,15 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
 
     private fun onCenterButtonClick() = when (viewModel.isFollowLocationEnabled()) {
         true -> {
-            when (mapView.zoomLevelDouble < 16) {
-                true -> mapView.controller.zoomTo(16, ZOOM_ANIMATION_SPEED)
-                false -> mapView.controller.zoomTo(14, ZOOM_ANIMATION_SPEED)
+            when (mapView.zoomLevelDouble < AUTO_ZOOM_IN_LEVEL) {
+                true -> mapView.controller.zoomTo(AUTO_ZOOM_IN_LEVEL, ZOOM_ANIMATION_SPEED)
+                false -> mapView.controller.zoomTo(AUTO_ZOOM_OUT_LEVEL, ZOOM_ANIMATION_SPEED)
             }
         }
         false -> {
             viewModel.setFollowLocation(true)
             switchFollowLocation(true)
-            mapView.controller.zoomTo(16, ZOOM_ANIMATION_SPEED)
+            mapView.controller.zoomTo(AUTO_ZOOM_IN_LEVEL, ZOOM_ANIMATION_SPEED)
         }
     }
 
@@ -280,9 +282,11 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
             //<editor-fold defaultstate="collapsed" desc="INNER FUNCTIONS">
             fun onSame() {
                 place.setHighlighted(false)
-                placeTitle.text = ""
+                placeTitle.apply {
+                    text = ""
+                    visibility = GONE
+                }
                 viewModel.currentSelection = null
-                placeTitleButton.visibility = GONE
             }
 
             fun onDifferent() {
@@ -394,7 +398,6 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
 
         with(viewModel) {
             mapView.let {
-//                Timber.e("BOUNDING BOX: ${it.boundingBox}")
                 (force || (wikimapiaOverlaysEnabled() && isFarEnough(
                     it.mapCenter,
                     getLastLocation()
@@ -472,8 +475,7 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
     override fun onLocationChanged(location: Location) {
         location.bearing.let { it.equals(0.0f).ifFalse { viewModel.latestBearing = it } }
         GeoPoint(location).apply {
-//            val speed = (location.speed).roundToLong()
-            (viewModel.isFollowLocationEnabled() /*&& speed >= 40*/).ifTrue {
+            (viewModel.isFollowLocationEnabled()).ifTrue {
                 mapView.controller.animateTo(
                     this, mapView.zoomLevelDouble, 600,
                     when (viewModel.isAutoRotateMapEnabled()) {
