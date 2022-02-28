@@ -23,7 +23,12 @@ import ru.fivefourtyfive.map.presentation.util.MapListenerDelay.FOLLOWING_LOCATI
 import ru.fivefourtyfive.map.presentation.util.Overlay
 import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.TileSource.CARTO_VOYAGER_TILE_SOURCE
+import ru.fivefourtyfive.map.presentation.util.toPlacePolygon
+import ru.fivefourtyfive.places.domain.datastate.AreaDataState
+import ru.fivefourtyfive.places.domain.entity.Place
+import ru.fivefourtyfive.places.domain.entity.dto.PlaceDTO
 import ru.fivefourtyfive.places.framework.presentation.abstraction.IEventHandler
+import ru.fivefourtyfive.places.framework.presentation.abstraction.IReducer
 import ru.fivefourtyfive.places.util.MapMode
 import ru.fivefourtyfive.places.util.ifFalse
 import ru.fivefourtyfive.places.util.ifTrue
@@ -48,7 +53,7 @@ class MapFragmentViewModel @Inject constructor(
     val myLocation: MyLocationNewOverlay,
     val gridOverlay: LatLonGridlineOverlay2,
     val folder: FolderOverlay
-) : ViewModel(), IEventHandler<MapEvent> {
+) : ViewModel(), IEventHandler<MapEvent>, IReducer<AreaDataState, MapViewState> {
 
     private var places = listOf<PlacePolygon>()
 
@@ -84,8 +89,10 @@ class MapFragmentViewModel @Inject constructor(
 
     fun setMapMode(mode: Int) = settings.setMapMode(mode)
 
+    @Suppress("SpellCheckingInspection")
     fun wikimapiaOverlaysEnabled() = settings.getWikimapiaOverlays()
 
+    @Suppress("SpellCheckingInspection")
     fun setWikimapiaOverlays(enabled: Boolean) = settings.setWikimapiaOverlays(enabled)
 
     fun isFollowLocationEnabled() = settings.getFollowLocation()
@@ -120,31 +127,25 @@ class MapFragmentViewModel @Inject constructor(
             factory.getAreaUseCase(lonMin, latMin, lonMax, latMax)
                 .execute()
                 .catch { _liveData.postValue(MapViewState.Error()) }
-                .collect {
-                    if (it is MapViewState.DataLoaded) {
-                        merge(it.places)
-                        _liveData.postValue(MapViewState.DataLoaded(places))
-                    } else _liveData.postValue(it)
-                }
+                .collect { reduce(it).also {state -> _liveData.postValue(state)} }
         }
     }
 
-    private fun merge(newPlaces: List<PlacePolygon>) = CoroutineScope(IO).launch {
-        ((places.isNotEmpty() && newPlaces.isEmpty())).ifFalse {
-            places = newPlaces
-        }
+    private fun updateFolder(newPlaces: List<PlaceDTO>){
+        val polygons = arrayListOf<PlacePolygon>()
+            .apply { addAll(newPlaces.map { it.toPlacePolygon() }) }
+        if ((places.isNotEmpty() && polygons.isEmpty())) return
+        places = polygons
         val selectedId = currentSelection?.id ?: -1
         currentSelection = null
-        MapViewState.DataLoaded(places).apply {
-            folder.items.apply {
-                clear()
-                places.map {
-                    (it.id == selectedId).ifTrue {
-                        currentSelection = it.apply { setHighlighted(true) }
-                    }
+        folder.items.apply {
+            clear()
+            places.map {
+                (it.id == selectedId).ifTrue {
+                    currentSelection = it.apply { setHighlighted(true) }
                 }
-                addAll(places)
             }
+            addAll(places)
         }
     }
 
@@ -161,5 +162,14 @@ class MapFragmentViewModel @Inject constructor(
                 is MapEvent.SwitchGridEvent -> setGrid(event.enable)
             }
         }
+    }
+
+    override fun reduce(dataState: AreaDataState) = when (dataState) {
+        is AreaDataState.Success -> {
+            updateFolder(dataState.area.places)
+            MapViewState.DataLoaded()
+        }
+        is AreaDataState.Loading -> MapViewState.Loading
+        is AreaDataState.Error -> MapViewState.Error(dataState.message)
     }
 }

@@ -9,7 +9,7 @@ import ru.fivefourtyfive.places.framework.presentation.abstraction.IViewState
 sealed class MapViewState : IViewState {
     open val progressVisibility = View.GONE
 
-    class DataLoaded(val places: List<PlacePolygon>) : MapViewState()
+    class DataLoaded() : MapViewState()
 
     object Loading : MapViewState() {
         override val progressVisibility = View.VISIBLE
