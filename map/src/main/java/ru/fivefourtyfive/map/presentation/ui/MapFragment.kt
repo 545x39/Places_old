@@ -189,7 +189,9 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
         fun onSuccess() {
             runCatching {
                 viewModel.folder.items.map {
-                    (it as PlacePolygon).setOnClickListener(PlaceOnClickListener(it))
+                    (it as PlacePolygon).setOnClickListener(
+                        PlaceOnClickListener(it)
+                    )
                 }
                 mapView.invalidate()
             }
@@ -296,7 +298,7 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
             }
             //</editor-fold>
 
-            when (place.id == viewModel.currentSelection?.id?:0) {
+            when (place.id == viewModel.currentSelection?.id ?: 0) {
                 true -> onSame()
                 false -> onDifferent()
             }
@@ -397,7 +399,6 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
                     it.mapCenter,
                     getLastLocation()
                 ) && it.zoomLevelDouble >= 10.0)).ifTrue {
-                    Timber.e("GETTING AREA... Force: $force")
                     dispatchEvent(
                         MapEvent.GetAreaEvent(
                             it.boundingBox.lonWest,
