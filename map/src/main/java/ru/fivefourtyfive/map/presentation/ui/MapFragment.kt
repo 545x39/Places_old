@@ -93,7 +93,7 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
         return inflater.inflate(R.layout.fragment_map, container, false)
     }
 
-//    @OptIn(ExperimentalCoroutinesApi::class)
+    //    @OptIn(ExperimentalCoroutinesApi::class)
 //    @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -183,7 +183,7 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
     }
 
     private fun subscribeObservers() {
-        viewModel.liveData.observe(viewLifecycleOwner, {
+        viewModel.liveData.observe(viewLifecycleOwner) {
             with(it) {
                 progress.visibility = progressVisibility
                 when (this) {
@@ -193,10 +193,10 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
                     }
                 }
             }
-        })
+        }
     }
 
-//    @ExperimentalCoroutinesApi
+    //    @ExperimentalCoroutinesApi
     private fun subscribeToButtonClicks() {
         bearingButton.clicks()
             .throttleFirst(200)
@@ -214,7 +214,7 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
     }
 
     private fun MapView.setMapListener() {
-        fun getAndUpdate(){
+        fun getAndUpdate() {
             getArea()
             updateLastLocationAndZoom()
         }
@@ -270,15 +270,16 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
 
             fun onDifferent() {
                 viewModel.currentSelection?.setHighlighted(false)
-                setPlaceTitle(place)
-                viewModel.currentSelection = place
+                place.also {
+                    viewModel.currentSelection = it
+                    setPlaceTitle(it)
+                }
                 mapView?.apply {
                     viewModel.isCenterSelectionEnabled()
                         .ifTrue { controller.animateTo(GeoPoint(place.lat, place.lon)) }
                 }
             }
             //</editor-fold>
-
             when (place == viewModel.currentSelection) {
                 true -> onSame()
                 false -> onDifferent()
