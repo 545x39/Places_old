@@ -301,7 +301,7 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
                 }
             }
             //</editor-fold>
-            Timber.e("CURRENT: [${viewModel.currentSelection.second}]")
+
             when (place.id == viewModel.currentSelection.first) {
                 true -> onSame()
                 false -> onDifferent()

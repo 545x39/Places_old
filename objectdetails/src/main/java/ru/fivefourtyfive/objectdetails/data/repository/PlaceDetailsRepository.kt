@@ -28,13 +28,11 @@ class PlaceDetailsRepository @Inject constructor(
                 emit(PlaceDetailsDataState.Success(PlaceDescriptionDTO(it)))
                 emit(PlaceDetailsDataState.Loading)
             }
-        emit(when (val place: Place? =
-            remoteDatasource.getPlace(id, dataBlocks)) {
-            null -> PlaceDetailsDataState.Error()
-            else -> PlaceDetailsDataState.Success(PlaceDescriptionDTO(place))
-                .also {
-                    CoroutineScope(IO).launch {localDataSource.persistPlace(place)}
-                }
-        })
+            emit(when (val place: Place? =
+                remoteDatasource.getPlace(id, dataBlocks)) {
+                null -> PlaceDetailsDataState.Error()
+                else -> PlaceDetailsDataState.Success(PlaceDescriptionDTO(place))
+                    .also { CoroutineScope(IO).launch { localDataSource.persistPlace(place) } }
+            })
         }.flowOn(IO)
 }

@@ -132,12 +132,9 @@ class MapFragmentViewModel @Inject constructor(
         }
     }
 
-    fun setHighlighted(id: Int, highlight: Boolean) {
-        places.filter { it.id == id }.take(1)
-            .apply { isEmpty().ifFalse { get(0).setHighlighted(highlight) } }
-    }
+    fun setHighlighted(id: Int, highlight: Boolean) = getPlaceById(id)?.setHighlighted(highlight)
 
-    fun getPlaceById(id: Int): PlacePolygon? {
+    private fun getPlaceById(id: Int): PlacePolygon? {
         for (i in 0 until places.size) {
             if (places[i].id == id)
                 return places[i]
