@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import ru.fivefourtyfive.objectdetails.domain.usecase.abstraction.factory.IPlaceDetailsUseCaseFactory
 import ru.fivefourtyfive.objectdetails.domain.repository.abstraction.IPlaceDetailsSettingsRepository
 import ru.fivefourtyfive.places.framework.presentation.abstraction.IEventHandler
+import timber.log.Timber
 import javax.inject.Inject
 
 class PlaceDetailsViewModel @Inject constructor(

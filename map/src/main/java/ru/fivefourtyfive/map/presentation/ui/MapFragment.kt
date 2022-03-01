@@ -48,6 +48,11 @@ import javax.inject.Inject
 import ru.fivefourtyfive.places.R as appR
 
 @Suppress("SpellCheckingInspection")
+
+private const val AUTO_ZOOM_IN_LEVEL = 16
+private const val AUTO_ZOOM_OUT_LEVEL = 14
+private const val ZOOM_ANIMATION_SPEED = 300L
+
 class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener {
 
     //<editor-fold defaultstate="collapsed" desc="FIELDS">
@@ -93,8 +98,6 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
         return inflater.inflate(R.layout.fragment_map, container, false)
     }
 
-//    @OptIn(ExperimentalCoroutinesApi::class)
-//    @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().setTitle(appR.string.app_name)
@@ -122,7 +125,7 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
         viewModel.myLocation.enableMyLocation()
         centerAndZoom()
         mapView.onResume()
-        setPlaceTitle(viewModel.currentSelection)
+        switchSelection(viewModel.currentSelection)
         locationManager.getProviders(true).map {
             isPermissionGranted(requireContext(), ACCESS_FINE_LOCATION)
                 .ifTrue { locationManager.requestLocationUpdates(it, 1000, 5.0f, this) }
@@ -165,25 +168,47 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
         }
     }
 
-    fun setPlaceTitle(place: PlacePolygon?) {
-        when (place) {
-            null -> placeTitleButton.visibility = GONE
-            else -> {
-                place.setHighlighted(true)
-                placeTitle.text = place.title
-                placeTitle.setOnClickListener {
-                    navigate(
-                        appR.id.action_mapFragment_to_placeDetailsFragment,
-                        bundleOf(ID to place.id)
-                    )
+    fun switchSelection(selection: Pair<Int, String>?) {
+        with(viewModel) {
+            setHighlighted(viewModel.currentSelection.first, false)
+            currentSelection = selection ?: -1 to ""
+            val (id, title) = currentSelection
+            when (id < 0) {
+                true -> placeTitleButton.visibility = GONE
+                false -> {
+                    setHighlighted(id, true)
+                    placeTitle.text = title
+                    placeTitle.setOnClickListener {
+                        navigate(
+                            appR.id.action_mapFragment_to_placeDetailsFragment,
+                            bundleOf(ID to id)
+                        )
+                    }
+                    placeTitleButton.visibility = VISIBLE
                 }
-                placeTitleButton.visibility = VISIBLE
             }
         }
     }
 
     private fun subscribeObservers() {
-        viewModel.liveData.observe(viewLifecycleOwner, {
+
+        //<editor-fold defaultstate="collapsed" desc="ON STATE CHANGE METHODS">
+        fun onSuccess() {
+            runCatching {
+                viewModel.folder.items.map {
+                    (it as PlacePolygon).setOnClickListener(
+                        PlaceOnClickListener(it)
+                    )
+                }
+                mapView.invalidate()
+            }
+        }
+
+        fun onError(message: String?) =
+            (requireActivity() as MainActivity).showSnackBar(message)
+        //</editor-fold>
+
+        viewModel.liveData.observe(viewLifecycleOwner) {
             with(it) {
                 progress.visibility = progressVisibility
                 when (this) {
@@ -193,10 +218,9 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
                     }
                 }
             }
-        })
+        }
     }
 
-//    @ExperimentalCoroutinesApi
     private fun subscribeToButtonClicks() {
         bearingButton.clicks()
             .throttleFirst(200)
@@ -214,7 +238,7 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
     }
 
     private fun MapView.setMapListener() {
-        fun getAndUpdate(){
+        fun getAndUpdate() {
             getArea()
             updateLastLocationAndZoom()
         }
@@ -236,15 +260,15 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
 
     private fun onCenterButtonClick() = when (viewModel.isFollowLocationEnabled()) {
         true -> {
-            when (mapView.zoomLevelDouble < 16) {
-                true -> mapView.controller.zoomTo(16, 300L)
-                false -> mapView.controller.zoomTo(14, 300L)
+            when (mapView.zoomLevelDouble < AUTO_ZOOM_IN_LEVEL) {
+                true -> mapView.controller.zoomTo(AUTO_ZOOM_IN_LEVEL, ZOOM_ANIMATION_SPEED)
+                false -> mapView.controller.zoomTo(AUTO_ZOOM_OUT_LEVEL, ZOOM_ANIMATION_SPEED)
             }
         }
         false -> {
             viewModel.setFollowLocation(true)
             switchFollowLocation(true)
-            mapView.controller.zoomTo(16, 300L)
+            mapView.controller.zoomTo(AUTO_ZOOM_IN_LEVEL, ZOOM_ANIMATION_SPEED)
         }
     }
 
@@ -262,16 +286,15 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
 
             //<editor-fold defaultstate="collapsed" desc="INNER FUNCTIONS">
             fun onSame() {
-                place.setHighlighted(false)
-                placeTitle.text = ""
-                viewModel.currentSelection = null
-                placeTitleButton.visibility = GONE
+                Timber.e("ON SAME")
+                switchSelection(null)
             }
 
             fun onDifferent() {
-                viewModel.currentSelection?.setHighlighted(false)
-                setPlaceTitle(place)
-                viewModel.currentSelection = place
+                Timber.e("ON DIFFERENT")
+                place.apply {
+                    switchSelection(id to title)
+                }
                 mapView?.apply {
                     viewModel.isCenterSelectionEnabled()
                         .ifTrue { controller.animateTo(GeoPoint(place.lat, place.lon)) }
@@ -279,7 +302,7 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
             }
             //</editor-fold>
 
-            when (place == viewModel.currentSelection) {
+            when (place.id == viewModel.currentSelection.first) {
                 true -> onSame()
                 false -> onDifferent()
             }
@@ -368,18 +391,6 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
     override fun dispatchEvent(event: MapEvent) = viewModel.handleEvent(event)
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="ON STATE CHANGE METHODS">
-    private fun onSuccess() {
-        viewModel.folder.items.map {
-            (it as PlacePolygon).setOnClickListener(PlaceOnClickListener(it))
-        }
-        mapView.invalidate()
-    }
-
-    private fun onError(message: String?) =
-        (requireActivity() as MainActivity).showSnackBar(message)
-    //</editor-fold>
-
     //<editor-fold defaultstate="collapsed" desc="MAP FUNCTIONALITY METHODS">
     private fun getArea(force: Boolean = false): Boolean {
 
@@ -387,7 +398,6 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
 
         with(viewModel) {
             mapView.let {
-                Timber.e("BOUNDING BOX: ${it.boundingBox}")
                 (force || (wikimapiaOverlaysEnabled() && isFarEnough(
                     it.mapCenter,
                     getLastLocation()
@@ -465,8 +475,7 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
     override fun onLocationChanged(location: Location) {
         location.bearing.let { it.equals(0.0f).ifFalse { viewModel.latestBearing = it } }
         GeoPoint(location).apply {
-//            val speed = (location.speed).roundToLong()
-            (viewModel.isFollowLocationEnabled() /*&& speed >= 40*/).ifTrue {
+            (viewModel.isFollowLocationEnabled()).ifTrue {
                 mapView.controller.animateTo(
                     this, mapView.zoomLevelDouble, 600,
                     when (viewModel.isAutoRotateMapEnabled()) {

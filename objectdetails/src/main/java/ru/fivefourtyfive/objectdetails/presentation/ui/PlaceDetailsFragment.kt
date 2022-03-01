@@ -62,9 +62,9 @@ class PlaceDetailsFragment : Fragment(), IEventDispatcher<PlaceEvent>,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().setTitle(appR.string.title_objectdetails)
-        viewModel = ViewModelProvider(this, providerFactory).get(PlaceDetailsViewModel::class.java)
+        viewModel = ViewModelProvider(this, providerFactory)[PlaceDetailsViewModel::class.java]
         binding.viewModel = viewModel
-        binding.viewModel?.viewStateLiveData?.observe(viewLifecycleOwner, { render(it) })
+        binding.viewModel?.viewStateLiveData?.observe(viewLifecycleOwner) { render(it) }
         arguments?.getInt(ID)?.also { dispatchEvent(PlaceEvent.GetPlace(it)) }
     }
 
@@ -155,7 +155,7 @@ class PlaceDetailsFragment : Fragment(), IEventDispatcher<PlaceEvent>,
                 is PlaceDetailsViewState.Loading -> {
                 }
                 is PlaceDetailsViewState.Error -> {
-                    (requireActivity() as MainActivity).showSnackBar(message)
+                    (requireActivity() as MainActivity).showSnackBar(resources.getString(R.string.network_error))
                 }
                 is PlaceDetailsViewState.Success -> {
                     setMain(title, description)

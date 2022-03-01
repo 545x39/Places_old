@@ -5,14 +5,15 @@ import ru.fivefourtyfive.places.framework.datasource.implementation.local.databa
 import ru.fivefourtyfive.places.framework.datasource.implementation.local.database.typeconverter.util.CoordinateDelimiters.COORDINATE_DELIMITER
 import ru.fivefourtyfive.places.domain.entity.PolygonPoint
 import ru.fivefourtyfive.places.util.ifTrue
+import timber.log.Timber
 
 class PolygonConverter {
 
     @TypeConverter
     fun polygonToString(polygon: List<PolygonPoint>) = buildString {
-        polygon.map {
-            append("${it.x}$VALUE_DELIMITER${it.y}")
-            (polygon[polygon.size - 1] != it).ifTrue { append(COORDINATE_DELIMITER) }
+        for (index in polygon.indices){
+            append("${polygon[index].x}$VALUE_DELIMITER${polygon[index].y}")
+            (index < polygon.size-1).ifTrue {append(COORDINATE_DELIMITER)}
         }
     }
 

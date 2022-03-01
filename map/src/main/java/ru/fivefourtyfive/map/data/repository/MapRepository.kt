@@ -9,6 +9,9 @@ import ru.fivefourtyfive.places.data.datasource.abstraction.IRemoteDataSource
 import ru.fivefourtyfive.places.domain.datastate.AreaDataState
 import ru.fivefourtyfive.places.domain.entity.dto.AreaDTO
 import ru.fivefourtyfive.map.domain.repository.abstratcion.IMapRepository
+import ru.fivefourtyfive.places.util.ifTrue
+import ru.fivefourtyfive.places.util.stackTraceToString
+import timber.log.Timber
 import javax.inject.Inject
 
 class MapRepository @Inject constructor(
@@ -27,6 +30,15 @@ class MapRepository @Inject constructor(
         language: String?
     ) = flow {
         emit(AreaDataState.Loading)
+        Timber.e("FETCHING BY:  $latMin, $lonMin, $latMax, $lonMax")
+        kotlin.runCatching {
+            localDataSource.getArea(latMin, lonMin, latMax, lonMax, category, count, language)
+                .apply {
+                    if (places?.isNotEmpty() == true) {
+                        emit(AreaDataState.Success(AreaDTO(this)))
+                    }
+                }
+        }
         remoteDataSource.getArea(lonMin, latMin, lonMax, latMax, category, page, count, language)
             .apply {
                 when (debugInfo) {

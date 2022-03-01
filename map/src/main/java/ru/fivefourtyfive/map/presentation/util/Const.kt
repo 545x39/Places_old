@@ -9,6 +9,7 @@ object MapListenerDelay{
 
 /** Maximum zoom level for this source is 17, in case of greater number it sends
  * gray tiles with "No tile data available" text on them.*/
+@Suppress("SpellCheckingInspection")
 object TileSource {
     const val COPYRIGHT = "© OpenStreetMap contributors"
     const val TILE_SIZE_PIXELS = 256
@@ -29,6 +30,9 @@ object TileSource {
     const val ARCGIS_IMAGERY_LABELS_TILE_SOURCE = "ArcGISImageryLabels"
     const val ARCGIS_IMAGERY_TRANSPORTATION_TILE_SOURCE = "ArcGISImageryTransportation"
     const val WIKIMAPIA_TILE_SOURCE = "Wikimapia"
+    const val CARTO_DARK_TILE_SOURCE = "CartoDark"
+    const val CARTO_LIGHT_TILE_SOURCE = "CartoLight"
+    const val CARTO_VOYAGER_TILE_SOURCE = "CartoVoyager"
 }
 
 object Overlay{

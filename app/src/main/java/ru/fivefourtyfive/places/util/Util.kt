@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
+import java.io.PrintWriter
+import java.io.StringWriter
 
 suspend fun <A, B> Iterable<A>.parallelMap(f: suspend (A) -> B): List<B> =
     coroutineScope { map { async { f(it) } }.awaitAll() }
@@ -25,6 +27,21 @@ fun decimalIpToString(decimal: Long) = ((decimal shr 24 and 0xFF).toString() + "
         + (decimal shr 16 and 0xFF) + "."
         + (decimal shr 8 and 0xFF) + "."
         + (decimal and 0xFF))
+
+/**
+ * @param exception Экземпляр исключения
+ * @return Стек трейс в виде строки.
+ * @brief Возвращает строку со стек трейсом переданного в параметр исключения. Удобен для вывода стек трейса в лог.
+ */
+fun stackTraceToString(exception: Throwable): String {
+    val stringWriter = StringWriter()
+    exception.apply {
+        printStackTrace(PrintWriter(stringWriter))
+        printStackTrace()
+    }
+    return stringWriter.toString()
+}
+
 
 //@ExperimentalCoroutinesApi
 fun View.clicks(): Flow<Unit> = callbackFlow {
