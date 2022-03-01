@@ -4,6 +4,7 @@ import ru.fivefourtyfive.places.data.datasource.abstraction.ILocalDataSource
 import ru.fivefourtyfive.places.framework.datasource.implementation.local.database.Database
 import ru.fivefourtyfive.places.domain.entity.Place
 import ru.fivefourtyfive.places.domain.entity.Places
+import timber.log.Timber
 import javax.inject.Inject
 
 class RoomDataSource @Inject constructor(private val database: Database) : ILocalDataSource {
@@ -23,15 +24,18 @@ class RoomDataSource @Inject constructor(private val database: Database) : ILoca
     }
 
     override suspend fun getArea(
-        latMin: Double,
-        lonMin: Double,
-        latMax: Double,
-        lonMax: Double,
+        north: Double,
+        west: Double,
+        south: Double,
+        east: Double,
         category: String?,
         count: Int?,
         language: String?
-    ) = database.placeDAO().getPlaces(latMin, lonMin, latMax, lonMax)
-        .let { Places(places = it, count = it.size, found = it.size) }
+    ) = database.placeDAO().getPlaces(north, west, south, east)
+        .let { Places(places = it, count = it.size, found = it.size) }.also {
+        Timber.e("SELECT * FROM places p LEFT JOIN locations l ON p.id = l.place_id WHERE ((north >= :south AND east >= :west AND north <= :north and east <= :east) OR ((south >= :south AND west >= :west AND south <= :north and west <= :east))) AND (north - south >= (:north - :south)/:limiter AND east - west >=(:east - :west) /:limiter);")
+        Timber.e("SELECT * FROM places p LEFT JOIN locations l ON p.id = l.place_id WHERE ((north >= $south AND east >= $west AND north <= $north and east <= $east) OR ((south >= $south AND west >= $west AND south <= $north and west <= $east))) AND (north - south >= ($north - $south)/25 AND east - west >=($east - $west) /25);")
+        Timber.e("south: $south, east: $east, north: $north, west: $west") }
 
     override suspend fun getPlacesCount() = database.placeDAO().getPlacesCount()
 
