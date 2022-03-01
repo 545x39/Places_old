@@ -4,12 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
+import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.TilesOverlay
@@ -25,12 +24,10 @@ import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_TILE_SO
 import ru.fivefourtyfive.map.presentation.util.TileSource.CARTO_VOYAGER_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.toPlacePolygon
 import ru.fivefourtyfive.places.domain.datastate.AreaDataState
-import ru.fivefourtyfive.places.domain.entity.Place
 import ru.fivefourtyfive.places.domain.entity.dto.PlaceDTO
 import ru.fivefourtyfive.places.framework.presentation.abstraction.IEventHandler
 import ru.fivefourtyfive.places.framework.presentation.abstraction.IReducer
 import ru.fivefourtyfive.places.util.MapMode
-import ru.fivefourtyfive.places.util.ifFalse
 import ru.fivefourtyfive.places.util.ifTrue
 import timber.log.Timber
 import javax.inject.Inject
@@ -55,7 +52,7 @@ class MapFragmentViewModel @Inject constructor(
     val folder: FolderOverlay
 ) : ViewModel(), IEventHandler<MapEvent>, IReducer<AreaDataState, MapViewState> {
 
-    private var places = listOf<PlacePolygon>()
+    private var places = mutableListOf<PlacePolygon>()
 
     private val _liveData = MutableLiveData<MapViewState>(MapViewState.Loading)
 
@@ -69,6 +66,8 @@ class MapFragmentViewModel @Inject constructor(
     }
 
     var latestBearing = 0.0f
+
+    private val latestBoundingBox = BoundingBox()
 
     //<editor-fold defaultstate="collapsed" desc="PREFERENCES">
     fun getLastLocation() =
@@ -124,22 +123,34 @@ class MapFragmentViewModel @Inject constructor(
         latMax: Double
     ) {
         viewModelScope.launch {
+            latestBoundingBox.set(lonMax, latMax, lonMin, latMin)
             factory.getAreaUseCase(lonMin, latMin, lonMax, latMax)
                 .execute()
                 .catch { _liveData.postValue(MapViewState.Error()) }
-                .collect { reduce(it).also {viewState -> _liveData.postValue(viewState)} }
+                .collect { reduce(it).also { viewState -> _liveData.postValue(viewState) } }
         }
     }
 
-    private fun updateFolder(newPlaces: List<PlaceDTO>){
-        val polygons = arrayListOf<PlacePolygon>()
+    private fun merge(newPlaces: List<PlaceDTO>) {
+
+        //<editor-fold defaultstate="collapsed" desc="INNER FUNCTIONS">
+
+        fun List<PlacePolygon>.removeOutOfTheBox() = filter {
+            latestBoundingBox.contains(it.north, it.west)
+                    || latestBoundingBox.contains(it.north, it.east)
+                    || latestBoundingBox.contains(it.south, it.west)
+                    || latestBoundingBox.contains(it.south, it.east)
+        }
+
+        fun List<PlacePolygon>.removeDuplicates(idList: List<Int>) = filterNot { idList.contains(it.id) }
+        //</editor-fold>
+
+        val newPlaced = arrayListOf<PlacePolygon>()
             .apply { addAll(newPlaces.map { it.toPlacePolygon() }) }
-        if ((places.isNotEmpty() && polygons.isEmpty())) return
-        places = polygons
-        // TODO Issue #42:
-        // TODO 1 Удалить из старых полигонов те, которые вышли за границу bounding box'а.
-        // TODO 2 Из оставшихся удалить те, которые присутствуют в новых.
-        // TODO 3 Слить оставшиеся полигоны с новыми.
+        if ((places.isNotEmpty() && newPlaced.isEmpty())) return
+        places = places.removeOutOfTheBox()
+            .removeDuplicates(newPlaces.map { it.id })
+            .toMutableList().apply { addAll(newPlaced) }
         val selectedId = currentSelection?.id ?: -1
         currentSelection = null
         folder.items.apply {
@@ -170,7 +181,7 @@ class MapFragmentViewModel @Inject constructor(
 
     override fun reduce(dataState: AreaDataState) = when (dataState) {
         is AreaDataState.Success -> {
-            updateFolder(dataState.area.places)
+            merge(dataState.area.places)
             MapViewState.DataLoaded()
         }
         is AreaDataState.Loading -> MapViewState.Loading
