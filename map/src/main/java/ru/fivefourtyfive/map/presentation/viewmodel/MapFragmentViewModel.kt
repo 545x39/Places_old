@@ -28,6 +28,7 @@ import ru.fivefourtyfive.places.domain.entity.dto.PlaceDTO
 import ru.fivefourtyfive.places.framework.presentation.abstraction.IEventHandler
 import ru.fivefourtyfive.places.framework.presentation.abstraction.IReducer
 import ru.fivefourtyfive.places.util.MapMode
+import ru.fivefourtyfive.places.util.ifFalse
 import ru.fivefourtyfive.places.util.ifTrue
 import timber.log.Timber
 import javax.inject.Inject
@@ -58,7 +59,7 @@ class MapFragmentViewModel @Inject constructor(
 
     val liveData = _liveData as LiveData<MapViewState>
 
-    var currentSelection: PlacePolygon? = null
+    var currentSelection: Pair<Int, String> = -1 to ""
 
     var mapListenerDelay = when (settings.getFollowLocation()) {
         true -> FOLLOWING_LOCATION_DELAY
@@ -131,6 +132,19 @@ class MapFragmentViewModel @Inject constructor(
         }
     }
 
+    fun setHighlighted(id: Int, highlight: Boolean) {
+        places.filter { it.id == id }.take(1)
+            .apply { isEmpty().ifFalse { get(0).setHighlighted(highlight) } }
+    }
+
+    fun getPlaceById(id: Int): PlacePolygon? {
+        for (i in 0 until places.size) {
+            if (places[i].id == id)
+                return places[i]
+        }
+        return null
+    }
+
     private fun merge(newPlaces: List<PlaceDTO>) {
 
         //<editor-fold defaultstate="collapsed" desc="INNER FUNCTIONS">
@@ -142,7 +156,8 @@ class MapFragmentViewModel @Inject constructor(
                     || latestBoundingBox.contains(it.south, it.east)
         }
 
-        fun List<PlacePolygon>.removeDuplicates(idList: List<Int>) = filterNot { idList.contains(it.id) }
+        fun List<PlacePolygon>.removeDuplicates(idList: List<Int>) =
+            filterNot { idList.contains(it.id) }
         //</editor-fold>
 
         val newPlaced = arrayListOf<PlacePolygon>()
@@ -151,16 +166,10 @@ class MapFragmentViewModel @Inject constructor(
         places = places.removeOutOfTheBox()
             .removeDuplicates(newPlaces.map { it.id })
             .toMutableList().apply { addAll(newPlaced) }
-        val selectedId = currentSelection?.id ?: -1
-        currentSelection = null
         folder.items.apply {
             clear()
-            places.map {
-                (it.id == selectedId).ifTrue {
-                    currentSelection = it.apply { setHighlighted(true) }
-                }
-            }
             addAll(places)
+            setHighlighted(currentSelection.first, true)
         }
     }
 

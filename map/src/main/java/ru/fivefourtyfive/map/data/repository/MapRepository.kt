@@ -34,7 +34,6 @@ class MapRepository @Inject constructor(
         kotlin.runCatching {
             localDataSource.getArea(latMin, lonMin, latMax, lonMax, category, count, language)
                 .apply {
-                    Timber.e("FOUND PLACES: ${places?.size}")
                     if (places?.isNotEmpty() == true) {
                         emit(AreaDataState.Success(AreaDTO(this)))
                     }

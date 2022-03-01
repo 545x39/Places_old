@@ -125,7 +125,7 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
         viewModel.myLocation.enableMyLocation()
         centerAndZoom()
         mapView.onResume()
-        setPlaceTitle(viewModel.currentSelection)
+        switchSelection(viewModel.currentSelection)
         locationManager.getProviders(true).map {
             isPermissionGranted(requireContext(), ACCESS_FINE_LOCATION)
                 .ifTrue { locationManager.requestLocationUpdates(it, 1000, 5.0f, this) }
@@ -168,19 +168,24 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
         }
     }
 
-    fun setPlaceTitle(place: PlacePolygon?) {
-        when (place) {
-            null -> placeTitleButton.visibility = GONE
-            else -> {
-                place.setHighlighted(true)
-                placeTitle.text = place.title
-                placeTitle.setOnClickListener {
-                    navigate(
-                        appR.id.action_mapFragment_to_placeDetailsFragment,
-                        bundleOf(ID to place.id)
-                    )
+    fun switchSelection(selection: Pair<Int, String>?) {
+        with(viewModel) {
+            setHighlighted(viewModel.currentSelection.first, false)
+            currentSelection = selection ?: -1 to ""
+            val (id, title) = currentSelection
+            when (id < 0) {
+                true -> placeTitleButton.visibility = GONE
+                false -> {
+                    setHighlighted(id, true)
+                    placeTitle.text = title
+                    placeTitle.setOnClickListener {
+                        navigate(
+                            appR.id.action_mapFragment_to_placeDetailsFragment,
+                            bundleOf(ID to id)
+                        )
+                    }
+                    placeTitleButton.visibility = VISIBLE
                 }
-                placeTitleButton.visibility = VISIBLE
             }
         }
     }
@@ -281,19 +286,14 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
 
             //<editor-fold defaultstate="collapsed" desc="INNER FUNCTIONS">
             fun onSame() {
-                place.setHighlighted(false)
-                placeTitle.apply {
-                    text = ""
-                    visibility = GONE
-                }
-                viewModel.currentSelection = null
+                Timber.e("ON SAME")
+                switchSelection(null)
             }
 
             fun onDifferent() {
-                viewModel.currentSelection?.setHighlighted(false)
-                place.also {
-                    viewModel.currentSelection = it
-                    setPlaceTitle(it)
+                Timber.e("ON DIFFERENT")
+                place.apply {
+                    switchSelection(id to title)
                 }
                 mapView?.apply {
                     viewModel.isCenterSelectionEnabled()
@@ -301,8 +301,8 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
                 }
             }
             //</editor-fold>
-
-            when (place.id == viewModel.currentSelection?.id ?: 0) {
+            Timber.e("CURRENT: [${viewModel.currentSelection.second}]")
+            when (place.id == viewModel.currentSelection.first) {
                 true -> onSame()
                 false -> onDifferent()
             }
