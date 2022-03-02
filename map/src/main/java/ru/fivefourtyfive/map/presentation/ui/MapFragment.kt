@@ -12,9 +12,14 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.*
 import androidx.core.os.bundleOf
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.buffer
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -253,6 +258,7 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
         addMapListener(DelayedMapListener(object : MapListener {
             override fun onScroll(event: ScrollEvent?) = true.also {
                 getAndUpdate()
+                Lifecycle.State.INITIALIZED
             }
 
             override fun onZoom(event: ZoomEvent?) = true.also {

@@ -11,19 +11,19 @@ class FakeRemoteDataSource : IRemoteDataSource {
     }
 
     override suspend fun getArea(
-        lonMin: Double,
-        latMin: Double,
-        lonMax: Double,
-        latMax: Double,
+        north: Double,
+        west: Double,
+        south: Double,
+        east: Double,
         category: String?,
         page: Int?,
         count: Int?,
         language: String?
     ) = FakeData.getArea(
-        lonMin,
-        latMin,
-        lonMax,
-        latMax,
+        east,
+        south,
+        west,
+        north,
         category,
         page,
         count,
