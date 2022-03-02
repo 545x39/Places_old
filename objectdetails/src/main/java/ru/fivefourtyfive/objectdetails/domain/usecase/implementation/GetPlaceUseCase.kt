@@ -1,12 +1,11 @@
 package ru.fivefourtyfive.objectdetails.domain.usecase.implementation
 
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.flow.*
+import ru.fivefourtyfive.objectdetails.domain.datastate.PlaceDetailsDataState
 import ru.fivefourtyfive.objectdetails.domain.repository.abstraction.IPlaceDetailsRepository
 import ru.fivefourtyfive.objectdetails.domain.usecase.abstraction.IGetPlaceUseCase
 import ru.fivefourtyfive.objectdetails.presentation.viewmodel.PlaceDetailsViewState
-import ru.fivefourtyfive.objectdetails.domain.datastate.PlaceDetailsDataState
 import ru.fivefourtyfive.places.framework.presentation.abstraction.IReducer
 import javax.inject.Inject
 
@@ -17,11 +16,11 @@ class GetPlaceUseCase @Inject constructor(private val repository: IPlaceDetailsR
 
     override var dataBlocks: String? = null
 
-    override suspend fun execute() = flow {
-        repository.getPlace(id, dataBlocks).flowOn(IO)
+    override suspend fun execute(): Flow<PlaceDetailsViewState> = flow {
+        repository.getPlace(id, dataBlocks)
             .catch { emit(PlaceDetailsViewState.Error()) }
             .collect { emit(reduce((it))) }
-    }.flowOn(Main)
+    }.flowOn(IO)
 
     override fun reduce(dataState: PlaceDetailsDataState): PlaceDetailsViewState {
         with(dataState) {

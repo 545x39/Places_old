@@ -12,16 +12,16 @@ class RetrofitDataSource @Inject constructor(private val api: Api) : IRemoteData
     )
 
     override suspend fun getArea(
-        lonMin: Double,
-        latMin: Double,
-        lonMax: Double,
-        latMax: Double,
+        north: Double,
+        west: Double,
+        south: Double,
+        east: Double,
         category: String?,
         page: Int?,
         count: Int?,
         language: String?
     ) = api.getArea(
-        boundingBox = Parameters.add(lonMin, latMin, lonMax, latMax),
+        boundingBox = Parameters.add(east, south, west, north),
         category = category,
         page = page,
         count = count,

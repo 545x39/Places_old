@@ -4,11 +4,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
+import ru.fivefourtyfive.map.domain.repository.abstratcion.IMapRepository
 import ru.fivefourtyfive.places.data.datasource.abstraction.ILocalDataSource
 import ru.fivefourtyfive.places.data.datasource.abstraction.IRemoteDataSource
 import ru.fivefourtyfive.places.domain.datastate.AreaDataState
 import ru.fivefourtyfive.places.domain.entity.dto.AreaDTO
-import ru.fivefourtyfive.map.domain.repository.abstratcion.IMapRepository
 import javax.inject.Inject
 
 class MapRepository @Inject constructor(
@@ -27,7 +27,6 @@ class MapRepository @Inject constructor(
         language: String?
     ) = flow {
         emit(AreaDataState.Loading)
-//        Timber.e("FETCHING BY:  $latMin, $lonMin, $latMax, $lonMax")
         kotlin.runCatching {
             localDataSource.getArea(north, west, south, east, category, count, language)
                 .apply {
@@ -36,13 +35,14 @@ class MapRepository @Inject constructor(
                     }
                 }
         }
-//        remoteDataSource.getArea(east, south, west, north, category, page, count, language)
-//            .apply {
-//                when (debugInfo) {
-//                    null -> emit(AreaDataState.Success(AreaDTO(this)))
-//                        .also { withContext(Dispatchers.IO){localDataSource.persistArea(this@apply)} }
-//                    else -> emit(AreaDataState.Error(message = debugInfo?.message ?: ""))
-//                }
-//            }
+
+        remoteDataSource.getArea(north, west, south, east, category, page, count, language)
+            .apply {
+                when (debugInfo) {
+                    null -> emit(AreaDataState.Success(AreaDTO(this)))
+                        .also { withContext(Dispatchers.IO){localDataSource.persistArea(this@apply)} }
+                    else -> emit(AreaDataState.Error(message = debugInfo?.message ?: ""))
+                }
+            }
     }.flowOn(Dispatchers.IO)
 }
