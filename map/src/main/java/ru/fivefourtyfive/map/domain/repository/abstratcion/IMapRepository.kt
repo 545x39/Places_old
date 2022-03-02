@@ -7,10 +7,10 @@ import ru.fivefourtyfive.places.framework.datasource.implementation.remote.util.
 interface IMapRepository {
 
     suspend fun getArea(
-        lonMin: Double,
-        latMin: Double,
-        lonMax: Double,
-        latMax: Double,
+        north: Double,
+        west: Double,
+        south: Double,
+        east: Double,
         category: String? = null,
         page: Int? = 1,
         count: Int? = Value.MAX_OBJECTS_PER_PAGE,

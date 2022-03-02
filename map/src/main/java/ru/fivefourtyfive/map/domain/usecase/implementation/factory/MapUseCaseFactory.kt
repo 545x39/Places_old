@@ -9,14 +9,14 @@ class MapUseCaseFactory @Inject constructor(
 ) : IMapUseCaseFactory {
 
     override fun getAreaUseCase(
-        lonMin: Double,
-        latMin: Double,
-        lonMax: Double,
-        latMax: Double,
+        north: Double,
+        west: Double,
+        south: Double,
+        east: Double,
         category: String?,
         page: Int?,
         count: Int?,
         language: String?
     ): IGetAreaUseCase =
-        getAreaUseCase.init(lonMin, latMin, lonMax, latMax, category, page, count, language)
+        getAreaUseCase.init(north, west, south, east, category, page, count, language)
 }

@@ -49,9 +49,11 @@ import ru.fivefourtyfive.places.R as appR
 
 @Suppress("SpellCheckingInspection")
 
+    //<editor-fold defaultstate="collapsed" desc="CONSTANTS">
 private const val AUTO_ZOOM_IN_LEVEL = 16
 private const val AUTO_ZOOM_OUT_LEVEL = 14
 private const val ZOOM_ANIMATION_SPEED = 300L
+    //</editor-fold>
 
 class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener {
 
@@ -177,12 +179,14 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
                 true -> placeTitleButton.visibility = GONE
                 false -> {
                     setHighlighted(id, true)
-                    placeTitle.text = title
-                    placeTitle.setOnClickListener {
-                        navigate(
-                            appR.id.action_mapFragment_to_placeDetailsFragment,
-                            bundleOf(ID to id)
-                        )
+                    placeTitle.apply {
+                        text = title
+                        setOnClickListener {
+                            navigate(
+                                appR.id.action_mapFragment_to_placeDetailsFragment,
+                                bundleOf(ID to id)
+                            )
+                        }
                     }
                     placeTitleButton.visibility = VISIBLE
                 }
@@ -196,7 +200,11 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
         fun onSuccess() {
             runCatching {
                 viewModel.folder.items.map {
+                    if((it as PlacePolygon).title == "Ломоносовская отмель"){
+                        Timber.e("ID: [${it.id}], TITLE: [${it.title}]")
+                    }
                     (it as PlacePolygon).setOnClickListener(
+
                         PlaceOnClickListener(it)
                     )
                 }
@@ -286,12 +294,10 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
 
             //<editor-fold defaultstate="collapsed" desc="INNER FUNCTIONS">
             fun onSame() {
-                Timber.e("ON SAME")
                 switchSelection(null)
             }
 
             fun onDifferent() {
-                Timber.e("ON DIFFERENT")
                 place.apply {
                     switchSelection(id to title)
                 }
@@ -301,7 +307,7 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
                 }
             }
             //</editor-fold>
-
+//            Timber.e("ID: [${place.id}], TITLE: [${place.title}]")
             when (place.id == viewModel.currentSelection.first) {
                 true -> onSame()
                 false -> onDifferent()
@@ -404,10 +410,10 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
                 ) && it.zoomLevelDouble >= 10.0)).ifTrue {
                     dispatchEvent(
                         MapEvent.GetAreaEvent(
-                            it.boundingBox.lonWest,
-                            it.boundingBox.latSouth,
+                            it.boundingBox.latNorth,
                             it.boundingBox.lonEast,
-                            it.boundingBox.latNorth
+                            it.boundingBox.latSouth,
+                            it.boundingBox.lonWest
                         )
                     )
                 }

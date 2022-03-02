@@ -5,10 +5,10 @@ import ru.fivefourtyfive.places.framework.presentation.abstraction.IEvent
 @Suppress("SpellCheckingInspection")
 sealed class MapEvent : IEvent {
     class GetAreaEvent(
-        val lonM: Double,
-        val latM: Double,
-        val lonMx: Double,
-        val latMx: Double
+        val north: Double,
+        val east: Double,
+        val south: Double,
+        val west: Double
     ) : MapEvent()
     class SwitchMapModeEvent(val mode: Int): MapEvent()
     class SwitchWikimapiaOverlayEvent(val enable: Boolean): MapEvent()

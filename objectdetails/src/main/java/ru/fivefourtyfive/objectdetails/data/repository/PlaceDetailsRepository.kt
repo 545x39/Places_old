@@ -22,6 +22,7 @@ class PlaceDetailsRepository @Inject constructor(
 
     override suspend fun getPlace(id: Int, dataBlocks: String?): Flow<PlaceDetailsDataState> =
         flow {
+            Timber.e("PLACE ID: $id")
             emit(PlaceDetailsDataState.Loading)
             localDataSource.getPlace(id)
             ?.let {

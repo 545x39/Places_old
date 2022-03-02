@@ -28,8 +28,6 @@ import ru.fivefourtyfive.places.domain.entity.dto.PlaceDTO
 import ru.fivefourtyfive.places.framework.presentation.abstraction.IEventHandler
 import ru.fivefourtyfive.places.framework.presentation.abstraction.IReducer
 import ru.fivefourtyfive.places.util.MapMode
-import ru.fivefourtyfive.places.util.ifFalse
-import ru.fivefourtyfive.places.util.ifTrue
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
@@ -118,14 +116,14 @@ class MapFragmentViewModel @Inject constructor(
         if (settings.getMapMode() == MapMode.SATELLITE) satelliteTileSource else schemeTileSource
 
     private fun getArea(
-        lonMin: Double,
-        latMin: Double,
-        lonMax: Double,
-        latMax: Double
+        north: Double,
+        west: Double,
+        south: Double,
+        east: Double
     ) {
         viewModelScope.launch {
-            latestBoundingBox.set(lonMax, latMax, lonMin, latMin)
-            factory.getAreaUseCase(lonMin, latMin, lonMax, latMax)
+            latestBoundingBox.set(west, north, east, south)
+            factory.getAreaUseCase(north, west, south, east)
                 .execute()
                 .catch { _liveData.postValue(MapViewState.Error()) }
                 .collect { reduce(it).also { viewState -> _liveData.postValue(viewState) } }
@@ -173,7 +171,7 @@ class MapFragmentViewModel @Inject constructor(
     override fun handleEvent(event: MapEvent) {
         settings.apply {
             when (event) {
-                is MapEvent.GetAreaEvent -> event.apply { getArea(lonM, latM, lonMx, latMx) }
+                is MapEvent.GetAreaEvent -> event.apply { getArea(north, west, south, east) }
                 is MapEvent.SwitchMapModeEvent -> setMapMode(event.mode)
                 is MapEvent.SwitchWikimapiaOverlayEvent -> setWikimapiaOverlays(event.enable)
                 is MapEvent.SwitchTransportationOverlayEvent -> setTransportationOverlay(event.enable)

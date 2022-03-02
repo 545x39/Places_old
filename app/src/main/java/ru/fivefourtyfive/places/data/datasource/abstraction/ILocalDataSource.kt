@@ -9,11 +9,12 @@ interface ILocalDataSource {
 
     suspend fun persistArea(area: Places)
 
+    //south, east, north, west
     suspend fun getArea(
-        latMin: Double,
-        lonMin: Double,
-        latMax: Double,
-        lonMax: Double,
+        north: Double,
+        west: Double,
+        south: Double,
+        east: Double,
         category: String?,
         count: Int?,
         language: String?
