@@ -57,9 +57,9 @@ dependencies {
     def compose_version = "1.1.0-alpha06"
     def activity_compose_version = "1.3.1"
     ////CORE
-    implementation 'androidx.core:core-ktx:1.6.0'
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.5.0'
     // VIEW MODEL AND LIVE DATA
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     ////DAGGER
@@ -67,9 +67,9 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
     // Coroutine lifecycle extensions
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.1"
     //TIMBER
     implementation "com.jakewharton.timber:timber:$timber_version"
     //COROUTINES
