@@ -258,7 +258,6 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
         addMapListener(DelayedMapListener(object : MapListener {
             override fun onScroll(event: ScrollEvent?) = true.also {
                 getAndUpdate()
-                Lifecycle.State.INITIALIZED
             }
 
             override fun onZoom(event: ZoomEvent?) = true.also {

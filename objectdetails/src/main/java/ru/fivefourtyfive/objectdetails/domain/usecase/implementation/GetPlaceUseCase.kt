@@ -1,5 +1,6 @@
 package ru.fivefourtyfive.objectdetails.domain.usecase.implementation
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
@@ -26,6 +27,7 @@ class GetPlaceUseCase @Inject constructor(private val repository: IPlaceDetailsR
             .flowOn(IO)
 
     override fun reduce(dataState: PlaceDetailsDataState): PlaceDetailsViewState {
+        Dispatchers.Default
         with(dataState) {
             return when (this) {
                 is PlaceDetailsDataState.Success -> PlaceDetailsViewState.Success(
