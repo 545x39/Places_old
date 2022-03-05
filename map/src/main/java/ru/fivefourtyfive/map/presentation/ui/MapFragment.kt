@@ -205,11 +205,7 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
         fun onSuccess() {
             runCatching {
                 viewModel.folder.items.map {
-                    if((it as PlacePolygon).title == "Ломоносовская отмель"){
-                        Timber.e("ID: [${it.id}], TITLE: [${it.title}]")
-                    }
                     (it as PlacePolygon).setOnClickListener(
-
                         PlaceOnClickListener(it)
                     )
                 }
@@ -258,7 +254,6 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
         addMapListener(DelayedMapListener(object : MapListener {
             override fun onScroll(event: ScrollEvent?) = true.also {
                 getAndUpdate()
-                Lifecycle.State.INITIALIZED
             }
 
             override fun onZoom(event: ZoomEvent?) = true.also {
@@ -407,7 +402,7 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
     private fun getArea(force: Boolean = false): Boolean {
 
         fun isFarEnough(point1: IGeoPoint, point2: IGeoPoint) = getDistance(point1, point2) > 5
-
+//        lifecycleScope.launch {  }
         with(viewModel) {
             mapView.let {
                 (force || (wikimapiaOverlaysEnabled() && isFarEnough(
