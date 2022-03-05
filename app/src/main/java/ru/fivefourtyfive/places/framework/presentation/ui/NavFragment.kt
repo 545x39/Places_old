@@ -8,6 +8,7 @@ import androidx.navigation.dynamicfeatures.DynamicInstallMonitor
 import androidx.navigation.fragment.findNavController
 import com.google.android.play.core.splitinstall.SplitInstallManager
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
+import kotlinx.coroutines.Dispatchers
 import ru.fivefourtyfive.places.util.InstallObserver
 
 open class NavFragment: Fragment() {
@@ -20,6 +21,7 @@ open class NavFragment: Fragment() {
     }
 
     protected fun navigate(resId: Int, args: Bundle? = null) {
+        Dispatchers.Unconfined
         DynamicInstallMonitor().also {
             findNavController().navigate(resId, args, null, DynamicExtras(it))
             InstallObserver.observeInstall(

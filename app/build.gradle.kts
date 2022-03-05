@@ -76,19 +76,20 @@ android {
     }
 
     setDynamicFeatures(setOf(":map", ":search", ":settings", ":objectdetails"))
+
 }
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="DEPENDENCIES">
 dependencies {
     /** ANDROID CORE */
-    implementation("androidx.core:core-ktx:$CORE_VERSION")
-    implementation("androidx.appcompat:appcompat:$APPCOMPAT_VERSION")
-    implementation("com.google.android.material:material:$MATERIAL_VERSION")
+    api("androidx.core:core-ktx:$CORE_VERSION")
+    api("androidx.appcompat:appcompat:$APPCOMPAT_VERSION")
+    api("com.google.android.material:material:$MATERIAL_VERSION")
     /** VIEW MODEL AND LIVE DATA */
-    implementation("androidx.lifecycle:lifecycle-extensions:$LIFECYCLE_VERSION")
+    api("androidx.lifecycle:lifecycle-extensions:$LIFECYCLE_VERSION")
     /** DAGGER */
-    implementation("com.google.dagger:dagger:$DAGGER_VERSION")
+    api("com.google.dagger:dagger:$DAGGER_VERSION")
     kapt("com.google.dagger:dagger-compiler:$DAGGER_VERSION")
     kapt("com.google.dagger:dagger-android-processor:$DAGGER_VERSION")
     ////
@@ -107,27 +108,32 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-scalars:$RETROFIT_VERSION")
     /** GSON */
     implementation("com.google.code.gson:gson:$GSON_VERSION")
-    /** Coroutine lifecycle extensions */
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$LIFECYCLE_EXT_VERSION")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$LIFECYCLE_EXT_VERSION")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$LIFECYCLE_EXT_VERSION")
-    /** TIMBER */
-    implementation("com.jakewharton.timber:timber:$TIMBER_VERSION")
     /** COROUTINES */
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$COROUTINES_VERSION")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$COROUTINES_VERSION")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$COROUTINES_VERSION")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:$COROUTINES_VERSION")
+    /** Coroutine lifecycle extensions */
+    api("androidx.lifecycle:lifecycle-livedata-ktx:$LIFECYCLE_EXT_VERSION")
+    api("androidx.lifecycle:lifecycle-viewmodel-ktx:$LIFECYCLE_EXT_VERSION")
+    api("androidx.lifecycle:lifecycle-runtime-ktx:$LIFECYCLE_EXT_VERSION")
     /** WORK MANAGER (+ coroutines) */
     implementation("androidx.work:work-runtime-ktx:$WORK_MANAGER_VERSION")
+    /** TIMBER */
+    api("com.jakewharton.timber:timber:$TIMBER_VERSION")
     /** PREFERENCES */
-    implementation("androidx.preference:preference-ktx:$PREFERENCE_VERSION")
+    api("androidx.preference:preference-ktx:$PREFERENCE_VERSION")
     /** NAVIGATION COMPONENT */
-    implementation("androidx.navigation:navigation-fragment-ktx:$NAVIGATION_VERSION")
-    implementation("androidx.navigation:navigation-ui-ktx:$NAVIGATION_VERSION")
+    api("androidx.navigation:navigation-fragment-ktx:$NAVIGATION_VERSION")
+    api("androidx.navigation:navigation-ui-ktx:$NAVIGATION_VERSION")
     api("androidx.navigation:navigation-dynamic-features-fragment:$NAVIGATION_VERSION")
     /** PLAY CORE */
     api("com.google.android.play:core:$PLAY_CORE_VERSION")
     /** TESTING */
-    testImplementation("junit:junit:$JUNIT_VERSION")
+//    testImplementation("junit:junit:$JUNIT_VERSION")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.8.2")
+    testImplementation("junit:junit:4.13.2")
+    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.8.2")
     androidTestImplementation("androidx.test.ext:junit:$JUNIT_EXT_VERSION")
     androidTestImplementation("androidx.test.espresso:espresso-core:$ESPRESSO_VERSION")
     /** ROOM */

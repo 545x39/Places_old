@@ -16,12 +16,12 @@ import java.io.StringWriter
 suspend fun <A, B> Iterable<A>.parallelMap(f: suspend (A) -> B): List<B> =
     coroutineScope { map { async { f(it) } }.awaitAll() }
 
-fun <T> Boolean.ifTrue(block: () -> T): T? = when (this) {
+inline fun <T> Boolean.ifTrue(block: () -> T): T? = when (this) {
     true -> block()
     false -> null
 }
 
-fun <T> Boolean.ifFalse(block: () -> T): T? = this.not().ifTrue(block)
+inline fun <T> Boolean.ifFalse(block: () -> T): T? = this.not().ifTrue(block)
 
 fun decimalIpToString(decimal: Long) = ((decimal shr 24 and 0xFF).toString() + "."
         + (decimal shr 16 and 0xFF) + "."
@@ -44,6 +44,7 @@ fun stackTraceToString(exception: Throwable): String {
 
 
 //@ExperimentalCoroutinesApi
+@Suppress("EXPERIMENTAL_API_USAGE")
 fun View.clicks(): Flow<Unit> = callbackFlow {
     setOnClickListener {
         trySend(Unit)
@@ -52,6 +53,7 @@ fun View.clicks(): Flow<Unit> = callbackFlow {
 }
 
 //@ExperimentalCoroutinesApi
+@Suppress("EXPERIMENTAL_API_USAGE")
 fun View.longClicks(): Flow<Unit> = callbackFlow {
     setOnLongClickListener {
         @Suppress("DEPRECATION")
