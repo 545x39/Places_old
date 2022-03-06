@@ -15,6 +15,7 @@ import dependencies.Versions.JUNIT_EXT_VERSION
 import dependencies.Versions.JUNIT_VERSION
 import dependencies.Versions.LIFECYCLE_EXT_VERSION
 import dependencies.Versions.LIFECYCLE_VERSION
+import dependencies.Versions.LOST_VERSION
 import dependencies.Versions.MATERIAL_VERSION
 import dependencies.Versions.NAVIGATION_VERSION
 import dependencies.Versions.PLAY_CORE_VERSION
@@ -127,6 +128,10 @@ dependencies {
     api("androidx.navigation:navigation-dynamic-features-fragment:$NAVIGATION_VERSION")
     /** PLAY CORE */
     api("com.google.android.play:core:$PLAY_CORE_VERSION")
+    /** LOST */
+    @Suppress("SpellCheckingInspection")
+    api("com.mapzen.android:lost:$LOST_VERSION")
+//    implementation("com.google.android.gms:play-services-location:18.0.0")
     /** TESTING */
 //    testImplementation("junit:junit:$JUNIT_VERSION")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
