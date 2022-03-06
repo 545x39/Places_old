@@ -1,6 +1,7 @@
 package ru.fivefourtyfive.places.data.datasource.abstraction
 
 import android.location.Location
+import kotlinx.coroutines.flow.SharedFlow
 
 interface ILocationDataSource {
 
@@ -8,5 +9,5 @@ interface ILocationDataSource {
 
     fun stopLocationUpdates()
 
-    fun getLastKnownLocation(): Location
+    fun location(): SharedFlow<Location>
 }

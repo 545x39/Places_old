@@ -16,6 +16,7 @@ object Versions {
     const val INTERCEPTOR_VERSION = "5.0.0-alpha.2"
     const val GSON_VERSION = "2.8.6"
     const val PLAY_CORE_VERSION = "1.10.1"
+    const val LOST_VERSION = "3.0.4"
     const val TIMBER_VERSION = "5.0.1"
     const val JUNIT_VERSION = "4.13.2"
     const val JUNIT_EXT_VERSION = "1.1.3"

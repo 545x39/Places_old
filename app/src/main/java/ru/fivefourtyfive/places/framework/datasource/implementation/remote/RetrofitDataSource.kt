@@ -3,6 +3,8 @@ package ru.fivefourtyfive.places.framework.datasource.implementation.remote
 import ru.fivefourtyfive.places.data.datasource.abstraction.IRemoteDataSource
 import ru.fivefourtyfive.places.framework.datasource.implementation.remote.util.Parameters
 import javax.inject.Inject
+import kotlin.math.max
+import kotlin.math.min
 
 class RetrofitDataSource @Inject constructor(private val api: Api) : IRemoteDataSource {
 
@@ -21,7 +23,12 @@ class RetrofitDataSource @Inject constructor(private val api: Api) : IRemoteData
         count: Int?,
         language: String?
     ) = api.getArea(
-        boundingBox = Parameters.add(east, south, west, north),
+        boundingBox = Parameters.add(
+            min(east, west),
+            min(north, south),
+            max(east, west),
+            max(north, south)
+        ),
         category = category,
         page = page,
         count = count,
