@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.flowOn
 import ru.fivefourtyfive.places.data.datasource.abstraction.IRemoteDataSource
 import ru.fivefourtyfive.places.framework.datasource.implementation.remote.util.Value
 import ru.fivefourtyfive.places.domain.datastate.SearchResultDataState
-import ru.fivefourtyfive.places.domain.entity.dto.SearchResultsDTO
+import ru.fivefourtyfive.places.domain.dto.places.SearchResultsDTO
 import javax.inject.Inject
 
 class SearchUseCase @Inject constructor(private val remoteDataSource: IRemoteDataSource) {

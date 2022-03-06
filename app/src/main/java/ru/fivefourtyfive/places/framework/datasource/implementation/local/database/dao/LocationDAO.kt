@@ -3,7 +3,7 @@ package ru.fivefourtyfive.places.framework.datasource.implementation.local.datab
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.REPLACE
-import ru.fivefourtyfive.places.domain.entity.Location
+import ru.fivefourtyfive.places.domain.entity.places.Location
 
 @Dao
 interface LocationDAO {

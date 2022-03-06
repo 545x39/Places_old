@@ -1,8 +1,8 @@
-package ru.fivefourtyfive.places.domain.entity.dto
+package ru.fivefourtyfive.places.domain.dto.places
 
-import ru.fivefourtyfive.places.domain.entity.DebugInfo
-import ru.fivefourtyfive.places.domain.entity.Place
-import ru.fivefourtyfive.places.domain.entity.Places
+import ru.fivefourtyfive.places.domain.entity.places.DebugInfo
+import ru.fivefourtyfive.places.domain.entity.places.Place
+import ru.fivefourtyfive.places.domain.entity.places.Places
 
 abstract class PlacesDTO<PLACE>(places: Places) {
     var debugInfo: DebugInfo? = places.debugInfo

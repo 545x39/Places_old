@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.places.domain.entity
+package ru.fivefourtyfive.places.domain.entity.places
 
 import androidx.room.*
 import com.google.gson.annotations.Expose
@@ -30,8 +30,8 @@ import ru.fivefourtyfive.places.domain.entity.util.PlaceFields.TITLE
 import ru.fivefourtyfive.places.domain.entity.util.PlaceFields.URL
 import ru.fivefourtyfive.places.domain.entity.util.PlaceFields.URL_HTML
 import ru.fivefourtyfive.places.domain.entity.util.PlaceFields.WIKIPEDIA
-import ru.fivefourtyfive.places.domain.entity.util.PlaceFields.X
-import ru.fivefourtyfive.places.domain.entity.util.PlaceFields.Y
+import ru.fivefourtyfive.places.domain.entity.util.X
+import ru.fivefourtyfive.places.domain.entity.util.Y
 
 @Entity(
     tableName = TABLE_PLACES,

@@ -3,10 +3,10 @@ package ru.fivefourtyfive.places.data.datasource.abstraction
 import ru.fivefourtyfive.places.framework.datasource.implementation.remote.util.DataBlock
 import ru.fivefourtyfive.places.framework.datasource.implementation.remote.util.Parameters
 import ru.fivefourtyfive.places.framework.datasource.implementation.remote.util.Value
-import ru.fivefourtyfive.places.domain.entity.Categories
-import ru.fivefourtyfive.places.domain.entity.Category
-import ru.fivefourtyfive.places.domain.entity.Places
-import ru.fivefourtyfive.places.domain.entity.Place
+import ru.fivefourtyfive.places.domain.entity.places.Categories
+import ru.fivefourtyfive.places.domain.entity.places.Category
+import ru.fivefourtyfive.places.domain.entity.places.Places
+import ru.fivefourtyfive.places.domain.entity.places.Place
 
 interface IRemoteDataSource {
 

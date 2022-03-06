@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.places.domain.entity
+package ru.fivefourtyfive.places.domain.entity.places
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

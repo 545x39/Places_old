@@ -3,6 +3,9 @@
 package ru.fivefourtyfive.places.domain.entity.util
 
 const val ID                        = "id"
+const val NAME                      = "name"
+const val X                         = "x"
+const val Y                         = "y"
 
 @Suppress("SpellCheckingInspection")
 object PlaceFields{
@@ -26,8 +29,6 @@ object PlaceFields{
     const val IS_BUILDING               = "is_building"
     const val IS_REGION                 = "is_region"
     const val IS_DELETED                = "is_deleted"
-    const val X                         = "x"
-    const val Y                         = "y"
     const val PL                        = "pl"
     const val SQUARE                    = "square"
     const val IS_PROTECTED              = "isProtected"
@@ -55,4 +56,13 @@ object LocationFields{
     const val CITY_GUIDE_DOMAIN         = "cityguideDomain"
     const val CITY                      = "city"
     const val ZOOM                      = "zoom"
+}
+
+object TrackFields{
+    const val TRACK_ID                  = "track_id"
+    const val ELAPSED_TIME              = "elapsed_time"
+    const val START_TIME                = "start_time"
+    const val END_TIME                  = "end_time"
+    const val SPEED                     = "speed"
+    const val IS_RECORDING              = "is_recording"
 }

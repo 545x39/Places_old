@@ -3,9 +3,8 @@ package ru.fivefourtyfive.places.framework.datasource.implementation.local.datab
 import androidx.room.TypeConverter
 import ru.fivefourtyfive.places.framework.datasource.implementation.local.database.typeconverter.util.CoordinateDelimiters.VALUE_DELIMITER
 import ru.fivefourtyfive.places.framework.datasource.implementation.local.database.typeconverter.util.CoordinateDelimiters.COORDINATE_DELIMITER
-import ru.fivefourtyfive.places.domain.entity.PolygonPoint
+import ru.fivefourtyfive.places.domain.entity.places.PolygonPoint
 import ru.fivefourtyfive.places.util.ifTrue
-import timber.log.Timber
 
 class PolygonConverter {
 
