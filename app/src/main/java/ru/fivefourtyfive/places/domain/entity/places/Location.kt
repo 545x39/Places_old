@@ -1,9 +1,6 @@
-package ru.fivefourtyfive.places.domain.entity
+package ru.fivefourtyfive.places.domain.entity.places
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import ru.fivefourtyfive.places.framework.datasource.implementation.local.database.util.TableName.TABLE_LOCATIONS
@@ -21,6 +18,7 @@ import ru.fivefourtyfive.places.domain.entity.util.LocationFields.PLACE_ID
 import ru.fivefourtyfive.places.domain.entity.util.LocationFields.SOUTH
 import ru.fivefourtyfive.places.domain.entity.util.LocationFields.STATE
 import ru.fivefourtyfive.places.domain.entity.util.LocationFields.WEST
+import ru.fivefourtyfive.places.domain.entity.util.PlaceFields
 
 @Entity(
     tableName = TABLE_LOCATIONS,
@@ -30,7 +28,9 @@ import ru.fivefourtyfive.places.domain.entity.util.LocationFields.WEST
         childColumns = [PLACE_ID],
         onUpdate = ForeignKey.CASCADE,
         onDelete = ForeignKey.CASCADE
-    )])
+    )],
+    indices = [Index(value = [ID], unique = true), Index(value = [PLACE_ID])]
+)
 data class Location(
     @ColumnInfo(name = ID)
     @Expose(serialize = false, deserialize = false)
@@ -94,7 +94,7 @@ data class Location(
     @SerializedName("zoom")
     @Expose
     val zoom: Double? = null
-){
+) {
     @ColumnInfo(name = PLACE_ID)
     var placeId: Int? = null
 }

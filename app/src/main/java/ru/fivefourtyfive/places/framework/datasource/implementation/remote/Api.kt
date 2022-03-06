@@ -33,10 +33,10 @@ import ru.fivefourtyfive.places.framework.datasource.implementation.remote.util.
 import ru.fivefourtyfive.places.framework.datasource.implementation.remote.util.Value.JSON
 import ru.fivefourtyfive.places.framework.datasource.implementation.remote.util.Value.MAX_OBJECTS_PER_PAGE
 import ru.fivefourtyfive.places.framework.datasource.implementation.remote.util.Value.RU
-import ru.fivefourtyfive.places.domain.entity.Categories
-import ru.fivefourtyfive.places.domain.entity.Category
-import ru.fivefourtyfive.places.domain.entity.Place
-import ru.fivefourtyfive.places.domain.entity.Places
+import ru.fivefourtyfive.places.domain.entity.places.Categories
+import ru.fivefourtyfive.places.domain.entity.places.Category
+import ru.fivefourtyfive.places.domain.entity.places.Place
+import ru.fivefourtyfive.places.domain.entity.places.Places
 
 interface Api {
 

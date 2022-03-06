@@ -1,7 +1,7 @@
 package ru.fivefourtyfive.places.data.datasource.abstraction
 
-import ru.fivefourtyfive.places.domain.entity.Place
-import ru.fivefourtyfive.places.domain.entity.Places
+import ru.fivefourtyfive.places.domain.entity.places.Place
+import ru.fivefourtyfive.places.domain.entity.places.Places
 
 interface ILocalDataSource {
 
@@ -9,7 +9,6 @@ interface ILocalDataSource {
 
     suspend fun persistArea(area: Places)
 
-    //south, east, north, west
     suspend fun getArea(
         north: Double,
         west: Double,

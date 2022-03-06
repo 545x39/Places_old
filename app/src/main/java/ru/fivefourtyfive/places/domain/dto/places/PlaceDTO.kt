@@ -1,6 +1,6 @@
-package ru.fivefourtyfive.places.domain.entity.dto
+package ru.fivefourtyfive.places.domain.dto.places
 
-import ru.fivefourtyfive.places.domain.entity.Place
+import ru.fivefourtyfive.places.domain.entity.places.Place
 
 open class PlaceDTO(place: Place) {
     var debugInfo   = place.debugInfo

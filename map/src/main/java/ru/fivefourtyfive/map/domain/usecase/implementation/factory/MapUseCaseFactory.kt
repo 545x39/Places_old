@@ -17,6 +17,14 @@ class MapUseCaseFactory @Inject constructor(
         page: Int?,
         count: Int?,
         language: String?
-    ): IGetAreaUseCase =
-        getAreaUseCase.init(north, west, south, east, category, page, count, language)
+    ): IGetAreaUseCase = getAreaUseCase.init(
+        north,
+        west,
+        south,
+        east,
+        category,
+        page,
+        count,
+        language
+    )
 }

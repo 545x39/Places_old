@@ -1,6 +1,6 @@
 package ru.fivefourtyfive.places.domain.datastate
 
-import ru.fivefourtyfive.places.domain.entity.dto.SearchResultsDTO
+import ru.fivefourtyfive.places.domain.dto.places.SearchResultsDTO
 
 sealed class SearchResultDataState : DataState{
     class Success(val area: SearchResultsDTO) : SearchResultDataState()

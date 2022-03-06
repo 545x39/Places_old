@@ -24,7 +24,7 @@ import ru.fivefourtyfive.map.presentation.util.TileSource.ARCGIS_IMAGERY_TILE_SO
 import ru.fivefourtyfive.map.presentation.util.TileSource.CARTO_VOYAGER_TILE_SOURCE
 import ru.fivefourtyfive.map.presentation.util.toPlacePolygon
 import ru.fivefourtyfive.places.domain.datastate.AreaDataState
-import ru.fivefourtyfive.places.domain.entity.dto.PlaceDTO
+import ru.fivefourtyfive.places.domain.dto.places.PlaceDTO
 import ru.fivefourtyfive.places.framework.presentation.abstraction.IEventHandler
 import ru.fivefourtyfive.places.framework.presentation.abstraction.IReducer
 import ru.fivefourtyfive.places.util.MapMode

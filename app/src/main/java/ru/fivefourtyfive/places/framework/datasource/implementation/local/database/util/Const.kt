@@ -1,7 +1,7 @@
 package ru.fivefourtyfive.places.framework.datasource.implementation.local.database.util
 
 object Version{
-    const val DB_VERSION = 2
+    const val DB_VERSION = 3
 }
 
 object Path {
@@ -16,5 +16,7 @@ object TableName{
     const val TABLE_POINTS              = "points"
     const val TABLE_PHOTOS              = "photos"
     const val TABLE_LOCATIONS           = "locations"
+    const val TABLE_TRACKS              = "tracks"
+    const val TABLE_TRACK_POINTS        = "track_points"
 
 }

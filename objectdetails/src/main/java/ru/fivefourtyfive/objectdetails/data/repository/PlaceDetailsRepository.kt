@@ -10,9 +10,8 @@ import ru.fivefourtyfive.objectdetails.domain.repository.abstraction.IPlaceDetai
 import ru.fivefourtyfive.places.data.datasource.abstraction.ILocalDataSource
 import ru.fivefourtyfive.places.data.datasource.abstraction.IRemoteDataSource
 import ru.fivefourtyfive.objectdetails.domain.datastate.PlaceDetailsDataState
-import ru.fivefourtyfive.places.domain.entity.Place
-import ru.fivefourtyfive.places.domain.entity.dto.PlaceDescriptionDTO
-import timber.log.Timber
+import ru.fivefourtyfive.places.domain.entity.places.Place
+import ru.fivefourtyfive.places.domain.dto.places.PlaceDescriptionDTO
 import javax.inject.Inject
 
 class PlaceDetailsRepository @Inject constructor(

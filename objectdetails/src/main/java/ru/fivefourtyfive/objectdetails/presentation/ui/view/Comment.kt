@@ -12,7 +12,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ru.fivefourtyfive.places.domain.entity.dto.CommentDTO
+import ru.fivefourtyfive.places.domain.dto.places.CommentDTO
 import java.text.SimpleDateFormat
 import java.util.*
 import ru.fivefourtyfive.places.R as appR

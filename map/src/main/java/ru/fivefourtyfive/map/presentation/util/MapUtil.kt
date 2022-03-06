@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.location.Location
-import android.os.Environment
 import org.osmdroid.api.IGeoPoint
 import org.osmdroid.events.MapListener
 import org.osmdroid.tileprovider.modules.SqlTileWriter
@@ -14,9 +13,8 @@ import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlay
 import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlayOptions
 import org.osmdroid.views.overlay.simplefastpoint.SimplePointTheme
 import ru.fivefourtyfive.map.presentation.ui.overlay.PlacePolygon
-import ru.fivefourtyfive.places.domain.entity.dto.PlaceDTO
+import ru.fivefourtyfive.places.domain.dto.places.PlaceDTO
 import ru.fivefourtyfive.places.util.ifTrue
-import java.io.File
 
 
 object MapUtil {

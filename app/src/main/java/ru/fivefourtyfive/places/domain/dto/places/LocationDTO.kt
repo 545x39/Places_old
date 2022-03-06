@@ -1,6 +1,6 @@
-package ru.fivefourtyfive.places.domain.entity.dto
+package ru.fivefourtyfive.places.domain.dto.places
 
-import ru.fivefourtyfive.places.domain.entity.Location
+import ru.fivefourtyfive.places.domain.entity.places.Location
 
 class LocationDTO(location: Location?) {
 

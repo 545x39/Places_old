@@ -2,6 +2,7 @@ package ru.fivefourtyfive.places.framework.datasource.implementation.remote
 
 import ru.fivefourtyfive.places.framework.datasource.implementation.remote.util.Value.RU
 import ru.fivefourtyfive.places.domain.entity.*
+import ru.fivefourtyfive.places.domain.entity.places.*
 
 object FakeData {
 
@@ -18,87 +19,87 @@ object FakeData {
         isBuilding = false,
         isRegion = false,
         isDeleted = false,
-        tags = listOf(
-            Tag(196, "Вторая мировая война"),
-            Tag(1147, "Первая мировая война"),
-            Tag(2750, "оборонительное сооружение"),
-            Tag(6413, "артиллерийская батарея"),
-            Tag(44858, "объект всемирного наследия ЮНЕСКО")
-        ),
-        photos = listOf(
-            Photo(
-                id = 1449250,
-                size = 105297,
-                status = 0,
-                objectId = 18307319,
-                userId = 799076,
-                userName = "miraru1",
-                time = 1292502478,
-                timeString = "11 лет назад",
-                lastUserId = 799076,
-                lastUserName = "miraru1",
-                url960 = "http://photos.wikimapia.org/p/00/01/44/92/50_960.jpg",
-                url1280 = "http://photos.wikimapia.org/p/00/01/44/92/50_1280.jpg",
-                urlBig = "http://photos.wikimapia.org/p/00/01/44/92/50_big.jpg",
-                thumbnailUrl = "http://photos.wikimapia.org/p/00/01/44/92/50_75.jpg",
-                thumbnailRetinaUrl = "http://photos.wikimapia.org/p/00/01/44/92/50_75@2x.jpg"
-            ),
-            Photo(
-                id = 2560539,
-                size = 4247643,
-                status = 0,
-                objectId = 18307319,
-                userId = 0,
-                userName = "Guest",
-                time = 1341073199,
-                timeString = "9 лет назад",
-                lastUserId = 0,
-                lastUserName = "Guest",
-                userIp = "0",
-                fullUrl = "http://photos.wikimapia.org/p/00/02/56/05/39_full.jpg",
-                url960 = "http://photos.wikimapia.org/p/00/02/56/05/39_960.jpg",
-                url1280 = "http://photos.wikimapia.org/p/00/02/56/05/39_1280.jpg",
-                urlBig = "http://photos.wikimapia.org/p/00/02/56/05/39_big.jpg",
-                thumbnailUrl = "http://photos.wikimapia.org/p/00/02/56/05/39_75.jpg",
-                thumbnailRetinaUrl = "http://photos.wikimapia.org/p/00/02/56/05/39_75@2x.jpg"
-            )
-        ),
-        comments = listOf(
-            Comment(
-                placeId = 18307319,
-                num = 1,
-                langId = 1,
-                userId = 0,
-                userIp = -1293120350,
-                userPhoto = "",
-                name = "fcts2009",
-                message = "Фото устарели,сейчас нет колючки,орудия покрашены,доступ открыт!Отличное место для любителей истории,не хуже бункеров линии Мажино или Атлантического Вала Гитлера!Проблема только добраться,дорог нет,распутица...",
-                good = 0,
-                bad = 1,
-                block = false,
-                date = 1411164683,
-                moderUid = 0,
-                moderatorName = null,
-                isDeleted = false
-            ),
-            Comment(
-                placeId = 18307319,
-                num = 2,
-                langId = 1,
-                userId = 2363734,
-                userIp = -720032043,
-                userPhoto = "/img/nofoto_50.png",
-                name = "FotosergS",
-                message = "Форт \"Красная Горка\" (подробный фотоальбом): \r\nhttps://fotki.yandex.ru/users/fotosergs/album/140144/",
-                good = 0,
-                bad = 0,
-                block = false,
-                date = 1440790244,
-                moderUid = 0,
-                moderatorName = null,
-                isDeleted = false
-            )
-        ),
+//        tags = listOf(
+//            Tag(196, "Вторая мировая война"),
+//            Tag(1147, "Первая мировая война"),
+//            Tag(2750, "оборонительное сооружение"),
+//            Tag(6413, "артиллерийская батарея"),
+//            Tag(44858, "объект всемирного наследия ЮНЕСКО")
+//        ),
+//        photos = listOf(
+//            Photo(
+//                id = 1449250,
+//                size = 105297,
+//                status = 0,
+//                objectId = 18307319,
+//                userId = 799076,
+//                userName = "miraru1",
+//                time = 1292502478,
+//                timeString = "11 лет назад",
+//                lastUserId = 799076,
+//                lastUserName = "miraru1",
+//                url960 = "http://photos.wikimapia.org/p/00/01/44/92/50_960.jpg",
+//                url1280 = "http://photos.wikimapia.org/p/00/01/44/92/50_1280.jpg",
+//                urlBig = "http://photos.wikimapia.org/p/00/01/44/92/50_big.jpg",
+//                thumbnailUrl = "http://photos.wikimapia.org/p/00/01/44/92/50_75.jpg",
+//                thumbnailRetinaUrl = "http://photos.wikimapia.org/p/00/01/44/92/50_75@2x.jpg"
+//            ),
+//            Photo(
+//                id = 2560539,
+//                size = 4247643,
+//                status = 0,
+//                objectId = 18307319,
+//                userId = 0,
+//                userName = "Guest",
+//                time = 1341073199,
+//                timeString = "9 лет назад",
+//                lastUserId = 0,
+//                lastUserName = "Guest",
+//                userIp = "0",
+//                fullUrl = "http://photos.wikimapia.org/p/00/02/56/05/39_full.jpg",
+//                url960 = "http://photos.wikimapia.org/p/00/02/56/05/39_960.jpg",
+//                url1280 = "http://photos.wikimapia.org/p/00/02/56/05/39_1280.jpg",
+//                urlBig = "http://photos.wikimapia.org/p/00/02/56/05/39_big.jpg",
+//                thumbnailUrl = "http://photos.wikimapia.org/p/00/02/56/05/39_75.jpg",
+//                thumbnailRetinaUrl = "http://photos.wikimapia.org/p/00/02/56/05/39_75@2x.jpg"
+//            )
+//        ),
+//        comments = listOf(
+//            Comment(
+//                placeId = 18307319,
+//                num = 1,
+//                langId = 1,
+//                userId = 0,
+//                userIp = -1293120350,
+//                userPhoto = "",
+//                name = "fcts2009",
+//                message = "Фото устарели,сейчас нет колючки,орудия покрашены,доступ открыт!Отличное место для любителей истории,не хуже бункеров линии Мажино или Атлантического Вала Гитлера!Проблема только добраться,дорог нет,распутица...",
+//                good = 0,
+//                bad = 1,
+//                block = false,
+//                date = 1411164683,
+//                moderUid = 0,
+//                moderatorName = null,
+//                isDeleted = false
+//            ),
+//            Comment(
+//                placeId = 18307319,
+//                num = 2,
+//                langId = 1,
+//                userId = 2363734,
+//                userIp = -720032043,
+//                userPhoto = "/img/nofoto_50.png",
+//                name = "FotosergS",
+//                message = "Форт \"Красная Горка\" (подробный фотоальбом): \r\nhttps://fotki.yandex.ru/users/fotosergs/album/140144/",
+//                good = 0,
+//                bad = 0,
+//                block = false,
+//                date = 1440790244,
+//                moderUid = 0,
+//                moderatorName = null,
+//                isDeleted = false
+//            )
+//        ),
         parentId = 0,
         x = 293234754, // /10_000_000
         y = 599717006,
@@ -148,88 +149,88 @@ object FakeData {
         isBuilding = false,
         isRegion = false,
         isDeleted = false,
-        tags = listOf(
-            Tag(1147, "Первая мировая война"),
-            Tag(2750, "оборонительное сооружение"),
-        ),
+//        tags = listOf(
+//            Tag(1147, "Первая мировая война"),
+//            Tag(2750, "оборонительное сооружение"),
+//        ),
         parentId = 0,
         x = 293363824,
         y = 599710642,
         square = 8952.9750083422,
-        photos = listOf(
-            Photo(
-                id = 1708706,
-                size = 205768,
-                status = 0,
-                objectId = 11867376,
-                userId = 0,
-                userName = "Guest",
-                time = 1306615916,
-                timeString = "10 лет назад",
-                lastUserId = 0,
-                lastUserName = "Guest",
-                userIp = "0",
-                url960 = "http://photos.wikimapia.org/p/00/01/70/87/06_960.jpg",
-                url1280 = "http://photos.wikimapia.org/p/00/01/70/87/06_1280.jpg",
-                urlBig = "http://photos.wikimapia.org/p/00/01/70/87/06_big.jpg",
-                thumbnailUrl = "http://photos.wikimapia.org/p/00/01/70/87/06_75.jpg",
-                thumbnailRetinaUrl = "http://photos.wikimapia.org/p/00/01/70/87/06_75@2x.jpg"
-            ),
-            Photo(
-                id = 1708707,
-                size = 225292,
-                status = 0,
-                objectId = 11867376,
-                userId = 0,
-                userName = "Guest",
-                time = 1306615949,
-                timeString = "10 лет назад",
-                lastUserId = 0,
-                lastUserName = "Guest",
-                userIp = "0",
-                url960 = "http://photos.wikimapia.org/p/00/01/70/87/07_960.jpg",
-                url1280 = "http://photos.wikimapia.org/p/00/01/70/87/07_1280.jpg",
-                urlBig = "http://photos.wikimapia.org/p/00/01/70/87/07_big.jpg",
-                thumbnailUrl = "http://photos.wikimapia.org/p/00/01/70/87/07_75.jpg",
-                thumbnailRetinaUrl = "http://photos.wikimapia.org/p/00/01/70/87/07_75@2x.jpg"
-            )
-        ),
-        comments = listOf(
-            Comment(
-                placeId = 11867376,
-                num = 1,
-                langId = 1,
-                userId = 56155,
-                userIp = 1547518165,
-                userPhoto = "/img/nofoto_50.png",
-                name = "ruspodplav",
-                message = "Эт сухопутная оборона форта.",
-                good = 4,
-                bad = 0,
-                block = false,
-                date = 1249158887,
-                moderUid = 0,
-                moderatorName = null,
-                isDeleted = false
-            ),
-            Comment(
-                placeId = 11867376,
-                num = 2,
-                langId = 1,
-                userId = 0,
-                userIp = -1304221335,
-                userPhoto = "",
-                name = "Glebr",
-                message = "Оборонительная линия впечатляет! \n",
-                good = 2,
-                bad = 0,
-                block = false,
-                date = 1294861729,
-                moderUid = 0,
-                moderatorName = null,
-                isDeleted = false
-            )
-        ),
+//        photos = listOf(
+//            Photo(
+//                id = 1708706,
+//                size = 205768,
+//                status = 0,
+//                objectId = 11867376,
+//                userId = 0,
+//                userName = "Guest",
+//                time = 1306615916,
+//                timeString = "10 лет назад",
+//                lastUserId = 0,
+//                lastUserName = "Guest",
+//                userIp = "0",
+//                url960 = "http://photos.wikimapia.org/p/00/01/70/87/06_960.jpg",
+//                url1280 = "http://photos.wikimapia.org/p/00/01/70/87/06_1280.jpg",
+//                urlBig = "http://photos.wikimapia.org/p/00/01/70/87/06_big.jpg",
+//                thumbnailUrl = "http://photos.wikimapia.org/p/00/01/70/87/06_75.jpg",
+//                thumbnailRetinaUrl = "http://photos.wikimapia.org/p/00/01/70/87/06_75@2x.jpg"
+//            ),
+//            Photo(
+//                id = 1708707,
+//                size = 225292,
+//                status = 0,
+//                objectId = 11867376,
+//                userId = 0,
+//                userName = "Guest",
+//                time = 1306615949,
+//                timeString = "10 лет назад",
+//                lastUserId = 0,
+//                lastUserName = "Guest",
+//                userIp = "0",
+//                url960 = "http://photos.wikimapia.org/p/00/01/70/87/07_960.jpg",
+//                url1280 = "http://photos.wikimapia.org/p/00/01/70/87/07_1280.jpg",
+//                urlBig = "http://photos.wikimapia.org/p/00/01/70/87/07_big.jpg",
+//                thumbnailUrl = "http://photos.wikimapia.org/p/00/01/70/87/07_75.jpg",
+//                thumbnailRetinaUrl = "http://photos.wikimapia.org/p/00/01/70/87/07_75@2x.jpg"
+//            )
+//        ),
+//        comments = listOf(
+//            Comment(
+//                placeId = 11867376,
+//                num = 1,
+//                langId = 1,
+//                userId = 56155,
+//                userIp = 1547518165,
+//                userPhoto = "/img/nofoto_50.png",
+//                name = "ruspodplav",
+//                message = "Эт сухопутная оборона форта.",
+//                good = 4,
+//                bad = 0,
+//                block = false,
+//                date = 1249158887,
+//                moderUid = 0,
+//                moderatorName = null,
+//                isDeleted = false
+//            ),
+//            Comment(
+//                placeId = 11867376,
+//                num = 2,
+//                langId = 1,
+//                userId = 0,
+//                userIp = -1304221335,
+//                userPhoto = "",
+//                name = "Glebr",
+//                message = "Оборонительная линия впечатляет! \n",
+//                good = 2,
+//                bad = 0,
+//                block = false,
+//                date = 1294861729,
+//                moderUid = 0,
+//                moderatorName = null,
+//                isDeleted = false
+//            )
+//        ),
         polygon = listOf(
             PolygonPoint(29.331758, 59.966697),
             PolygonPoint(29.329741, 59.9660204),
@@ -279,6 +280,7 @@ object FakeData {
         distance = 5200
     )
 
+    @Suppress("UNUSED_PARAMETER")
     fun getArea(
         lonMin: Double = 0.0,
         latMin: Double = 0.0,
@@ -359,7 +361,7 @@ object FakeData {
         synonyms = listOf(Category(id = 102826, name = "вооружённые силы"))
     )
 
-    fun getPlaceError() = Place(debugInfo = DebugInfo(1, "ERROR: Place not found!"))
+    fun getPlaceError() = Place(0).apply { debugInfo = DebugInfo(1, "ERROR: Place not found!") }
 
     fun onAreaError() = Places(debugInfo = DebugInfo(2, "ERROR: wrong area request"))
 

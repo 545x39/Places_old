@@ -1,6 +1,6 @@
-package ru.fivefourtyfive.places.domain.entity.dto
+package ru.fivefourtyfive.places.domain.dto.places
 
-import ru.fivefourtyfive.places.domain.entity.Comment
+import ru.fivefourtyfive.places.domain.entity.places.Comment
 
 class CommentDTO(comment: Comment) {
 

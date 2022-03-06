@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.places.domain.entity
+package ru.fivefourtyfive.places.domain.entity.places
 
 @Suppress("unused")
 enum class Language {

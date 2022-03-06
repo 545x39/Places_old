@@ -1,14 +1,14 @@
-package ru.fivefourtyfive.places.domain.entity.dto
+package ru.fivefourtyfive.places.domain.dto.places
 
 import ru.fivefourtyfive.places.framework.datasource.implementation.remote.util.Value.RU
-import ru.fivefourtyfive.places.domain.entity.DebugInfo
-import ru.fivefourtyfive.places.domain.entity.Location
-import ru.fivefourtyfive.places.domain.entity.Place
-import ru.fivefourtyfive.places.domain.entity.Tag
+import ru.fivefourtyfive.places.domain.entity.places.DebugInfo
+import ru.fivefourtyfive.places.domain.entity.places.Location
+import ru.fivefourtyfive.places.domain.entity.places.Place
+import ru.fivefourtyfive.places.domain.entity.places.Tag
 
 class PlaceDescriptionDTO(place: Place) {
 
-    var debugInfo: DebugInfo? = null
+    var debugInfo: DebugInfo?       = null
     val id: Int                     = place.id
     val title: String               = place.title ?: ""
     val description: String         = place.description ?: ""

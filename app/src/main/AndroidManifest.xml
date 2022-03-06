@@ -6,7 +6,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -23,35 +22,39 @@
         <activity
             android:name="ru.fivefourtyfive.places.framework.presentation.ui.MainActivity"
             android:exported="true"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            tools:ignore="RedundantLabel">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <!-- -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="www.wikimapia.org"
                     android:scheme="http" />
-                <data android:scheme="https"
-                    android:host="www.wikimapia.org"/>
-<!--                    android:pathPrefix="/22570314" />-->
+                <data
+                    android:host="www.wikimapia.org"
+                    android:scheme="https" />
+                <!--                    android:pathPrefix="/22570314" />-->
             </intent-filter>
-
-            <!--            -->
         </activity>
-<!--        <provider-->
-<!--            android:name="androidx.startup.InitializationProvider"-->
-<!--            android:authorities="${applicationId}.androidx-startup"-->
-<!--            android:exported="false"-->
-<!--            tools:node="merge">-->
-<!--            <meta-data-->
-<!--                android:name="androidx.work.WorkManagerInitializer"-->
-<!--                tools:node="remove" />-->
-<!--        </provider>-->
+        <service
+            android:name=".framework.datasource.implementation.location.LocationService"
+            android:foregroundServiceType="location" />
+        <!--        <provider-->
+        <!--            android:name="androidx.startup.InitializationProvider"-->
+        <!--            android:authorities="${applicationId}.androidx-startup"-->
+        <!--            android:exported="false"-->
+        <!--            tools:node="merge">-->
+        <!--            <meta-data-->
+        <!--                android:name="androidx.work.WorkManagerInitializer"-->
+        <!--                tools:node="remove" />-->
+        <!--        </provider>-->
     </application>
 
 </manifest>

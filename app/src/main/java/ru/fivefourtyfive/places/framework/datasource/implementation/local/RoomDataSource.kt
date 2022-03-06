@@ -2,9 +2,8 @@ package ru.fivefourtyfive.places.framework.datasource.implementation.local
 
 import ru.fivefourtyfive.places.data.datasource.abstraction.ILocalDataSource
 import ru.fivefourtyfive.places.framework.datasource.implementation.local.database.Database
-import ru.fivefourtyfive.places.domain.entity.Place
-import ru.fivefourtyfive.places.domain.entity.Places
-import timber.log.Timber
+import ru.fivefourtyfive.places.domain.entity.places.Place
+import ru.fivefourtyfive.places.domain.entity.places.Places
 import javax.inject.Inject
 
 class RoomDataSource @Inject constructor(private val database: Database) : ILocalDataSource {

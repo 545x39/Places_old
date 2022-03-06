@@ -2,8 +2,8 @@ package ru.fivefourtyfive.objectdetails.presentation.viewmodel
 
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import ru.fivefourtyfive.places.domain.entity.dto.CommentDTO
-import ru.fivefourtyfive.places.domain.entity.dto.PhotoDTO
+import ru.fivefourtyfive.places.domain.dto.places.CommentDTO
+import ru.fivefourtyfive.places.domain.dto.places.PhotoDTO
 import ru.fivefourtyfive.places.framework.presentation.abstraction.IViewState
 
 sealed class PlaceDetailsViewState : IViewState {
