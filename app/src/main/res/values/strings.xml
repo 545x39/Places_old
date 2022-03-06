@@ -28,4 +28,6 @@
     <string name="title_scale">Scale</string>
     <string name="comments_count">Comments: %s</string>
     <string name="following_location_disabled">Following location disabled</string>
+    <string name="tracks_notification_channel_name">Track</string>
+    <string name="track_is_being_recorded">Track is being recorded</string>
 </resources>

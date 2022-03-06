@@ -24,4 +24,6 @@
     <string name="title_scale">Масштаб</string>
     <string name="comments_count">Комментариев: %s</string>
     <string name="following_location_disabled">Следование за местоположением отключено</string>
+    <string name="tracks_notification_channel_name">Треки</string>
+    <string name="track_is_being_recorded">Идет запись трека</string>
 </resources>

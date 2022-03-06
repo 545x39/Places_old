@@ -6,7 +6,7 @@ import ru.fivefourtyfive.places.data.datasource.abstraction.ILocalDataSource
 import ru.fivefourtyfive.places.data.datasource.abstraction.IRemoteDataSource
 import ru.fivefourtyfive.places.data.datasource.abstraction.ISettingsDataSource
 import ru.fivefourtyfive.places.di.module.*
-import ru.fivefourtyfive.places.framework.service.LocationService
+import ru.fivefourtyfive.places.framework.service.TrackerService
 import javax.inject.Singleton
 
 @Singleton
@@ -24,7 +24,7 @@ interface AppComponent {
 
     fun inject(app: Context)
 
-    fun inject(service: LocationService)
+    fun inject(service: TrackerService)
 
     fun getSettingsDataSource(): ISettingsDataSource
 

@@ -38,12 +38,11 @@ class MapRepository @Inject constructor(
         }
         remoteDataSource.getArea(north, west, south, east, category, page, count, language)
             .apply {
-                Timber.e("PLACES: ${this@apply}")
                 when (debugInfo) {
                     null -> emit(AreaDataState.Success(AreaDTO(this)))
                         .also {
                             withContext(Dispatchers.IO){localDataSource.persistArea(this@apply)} }
-                    else -> emit(AreaDataState.Error(message = debugInfo?.message ?: "").also { Timber.e("NETWORK ERROR ON LOADING AREA!") })
+                    else -> emit(AreaDataState.Error(message = debugInfo?.message ?: ""))
                 }
             }
     }.flowOn(Dispatchers.IO)

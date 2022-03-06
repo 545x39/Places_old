@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import ru.fivefourtyfive.places.di.AppComponent
 import ru.fivefourtyfive.places.di.DaggerAppComponent
 import ru.fivefourtyfive.places.di.module.AppModule
+import ru.fivefourtyfive.places.util.createNotificationChannels
 import timber.log.Timber
 
 open class Places : Application() {
@@ -17,6 +18,7 @@ open class Places : Application() {
         initTimber()
         initAppComponent()
         setNightMode()
+        createNotificationChannels(this)
     }
 
     protected open fun initAppComponent() {
