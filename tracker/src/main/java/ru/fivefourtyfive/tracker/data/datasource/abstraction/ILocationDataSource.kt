@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.places.data.datasource.abstraction
+package ru.fivefourtyfive.tracker.data.datasource.abstraction
 
 import android.location.Location
 import kotlinx.coroutines.flow.SharedFlow

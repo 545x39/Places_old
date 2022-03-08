@@ -1,4 +1,4 @@
-package ru.fivefourtyfive.places.framework.datasource.implementation.location
+package ru.fivefourtyfive.tracker.framework.datasource.implementation
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
@@ -14,10 +14,9 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import ru.fivefourtyfive.places.data.datasource.abstraction.ILocationDataSource
-import ru.fivefourtyfive.places.util.PermissionsUtil
 import ru.fivefourtyfive.places.util.PermissionsUtil.arePermissionsGranted
 import ru.fivefourtyfive.places.util.ifTrue
+import ru.fivefourtyfive.tracker.data.datasource.abstraction.ILocationDataSource
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -28,7 +27,8 @@ const val INTERVAL = 5L
 const val SMALLEST_DISPLACEMENT = 5.0f
 //</editor-fold>
 
-class LostLocationDataSource @Inject constructor(private val context: Context) : ILocationDataSource {
+class LostLocationDataSource @Inject constructor(private val context: Context) :
+    ILocationDataSource {
 
     //<editor-fold defaultstate="collapsed" desc="PRIVATE FIELDS">
     private val _locations = MutableSharedFlow<Location>()

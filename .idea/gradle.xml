@@ -17,6 +17,7 @@
             <option value="$PROJECT_DIR$/objectdetails" />
             <option value="$PROJECT_DIR$/search" />
             <option value="$PROJECT_DIR$/settings" />
+            <option value="$PROJECT_DIR$/tracker" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

@@ -77,6 +77,7 @@ android {
     }
 
     setDynamicFeatures(setOf(":map", ":search", ":settings", ":objectdetails"))
+    dynamicFeatures += setOf(":tracker")
 
 }
 //</editor-fold>
@@ -128,10 +129,6 @@ dependencies {
     api("androidx.navigation:navigation-dynamic-features-fragment:$NAVIGATION_VERSION")
     /** PLAY CORE */
     api("com.google.android.play:core:$PLAY_CORE_VERSION")
-    /** LOST */
-    @Suppress("SpellCheckingInspection")
-    api("com.mapzen.android:lost:$LOST_VERSION")
-//    implementation("com.google.android.gms:play-services-location:18.0.0")
     /** TESTING */
 //    testImplementation("junit:junit:$JUNIT_VERSION")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")

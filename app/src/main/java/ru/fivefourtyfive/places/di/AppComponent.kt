@@ -6,7 +6,6 @@ import ru.fivefourtyfive.places.data.datasource.abstraction.ILocalDataSource
 import ru.fivefourtyfive.places.data.datasource.abstraction.IRemoteDataSource
 import ru.fivefourtyfive.places.data.datasource.abstraction.ISettingsDataSource
 import ru.fivefourtyfive.places.di.module.*
-import ru.fivefourtyfive.places.framework.service.TrackerService
 import javax.inject.Singleton
 
 @Singleton
@@ -16,15 +15,12 @@ import javax.inject.Singleton
         NetworkModule::class,
         DatabaseModule::class,
         DataSourceModule::class,
-        LocationDataSourceModule::class,
         ViewModelProviderFactoryModule::class
     ]
 )
 interface AppComponent {
 
     fun inject(app: Context)
-
-    fun inject(service: TrackerService)
 
     fun getSettingsDataSource(): ISettingsDataSource
 

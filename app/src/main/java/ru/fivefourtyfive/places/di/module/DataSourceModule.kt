@@ -7,7 +7,6 @@ import ru.fivefourtyfive.places.framework.datasource.implementation.remote.Retro
 import ru.fivefourtyfive.places.data.datasource.abstraction.IRemoteDataSource
 import ru.fivefourtyfive.places.data.datasource.abstraction.ISettingsDataSource
 import ru.fivefourtyfive.places.framework.datasource.implementation.local.RoomDataSource
-import ru.fivefourtyfive.places.framework.datasource.implementation.location.LostLocationDataSource
 import ru.fivefourtyfive.places.framework.datasource.implementation.settings.SharedPreferencesDataSource
 
 @Module
