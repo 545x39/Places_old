@@ -42,7 +42,7 @@ class TrackerService : Service() {
         super.onCreate()
         runBlocking {
             factory.apply {
-                startLocationUpdates()
+//                startLocationUpdates()
                 track = getActiveTrackUseCase().execute()
 
             }

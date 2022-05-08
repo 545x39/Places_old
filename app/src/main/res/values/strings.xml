@@ -21,6 +21,7 @@
     <string name="title_overlays">Map mode</string>
     <string name="title_center_selection">Center selection</string>
     <string name="title_keep_screen_on">Keep screen on</string>
+    <string name="title_filter_location_accuracy">Filter location accuracy</string>
     <string name="title_follow_location">Follow location</string>
     <string name="title_auto_rotate_map">Auto rotate map</string>
     <string name="title_compass">Compass</string>

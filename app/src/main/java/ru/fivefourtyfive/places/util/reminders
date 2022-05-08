@@ -391,6 +391,10 @@ org.wikimapia.android.tiles.WMTileTools
 org.wikimapia.android.tiles.base.WMInteractiveTileObject, который, в числе прочего принимает на вход строку с бинарником полигона и парсит его в ArrayList<PolyPoint>.
 
 -------
+Vetus maps old finnish:
+http://vetusmaps.net:8080/VetusMapsTileSrv/TileServlet?id=fin-topo500-13-l5&x=2381&y=1181&z=5&t=uQcgRfTxHuK5inV5HywzJWYwg318NMEOWafTJP4fXZq9LL2QqR-s9s1c6V-DojV1%0A
+http://vetusmaps.net:8080/VetusMapsTileSrv/TileServlet?id=kareliya-rkka-2km-12-l4-j75&x=1190&y=596&z=6&t=O1cIGQzb36ebUIDYiq_phyyY0O7nBIUJmevWBky4kZiXSRl33mc6oTMlaVgqFsGH%0A
+-------
 JD-GUI
 
 -------

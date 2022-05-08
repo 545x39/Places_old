@@ -46,5 +46,9 @@ interface IMapSettingsRepository {
     fun setTransportationOverlay(enable: Boolean)
 
     fun setAutoRotateMap(enable: Boolean)
+
+    fun getFilterLocationAccuracy() : Boolean
+
+    fun setFilterLocationAccuracy(enable: Boolean)
     //</editor-fold>
 }

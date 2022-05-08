@@ -7,6 +7,7 @@
         android:icon="@drawable/icon_lens"
         android:orderInCategory="1"
         android:title="@string/search"
+        android:visible="false"
         app:showAsAction="always" />
     <!--    <item-->
     <!--        android:id="@+id/action_search"-->
@@ -85,4 +86,17 @@
         android:orderInCategory="96"
         android:title="@string/title_keep_screen_on"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_filter_location_accuracy"
+        android:checkable="true"
+        android:orderInCategory="97"
+        android:title="@string/title_filter_location_accuracy"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_settings"
+        android:checkable="true"
+        android:orderInCategory="104"
+        android:title="@string/title_settings"
+        android:icon="@drawable/icon_gear"
+        app:showAsAction="always" />
 </menu>

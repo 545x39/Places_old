@@ -15,8 +15,6 @@ interface TrackerComponent {
 
     fun inject(service: TrackerService)
 
-//    fun getLocalDataSource(): ILocalDataSource
-
     @Component.Factory
     interface Factory {
         fun create(appComponent: AppComponent): TrackerComponent

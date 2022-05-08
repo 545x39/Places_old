@@ -22,35 +22,19 @@ class NetworkModule {
     @Provides
     fun provideRetrofit(): Retrofit {
 
-        //<editor-fold defaultstate="collapsed" desc="INNER FUNCTIONS">
-        /** Huge response may result in OutOfMemoryError.*/
-        fun OkHttpClient.Builder.addLoggingInterceptor() {
-            if (BuildConfig.DEBUG) {
-                with(HttpLoggingInterceptor()) {
-                    level = HttpLoggingInterceptor.Level.BODY
-                    addInterceptor(this)
-                }
-            }
-        }
-
-        fun okHttp(): OkHttpClient {
-            with(OkHttpClient.Builder()) {
-                connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
-                readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
-                retryOnConnectionFailure(true)
-                addLoggingInterceptor()
-                return build()
-            }
-        }
-
-        fun gsonConverter() = GsonConverterFactory.create(GsonBuilder().setLenient().create())
-
-        // </editor-fold>
+        fun okHttp(): OkHttpClient = (OkHttpClient.Builder()).apply {
+            connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
+            readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
+            retryOnConnectionFailure(true)
+            addInterceptor(HttpLoggingInterceptor()
+                .apply { level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE }
+            )
+        }.build()
 
         return Retrofit.Builder().apply {
             baseUrl(API_URL)
             client(okHttp())
-            addConverterFactory(gsonConverter())
+            addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
         }.build()
     }
 

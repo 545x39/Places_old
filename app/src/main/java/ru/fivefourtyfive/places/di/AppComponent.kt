@@ -30,8 +30,6 @@ interface AppComponent {
 
     fun getContext(): Context
 
-//    fun workerProviderFactory(): WorkerProviderFactory
-
     @Component.Factory
     interface Factory {
         fun create(appModule: AppModule): AppComponent

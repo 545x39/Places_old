@@ -110,6 +110,10 @@ class MapFragmentViewModel @Inject constructor(
     fun isAutoRotateMapEnabled() = settings.getAutoRotateMap()
 
     fun setAutoRotateMap(enable: Boolean) = settings.setAutoRotateMap(enable)
+
+    fun isFilterLocationAccuracyEnabled() = settings.getFilterLocationAccuracy()
+
+    fun setFilterLocationAccuracy(enable: Boolean) = settings.setFilterLocationAccuracy(enable)
     //</editor-fold>
 
     fun getTileSource() =

@@ -54,5 +54,9 @@ class MapSettingsRepository @Inject constructor(private val settings: ISettingsD
     override fun setTransportationOverlay(enable: Boolean) = settings.putBoolean(Preferences.PREFERENCE_TRANSPOTRATION_OVERLAY, enable)
 
     override fun setAutoRotateMap(enable: Boolean) = settings.putBoolean(Preferences.PREFERENCE_AUTO_ROTATE_MAP, enable)
+
+    override fun getFilterLocationAccuracy() = settings.getBoolean(Preferences.PREFERENCE_FILTER_LOCATION_ACCURACY)
+
+    override fun setFilterLocationAccuracy(enable: Boolean) = settings.putBoolean(Preferences.PREFERENCE_FILTER_LOCATION_ACCURACY, enable)
     //</editor-fold>
 }

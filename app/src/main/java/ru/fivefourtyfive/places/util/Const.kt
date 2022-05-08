@@ -47,20 +47,21 @@ object Permissions {
 }
 
 object Preferences {
-    const val PREFERENCE_SLIDESHOW              = "preference_slideshow"
-    const val PREFERENCE_LAST_LOCATION          = "preference_last_location"
-    const val PREFERENCE_LAST_ZOOM              = "preference_last_zoom"
-    const val PREFERENCE_MAP_MODE               = "preference_map_mode"
-    const val PREFERENCE_TRANSPOTRATION_OVERLAY = "preference_transportation_overlay"
-    const val PREFERENCE_WIKIMAPIA_OVERLAYS     = "preference_wikimapia_overlays"
-    const val PREFERENCE_FOLLOW_LOCATION        = "preference_follow_location"
-    const val PREFERENCE_CENTER_SELECTION       = "preference_center_selection"
-    const val PREFERENCE_SHOW_SCALE             = "preference_show_scale"
-    const val PREFERENCE_SHOW_GRID              = "preference_show_grid"
-    const val PREFERENCE_KEEP_SCREEN_ON         = "preference_keep_screen_on"
-    const val PREFERENCE_AUTO_ROTATE_MAP        = "preference_auto_rotate_map"
+    const val PREFERENCE_SLIDESHOW                  = "preference_slideshow"
+    const val PREFERENCE_LAST_LOCATION              = "preference_last_location"
+    const val PREFERENCE_LAST_ZOOM                  = "preference_last_zoom"
+    const val PREFERENCE_MAP_MODE                   = "preference_map_mode"
+    const val PREFERENCE_TRANSPOTRATION_OVERLAY     = "preference_transportation_overlay"
+    const val PREFERENCE_WIKIMAPIA_OVERLAYS         = "preference_wikimapia_overlays"
+    const val PREFERENCE_FOLLOW_LOCATION            = "preference_follow_location"
+    const val PREFERENCE_CENTER_SELECTION           = "preference_center_selection"
+    const val PREFERENCE_SHOW_SCALE                 = "preference_show_scale"
+    const val PREFERENCE_SHOW_GRID                  = "preference_show_grid"
+    const val PREFERENCE_KEEP_SCREEN_ON             = "preference_keep_screen_on"
+    const val PREFERENCE_AUTO_ROTATE_MAP            = "preference_auto_rotate_map"
+    const val PREFERENCE_FILTER_LOCATION_ACCURACY   = "preference_filter_location_accuracy"
     ////
-    const val DEFAULT_LOCATION                  = "59.939039;30.315780"
+    const val DEFAULT_LOCATION                      = "59.939039;30.315780"
 }
 
 object MapZoom {

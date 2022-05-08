@@ -75,18 +75,6 @@ class PlaceDetailsFragment : Fragment(), IEventDispatcher<PlaceEvent>,
         menu.findItem(R.id.action_slide_show).isChecked = binding.viewModel!!.slideshow
     }
 
-    @SuppressLint("SourceLockedOrientationActivity")
-    override fun onResume() {
-        super.onResume()
-        //TODO Сделать корректное отображение в Landscape.
-        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-    }
-
-    override fun onPause() {
-        super.onPause()
-        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         //<editor-fold defaultstate="collapsed" desc="INNER METHODS">
@@ -145,6 +133,18 @@ class PlaceDetailsFragment : Fragment(), IEventDispatcher<PlaceEvent>,
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    @SuppressLint("SourceLockedOrientationActivity")
+    override fun onResume() {
+        super.onResume()
+        //TODO Сделать корректное отображение в Landscape.
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    }
+
+    override fun onPause() {
+        super.onPause()
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
     }
 
     override fun render(viewState: PlaceDetailsViewState) {

@@ -50,11 +50,11 @@ import ru.fivefourtyfive.places.R as appR
 
 @Suppress("SpellCheckingInspection")
 
-    //<editor-fold defaultstate="collapsed" desc="CONSTANTS">
+//<editor-fold defaultstate="collapsed" desc="CONSTANTS">
 private const val AUTO_ZOOM_IN_LEVEL = 16
 private const val AUTO_ZOOM_OUT_LEVEL = 14
 private const val ZOOM_ANIMATION_SPEED = 300L
-    //</editor-fold>
+//</editor-fold>
 
 class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener {
 
@@ -330,6 +330,7 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
             item(R.id.action_show_grid).isChecked = isGridEnabled()
             item(R.id.action_keep_screen_on).isChecked = isKeepScreenOnEnabled()
             item(R.id.action_auto_rotate).isChecked = isAutoRotateMapEnabled()
+            item(R.id.action_filter_location_accuracy).isChecked = isFilterLocationAccuracyEnabled()
             when (getMapMode()) {
                 MapMode.SCHEME -> item(R.id.action_map_mode_scheme).setChecked(true)
                 MapMode.SATELLITE -> item(R.id.action_map_mode_satellite).setChecked(true)
@@ -386,7 +387,11 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
                 item.isChecked = item.isChecked.not()
                 viewModel.setAutoRotateMap(item.isChecked)
             }
-            R.id.action_search -> navigate(appR.id.action_mapFragment_to_settingsFragment)
+            R.id.action_settings -> navigate(appR.id.action_mapFragment_to_settingsFragment)
+            R.id.action_filter_location_accuracy -> {
+                item.isChecked = item.isChecked.not()
+                viewModel.setFilterLocationAccuracy(item.isChecked)
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -398,7 +403,6 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
     private fun getArea(force: Boolean = false): Boolean {
 
         fun isFarEnough(point1: IGeoPoint, point2: IGeoPoint) = getDistance(point1, point2) > 5
-//        lifecycleScope.launch {  }
         with(viewModel) {
             mapView.let {
                 (force || (wikimapiaOverlaysEnabled() && isFarEnough(
@@ -476,18 +480,18 @@ class MapFragment : NavFragment(), IEventDispatcher<MapEvent>, LocationListener 
     }
 
     override fun onLocationChanged(location: Location) {
-        location.bearing.let { it.equals(0.0f).ifFalse { viewModel.latestBearing = it } }
-        GeoPoint(location).apply {
-            (viewModel.isFollowLocationEnabled()).ifTrue {
+        location.bearing.equals(0.0f).ifFalse { viewModel.latestBearing = location.bearing }
+        (viewModel.isFollowLocationEnabled()
+                && (!viewModel.isFilterLocationAccuracyEnabled() || location.accuracy <= 20))
+            .ifTrue {
                 mapView.controller.animateTo(
-                    this, mapView.zoomLevelDouble, 600,
+                    GeoPoint(location), mapView.zoomLevelDouble, 600,
                     when (viewModel.isAutoRotateMapEnabled()) {
                         true -> -viewModel.latestBearing
                         false -> mapView.mapOrientation
                     }
                 )
             }
-        }
     }
     //</editor-fold>
 }

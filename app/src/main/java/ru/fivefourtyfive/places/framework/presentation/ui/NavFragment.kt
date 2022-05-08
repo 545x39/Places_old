@@ -21,7 +21,6 @@ open class NavFragment: Fragment() {
     }
 
     protected fun navigate(resId: Int, args: Bundle? = null) {
-        Dispatchers.Unconfined
         DynamicInstallMonitor().also {
             findNavController().navigate(resId, args, null, DynamicExtras(it))
             InstallObserver.observeInstall(
